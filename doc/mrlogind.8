@@ -48,142 +48,36 @@
 .Os "Linux Mrsh"
 .Sh NAME
 .Nm mrlogind
-.Nd remote login server
+.Nd munge authenticated remote login server
 .Sh SYNOPSIS
 .Nm mrlogind
 .Op Fl ahlLn
+.Nm mrlogind
+.Fl V
 .Sh DESCRIPTION
 .Nm Mrlogind
 is the server for the 
 .Xr mrlogin 1
-program.  The server provides a remote login facility
-with authentication based on privileged port numbers from trusted hosts.
+program.  It is a modification of the
+.Xr rlogind
+server and uses munge authentication rather than
+reserved ports for security.
 .Pp
 Options supported by
 .Nm mrlogind :
 .Bl -tag -width Ds
 .It Fl a
 Ask hostname for verification.
-.It Fl h
-Permit use of superuser 
-.Dq Pa .rhosts
-files.
-.It Fl l
-Prevent any authentication based on the user's
-.Dq Pa .rhosts
-file. If the user is logging in as the superuser and the \-h
-option is used,
-.Dq Pa .rhosts
-processing is still enabled.
-.It Fl L
-Prevent any authentication based on 
-.Dq Pa .rhosts
-or
-.Dq Pa hosts.equiv
-information.
 .It Fl n
 Disable keep-alive messages.
+.It Fl V
+Output package and protocol version.
 .El
-.Pp
-The \-h, \-l, and \-L flags are not used if PAM (Pluggable
-Authentication Module) support is in use. In this case the same
-effects can be achieved by editing
-.Pa /etc/pam.conf .
-.Pp
-The
-.Fl h
-and
-.Fl l
-options should also not be trusted without verifying that they work as
-expected with the particular version of libc installed on your system
-(and should be tested again after any libc update) because some
-versions of libc may not honor the internal flags used by
-.Nm mrlogind .
-As the
-.Fl L
-option bypasses the libc functions entirely, it is not subject to this
-problem.
-.Pp
-Also note that the design of the
-.Pa .rhosts
-system is COMPLETELY INSECURE except on a carefully firewalled private
-network. Always use the 
-.Fl L
-option under all other circumstances. Also, since
-.Nm mrlogind
-does not encrypt communications, it should not, in general, be used at
-all. Consider
-.Xr ssh 8 .
 .Pp
 .Nm Mrlogind
 listens for service requests at the port indicated in
-the ``login'' service specification; see
+the ``mlogin'' service specification; see
 .Xr services 5 .
-When a service request is received the following protocol
-is initiated:
-.Bl -enum
-.It
-The server checks the client's source port.
-If the port is not in the range 512-1023, the server
-aborts the connection.
-.It
-The server checks the client's source address
-and requests the corresponding host name (see
-.Xr gethostbyaddr 3 ,
-.Xr hosts 5
-and
-.Xr named 8 ) .
-If the hostname cannot be determined,
-the dot-notation representation of the host address is used.
-If the hostname is in the same domain as the server (according to
-the last two components of the domain name),
-or if the
-.Fl a
-option is given,
-the addresses for the hostname are requested,
-verifying that the name and address correspond.
-Normal authentication is bypassed if the address verification fails.
-.El
-.Pp
-Once the source port and address have been checked, 
-.Nm mrlogind
-proceeds with the authentication process described in
-.Xr mrshd 8 .
-It then allocates a pseudo terminal (see 
-.Xr pty 4 ) ,
-and manipulates file descriptors so that the slave
-half of the pseudo terminal becomes the 
-.Em stdin ,
-.Em stdout ,
-and
-.Em stderr
-for a login process.
-The login process is an instance of the
-.Xr login 1
-program, invoked with the
-.Fl f
-option if authentication has succeeded.
-If automatic authentication fails, the user is
-prompted to log in as if on a standard terminal line.
-.Pp
-The parent of the login process manipulates the master side of
-the pseudo terminal, operating as an intermediary
-between the login process and the client instance of the
-.Xr mrlogin
-program.  In normal operation, the packet protocol described
-in
-.Xr pty 4
-is invoked to provide
-.Ql ^S/^Q
-type facilities and propagate
-interrupt signals to the remote programs.  The login process
-propagates the client terminal's baud rate and terminal type,
-as found in the environment variable,
-.Ql Ev TERM ;
-see
-.Xr environ 7 .
-The screen or window size of the terminal is requested from the client,
-and window size changes from the client are propagated to the pseudo terminal.
 .Pp
 Transport-level keepalive messages are enabled unless the
 .Fl n
@@ -191,33 +85,10 @@ option is present.
 The use of keepalive messages allows sessions to be timed out
 if the client crashes or becomes unreachable.
 .Sh DIAGNOSTICS
-All initial diagnostic messages are indicated
-by a leading byte with a value of 1,
-after which any network connections are closed.
-If there are no errors before
-.Xr login
-is invoked, a null byte is returned as in indication of success.
-.Bl -tag -width Ds
-.It Sy Try again.
-A
-.Xr fork
-by the server failed.
-.El
+All errors are logged via the syslog (3) library.  Administrators
+should check the log files for details regarding errors.  Error
+messages send to the user are intentionally ambiguous, so that 
+details about state information cannot be interpreted.
 .Sh SEE ALSO
-.Xr login 1 ,
-.Xr ruserok 3 ,
+.Xr mrlogin 1 , 
 .Xr mrshd 8
-.Sh BUGS
-The authentication procedure used here assumes the integrity
-of each client machine and the connecting medium.  This is
-insecure, but is useful in an ``open'' environment.
-.Pp
-A facility to allow all data exchanges to be encrypted should be
-present.
-.Pp
-A more extensible protocol should be used.
-.Sh HISTORY
-The
-.Nm
-command appeared in
-.Bx 4.2 .

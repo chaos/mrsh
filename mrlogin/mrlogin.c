@@ -81,6 +81,7 @@ char rcsid[] =
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include "mcmd.h"
 
 /*
  * mrlogin has problems with urgent data when logging into suns which
@@ -208,7 +209,7 @@ main(int argc, char **argv)
 	else
 		p = argv[0];
 
-	if (strcmp(p, "mrlogin"))
+	if (strcmp(p, "mrlogin") && strcmp(p, "rlogin"))
 		host = p;
 
 	/* handle "mrlogin host flags" */
@@ -217,7 +218,7 @@ main(int argc, char **argv)
 		argoff = 1;
 	}
 
-#define	OPTIONS	"8EKLde:l:"
+#define	OPTIONS	"8EKLde:l:V"
 	while ((ch = getopt(argc - argoff, argv + argoff, OPTIONS)) != EOF)
 		switch(ch) {
 		case '8':
@@ -240,6 +241,10 @@ main(int argc, char **argv)
 		case 'l':
 			user = optarg;
 			break;
+		case 'V':
+			printf("%s %s-%s\n", PACKAGE, VERSION, RELEASE);
+			printf("Protocol Level = %s\n", MRSH_PROTOCOL_VERSION);
+			exit(0);
 		case '?':
 		default:
 			usage();
@@ -284,7 +289,7 @@ main(int argc, char **argv)
 	get_window_size(0, &winsize);
 
 	/*
-	 * Moved before rcmd call so that if get a SIGPIPE in rcmd
+	 * Moved before mcmd call so that if get a SIGPIPE in mcmd
 	 * we will have the defmodes set already. 
 	 */
 	tcgetattr(0, &defmodes);
@@ -294,7 +299,7 @@ main(int argc, char **argv)
 	/* will use SIGUSR1 for window size hack, so hold it off */
 	omask = sigblock(sigmask(SIGURG) | sigmask(SIGUSR1));
 
-	rem = rcmd(&host, sp->s_port, pw->pw_name, user, term, 0);
+	rem = mcmd(&host, sp->s_port, user, term, 0);
 
 	if (rem < 0) exit(1);
 

@@ -73,6 +73,7 @@ char rcsid[] = "$Id$";
 #include <errno.h>
 #include <string.h>
 #include "pathnames.h"
+#include "mcmd.h"
 
 /*
  * mrsh - remote shell
@@ -107,7 +108,7 @@ main(int argc, char *argv[])
 	if (p) p++;
 	else p = argv[0];
 
-	if (!strcmp(p, "mrsh")) asmrsh = 1;
+	if (!strcmp(p, "mrsh") || !strcmp(p, "rsh")) asmrsh = 1;
 	else host = p;
 
 	/* handle "mrsh host flags" */
@@ -116,7 +117,7 @@ main(int argc, char *argv[])
 		argoff = 1;
 	}
 
-#define	OPTIONS	"+8KLdel:nw"
+#define	OPTIONS	"+8KLdel:nwV"
 	while ((ch = getopt(argc - argoff, argv + argoff, OPTIONS)) != EOF)
 		switch(ch) {
 		case 'K':
@@ -135,6 +136,10 @@ main(int argc, char *argv[])
 		case 'n':
 			nflag = 1;
 			break;
+		case 'V':
+			printf("%s %s-%s\n", PACKAGE, VERSION, RELEASE);
+			printf("Protocol Level = %s\n", MRSH_PROTOCOL_VERSION);
+			exit(0);
 		case '?':
 		default:
 			usage();
@@ -178,7 +183,7 @@ main(int argc, char *argv[])
 		exit(1);
 	}
 
-	rem = rcmd(&host, sp->s_port, pw->pw_name, user, args, &rfd2);
+	rem = mcmd(&host, sp->s_port, user, args, &rfd2);
 
 	if (rem < 0)
 		exit(1);

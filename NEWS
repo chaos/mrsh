@@ -2,4 +2,14 @@ This file describes changes in recent versions of mrsh. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in mrsh-2.0:
+====================
+* Mrsh package reorganized.  The mrshd and rsh-mrsh-compat
+  packages have been renamed to mrsh-server and mrsh-rsh-compat
+  respectively.  They are now both subpackages of mrsh.
+* Fixed memory leak in mrcp that can cause a crash when recursively
+  copying deeply nested directories.
+* Added the -V option to mrcp, mrsh, mrlogin, in.mrshd, and in.mrlogind.
+* Increased protocol version to 2.0.
+
 $Id$

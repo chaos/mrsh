@@ -4,19 +4,19 @@
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
-CPPFLAGS = -I../common -I../config -I../mcmd
+CPPFLAGS = -I../common -I../config
 
-noinst_HEADERS = pathnames.h
+noinst_HEADERS = mauth.h
 
-bin_PROGRAMS = mrsh
+noinst_LTLIBRARIES = libmauth.la
 
-mrsh_SOURCES = mrsh.c
+libmauth_la_SOURCES = mauth.c mauth.h
 
-mrsh_LDADD = ../mcmd/libmcmd.la
+libmauth_la_LIBADD = ../common/libfd.la
 
-mrsh_LDFLAGS = $(MCMD_CFLAGS)
+libmauth_la_LDFLAGS = $(MAUTH_LIBS)
 
-../mcmd/libmcmd.la : force-dependency-check
+../common/libfd.la : force-dependency-check
 	@cd `dirname $@` && make `basename $@`
 
 force-dependency-check:

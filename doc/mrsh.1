@@ -48,16 +48,23 @@
 .Os "Linux Mrsh"
 .Sh NAME
 .Nm mrsh
-.Nd remote shell
+.Nd munge authenticated remote shell
 .Sh SYNOPSIS
 .Nm mrsh
-.Op Fl Kdnx
-.Op Fl k Ar realm
+.Op Fl dn
 .Op Fl l Ar username
 .Ar host
 .Op command
+.Nm mrsh
+.Fl V
 .Sh DESCRIPTION
 .Nm Mrsh
+is a modification of the 
+.Nm rsh
+command that uses munge authentication instead of reserved
+ports for security.  Just like
+.Nm rsh,
+.Nm mrsh
 executes
 .Ar command
 on
@@ -73,10 +80,6 @@ command;
 normally terminates when the remote command does.
 The options are as follows:
 .Bl -tag -width flag
-.It Fl K
-The
-.Fl K
-option turns off all Kerberos authentication.
 .It Fl d
 The
 .Fl d
@@ -85,23 +88,11 @@ option turns on socket debugging (using
 on the
 .Tn TCP
 sockets used for communication with the remote host.
-.It Fl k
-The
-.Fl k
-option causes
-.Nm mrsh
-to obtain tickets for the remote host in
-.Ar realm
-instead of the remote host's realm as determined by
-.Xr krb_realmofhost  3  .
 .It Fl l
 By default, the remote username is the same as the local username.
 The
 .Fl l
 option allows the remote name to be specified.
-Kerberos authentication is used, and authorization is determined
-as in
-.Xr mrlogin  1  .
 .It Fl n
 The
 .Fl n
@@ -110,13 +101,10 @@ option redirects input from the special device
 (see the
 .Sx BUGS
 section of this manual page).
-.It Fl x
+.It Fl V
 The
-.Fl x
-option turns on
-.Tn DES
-encryption for all data exchange.
-This may introduce a significant delay in response time.
+.Fl V
+option outputs the package and protocol version.
 .El
 .Pp
 If no
@@ -142,25 +130,8 @@ appends
 .Ar remotefile
 to
 .Ar other_remotefile .
-.\" .Pp
-.\" Many sites specify a large number of host names as commands in the
-.\" directory /usr/hosts.
-.\" If this directory is included in your search path, you can use the
-.\" shorthand ``host command'' for the longer form ``mrsh host command''.
-.Sh FILES
-.Bl -tag -width /etc/hosts -compact
-.It Pa /etc/hosts
-.El
 .Sh SEE ALSO
-.Xr mrlogin 1 ,
-.Xr kerberos 3 ,
-.Xr krb_sendauth 3 ,
-.Xr krb_realmofhost 3
-.Sh HISTORY
-The
-.Nm mrsh
-command appeared in
-.Bx 4.2 .
+.Xr mrlogin 1
 .Sh BUGS
 If you are using
 .Xr csh  1

@@ -20,6 +20,14 @@ Requires: xinetd
 %description server
 Server daemons for remote access commands (mrsh, mrlogin, mrcp)
 
+%package rsh-compat
+Summary: rsh compatability package for mrcp/mrlogin/mrsh
+Group: System Environment/Base
+Requires: mrsh
+Conflicts: rsh
+%description rsh-compat
+rsh compatability package for mrcp/mrlogin/mrsh
+
 %prep
 %setup -n %{name}-%{version}
 
@@ -35,19 +43,29 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %files
 %defattr(-,root,root)
 %doc NEWS README ChangeLog DISCLAIMER COPYING
-/usr/man/man1
-/usr/bin
+/usr/man/man1/mrcp.1.gz
+/usr/man/man1/mrsh.1.gz
+/usr/man/man1/mrlogin.1.gz
+/usr/bin/mrcp
+/usr/bin/mrsh
+/usr/bin/mrlogin
 
 %files server
 %defattr(-,root,root)
 %config(noreplace) /etc/xinetd.d/mrshd
 %config(noreplace) /etc/xinetd.d/mrlogind
-%config(noreplace) /etc/xinetd.d/mrexecd
 /usr/man/man8
 /usr/sbin
+
+%files rsh-compat
+/usr/man/man1/rcp.1.gz
+/usr/man/man1/rsh.1.gz
+/usr/man/man1/rlogin.1.gz
+/usr/bin/rcp
+/usr/bin/rsh
+/usr/bin/rlogin
 
 %post server
 /sbin/chkconfig mrshd on
 /sbin/chkconfig mrlogind on
-/sbin/chkconfig mrexecd on
 /etc/rc.d/init.d/xinetd reload

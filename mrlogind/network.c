@@ -195,11 +195,9 @@ network_init(int f, int *hostokp)
 	hname = find_hostname(fromp, hostokp);
 
 	port = ntohs(fromp->sin_port);
-	if (fromp->sin_family != AF_INET ||
-	    port >= IPPORT_RESERVED || port < IPPORT_RESERVED/2) {
-	    syslog(LOG_NOTICE, "Connection from %s on illegal port",
-		   inet_ntoa(fromp->sin_addr));
-	    fatal(f, "Permission denied", 0);
+	if (fromp->sin_family != AF_INET) {
+	    syslog(LOG_NOTICE, "Illegal Connection");
+	    fatal(f, "Illegal Connection", 0);
 	}
 
 #ifdef IP_OPTIONS

@@ -4,9 +4,20 @@
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
-XINETDDIR = /etc/xinetd.d
+man1_MANS = rsh.1 rcp.1 rlogin.1
+
+all:
+	ln -s $(bindir)/mrsh rsh
+	ln -s $(bindir)/mrcp rcp
+	ln -s $(bindir)/mrlogin rlogin
 
 install-exec-hook:
-	mkdir -p -m 755 $(DESTDIR)$(XINETDDIR)
-	install -m644 mrshd-xinetd $(DESTDIR)$(XINETDDIR)/mrshd
-	install -m644 mrlogind-xinetd $(DESTDIR)$(XINETDDIR)/mrlogind
+	mkdir -m 755 -p $(DESTDIR)$(bindir)
+	cp -d rsh $(DESTDIR)$(bindir)
+	cp -d rcp $(DESTDIR)$(bindir)
+	cp -d rlogin $(DESTDIR)$(bindir)
+
+clean:
+	rm -f rsh
+	rm -f rcp
+	rm -f rlogin

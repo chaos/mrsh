@@ -48,20 +48,26 @@
 .Os "Linux Mrsh"
 .Sh NAME
 .Nm mrcp
-.Nd remote file copy
+.Nd munge authenticated remote file copy
 .Sh SYNOPSIS
 .Nm mrcp
-.Op Fl px
-.Op Fl k Ar realm
+.Op Fl p
 .Ar file1 file2
 .Nm mrcp
-.Op Fl px
+.Op Fl p
 .Op Fl r
-.Op Fl k Ar realm
 .Ar file ...
 .Ar directory
+.Nm mrcp
+.Fl V
 .Sh DESCRIPTION
 .Nm Mrcp
+is a modification of the
+.Nm rcp
+command that uses munge authentication instead of reserved ports
+for security.  Just like
+.Nm rcp,
+.Nm mrcp
 copies files between machines.  Each
 .Ar file
 or
@@ -90,27 +96,10 @@ are preserved if it already existed; otherwise the mode of the source file
 modified by the
 .Xr umask  2
 on the destination host is used.
-.It Fl k
+.It Fl V
 The
-.Fl k
-option requests
-.Nm mrcp
-to obtain tickets
-for the remote host in realm
-.Ar realm
-instead of the remote host's realm as determined by
-.Xr krb_realmofhost  3  .
-.It Fl x
-The
-.Fl x
-option turns on
-.Tn DES
-encryption for all data passed by
-.Nm mrcp .
-This may impact response time and
-.Tn CPU
-utilization, but provides
-increased security.
+.Fl V
+option outputs the package and protocol version.
 .El
 .Pp
 If
@@ -140,16 +129,6 @@ are on the current machine.
 .Xr ftp 1 ,
 .Xr mrsh 1 ,
 .Xr mrlogin 1
-.Sh HISTORY
-The
-.Nm mrcp
-command appeared in
-.Bx 4.2 .
-The version of
-.Nm mrcp
-described here
-has been reimplemented with Kerberos in
-.Bx 4.3 Reno .
 .Sh BUGS
 Doesn't detect all cases where the target of a copy might
 be a file in cases where only a directory should be legal.

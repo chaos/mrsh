@@ -86,6 +86,7 @@ char rcsid[] =
 #include "pathnames.h"
 #include "logwtmp.h"
 #include "mrlogind.h"
+#include "mauth.h"
 
 pid_t forkpty(int *, char *, struct termios *, struct winsize *);
 int logout(const char *);
@@ -97,7 +98,7 @@ int logout(const char *);
 int keepalive = 1;
 int check_all = 0;
 int use_rhosts = 1;
-int allow_root_rhosts = 0;
+int allow_root_rhosts = 1;
 int deny_all_rhosts_hequiv = 0;
 
 static char oobdata[] = {(char)TIOCPKT_WINDOW};
@@ -385,14 +386,6 @@ static void child(const char *hname, const char *termtype,
 ////////////////////////////////////////////////// main ////////////////////
 
 
-static void getstr(char *buf, int cnt, const char *errmsg) {
-    char c;
-    do {
-	if (read(STDIN_FILENO, &c, 1) != 1) exit(1);
-	if (--cnt < 0) fatal(STDOUT_FILENO, errmsg, 0);
-	*buf++ = c;
-    } while (c != 0);
-}
 
 static void doit(int netfd) {
     int master, pid, on = 1;
@@ -400,12 +393,17 @@ static void doit(int netfd) {
     char *hname;
     int hostok;
     char lusername[32], rusername[32], termtype[256];
+    struct mauth ma;
 
     hname = network_init(netfd, &hostok);
 
-    getstr(rusername, sizeof(rusername), "remuser too long");
-    getstr(lusername, sizeof(lusername), "locuser too long");
-    getstr(termtype, sizeof(termtype), "Terminal type too long");
+    if (mauth(&ma, 0, 0) < 0)
+        fatal(netfd, &(ma.errmsg[0]), 0);
+
+    /* achu: Necessary b/c of internals of auth_checkauth. */
+    strncpy(lusername, &(ma.username[0]), sizeof(lusername));
+    lusername[sizeof(lusername) - 1] = '\0';
+    strcpy(rusername, lusername);
     
     /*
      * This function will either die, return -1 if authentication failed,
@@ -423,8 +421,19 @@ static void doit(int netfd) {
     }
     network_confirm();
 
+    /* achu: It is possible to disclose information by fatally
+     * exitting here.  We will accept this for now.
+     */
+
+    
     if (!hostok) {
-	write(netfd, "mrlogind: Host address mismatch.\r\n", 33);
+        syslog(LOG_ERR, "Host address mismatch.");
+        fatal(netfd, "Host address mismatch", 0);
+    }
+
+    if (!authenticated) {
+        strncpy(termtype, &(ma.cmd[0]), sizeof(termtype));
+        termtype[sizeof(termtype) - 1] = '\0';
     }
 
     pid = forkpty(&master, line, NULL, &win);
@@ -454,13 +463,16 @@ int main(int argc, char **argv) {
     openlog("mrlogind", LOG_PID | LOG_CONS, LOG_AUTH);
 
     opterr = 0;
-    while ((ch = getopt(argc, argv, "ahLln")) != EOF) {
+    while ((ch = getopt(argc, argv, "ahLlnV")) != EOF) {
 	switch (ch) {
 	    case 'a': check_all = 1; break;
 	    case 'h': allow_root_rhosts = 1; break;
 	    case 'L': deny_all_rhosts_hequiv = 1; break;
 	    case 'l': use_rhosts = 0; break;
 	    case 'n': keepalive = 0; break;
+	    case 'V': printf("%s %s-%s\n", PACKAGE, VERSION, RELEASE);
+		      printf("Protocol Level = %s\n", MRSH_PROTOCOL_VERSION);
+		      exit(0);
 	    case '?': default:
 		syslog(LOG_ERR, "usage: mrlogind [-ahLln]");
 		break;

@@ -1,7 +1,5 @@
 # default: on
-# description: mrlogind is the server for the mrlogin(1) program.  The server \
-#	provides a remote login facility with authentication based on \
-#	privileged port numbers from trusted hosts.
+# description: mrlogind is the server for the mrlogin(1) program.
 service login
 {
 	socket_type		= stream

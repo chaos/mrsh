@@ -6,4 +6,4 @@
 
 include config/Make-rpm.mk
 
-SUBDIRS = common doc etc mrcp mrexec mrexecd mrlogin mrlogind mrsh mrshd
+SUBDIRS = common doc etc mcmd mauth mrcp mrlogin mrlogind mrsh mrshd rsh-compat

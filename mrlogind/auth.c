@@ -137,7 +137,7 @@ int auth_checkauth(const char *remoteuser, const char *host,
     pam_set_item(pamh, PAM_USER, localuser);
     pam_set_item(pamh, PAM_RUSER, remoteuser);
     pam_set_item(pamh, PAM_RHOST, host);
-    pam_set_item(pamh, PAM_TTY, "tty");   /* ? */
+    pam_set_item(pamh, PAM_TTY, "mrlogin");   /* ? */
 	
     network_confirm();
     retval = attempt_auth();

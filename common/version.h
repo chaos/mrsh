@@ -2,4 +2,8 @@
  * String to embed in binaries to identify package
  */
 
-char pkg[]="$NetKit: netkit-rsh-0.17 $";
+/* Due to global naming conflicts with mcmd, pkg array must be
+ * removed.
+ */
+
+#define MRSH_PROTOCOL_VERSION   "2.0"

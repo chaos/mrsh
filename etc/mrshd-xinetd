@@ -1,8 +1,5 @@
 # default: on
-# description: The mrshd server is the server for the rcmd(3) routine and, \
-#	consequently, for the mrsh(1) program.  The server provides \
-#	remote execution facilities with authentication based on \
-#	privileged port numbers from trusted hosts.
+# description: The mrshd server for the mrsh(1) program.
 service shell
 {
 	socket_type		= stream

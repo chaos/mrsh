@@ -95,6 +95,9 @@ char rcsid[] =
 #include <ctype.h>
 #include <assert.h>
 
+#include "fd.h"
+#include "mauth.h"
+
 #if defined(__GLIBC__) && (__GLIBC__ >= 2)
 #define _check_rhosts_file  __check_rhosts_file
 #endif
@@ -105,25 +108,28 @@ char rcsid[] =
 static pam_handle_t *pamh;
 #endif /* USE_PAM */
 
-#define	OPTIONS	"ahlLn"
+#define	OPTIONS	"ahlLnV"
 
 static int keepalive = 1;
 static int check_all = 0;
 static int paranoid = 0;
 static int sent_null;
-static int allow_root_rhosts=0;
+static int allow_root_rhosts=1;
 
 char	username[20] = "USER=";
 char	homedir[64] = "HOME=";
 char	shell[64] = "SHELL=";
-char	path[100] = "PATH=";
+char	path[256] = "PATH=";
 char	*envinit[] =
 	    {homedir, shell, path, username, 0};
 extern	char	**environ;
 
 static void error(const char *fmt, ...);
 static void doit(struct sockaddr_in *fromp);
-static void getstr(char *buf, int cnt, const char *err);
+
+static const char *errmsg = NULL;
+static char errmsgbuf[4096];
+static struct mauth ma;
 
 extern int _check_rhosts_file;
 
@@ -156,20 +162,8 @@ static void fail(const char *errorstr,
 	if (paranoid) {
 	    syslog(LOG_INFO|LOG_AUTH, "mrsh command was '%s'", cmdbuf);
 	}
-	error(errorstr, hostname);
-	exit(1);
-}
-
-static void getstr(char *buf, int cnt, const char *err) {
-    char c;
-    do {
-	if (read(0, &c, 1) != 1) exit(1);
-	*buf++ = c;
-	if (--cnt == 0) {
-	    error("%s too long\n", err);
-	    exit(1);
-	}
-    } while (c != 0);
+	sprintf(errmsgbuf, errorstr, hostname);
+	errmsg = errmsgbuf;
 }
 
 static int getint(void) {
@@ -246,7 +240,7 @@ static struct passwd *doauth(const char *remuser,
     static struct pam_conv conv = { misc_conv, NULL };
     int retcode;
 #endif
-    struct passwd *pwd = getpwnam(locuser);
+    struct passwd *pwd = ma.pwd;
     if (pwd == NULL) return NULL;
     if (pwd->pw_uid==0) paranoid = 1;
 
@@ -258,7 +252,7 @@ static struct passwd *doauth(const char *remuser,
     }
     pam_set_item (pamh, PAM_RUSER, remuser);
     pam_set_item (pamh, PAM_RHOST, hostname);
-    pam_set_item (pamh, PAM_TTY, "tty");
+    pam_set_item (pamh, PAM_TTY, "mrsh");
     
     retcode = pam_authenticate(pamh, 0);
     if (retcode == PAM_SUCCESS) {
@@ -313,8 +307,8 @@ static const char *findhostname(struct sockaddr_in *fromp,
 
 	if (hostname==NULL) {
 	    /* out of memory? */
-	    error("strdup: %s\n", strerror(errno));
-	    exit(1);
+	    errmsg = "Out of memory.\n";
+	    return NULL;
 	}
 
 	/*
@@ -328,6 +322,7 @@ static const char *findhostname(struct sockaddr_in *fromp,
 	    syslog(LOG_INFO, "Couldn't look up address for %s", hostname);
 	    fail("Couldn't get address for your host (%s)\n", 
 		 remuser, inet_ntoa(fromp->sin_addr), locuser, cmdbuf);
+	    return NULL;
 	} 
 	while (hp->h_addr_list[0] != NULL) {
 	    if (!memcmp(hp->h_addr_list[0], &fromp->sin_addr,
@@ -340,7 +335,7 @@ static const char *findhostname(struct sockaddr_in *fromp,
 	       inet_ntoa(fromp->sin_addr), hp->h_name);
 	fail("Host address mismatch for %s\n", 
 	     remuser, inet_ntoa(fromp->sin_addr), locuser, cmdbuf);
-	return NULL; /* not reachable */
+	return NULL;
 }
 
 static void
@@ -363,24 +358,6 @@ doit(struct sockaddr_in *fromp)
 	port = getint();
 	alarm(0);
 
-	if (port != 0) {
-		int lport = IPPORT_RESERVED - 1;
-		sock = rresvport(&lport);
-		if (sock < 0) {
-		    syslog(LOG_ERR, "can't get stderr port: %m");
-		    exit(1);
-		}
-		if (port >= IPPORT_RESERVED) {
-		    syslog(LOG_ERR, "2nd port not reserved\n");
-		    exit(1);
-		}
-		fromp->sin_port = htons(port);
-		if (connect(sock, (struct sockaddr *)fromp,
-			    sizeof(*fromp)) < 0) {
-		    syslog(LOG_INFO, "connect second port: %m");
-		    exit(1);
-		}
-	}
 
 #if 0
 	/* We're running from inetd; socket is already on 0, 1, 2 */
@@ -389,18 +366,29 @@ doit(struct sockaddr_in *fromp)
 	dup2(f, 2);
 #endif
 
-	getstr(remuser, sizeof(remuser), "remuser");
-	getstr(locuser, sizeof(locuser), "locuser");
-	getstr(cmdbuf, sizeof(cmdbuf), "command");
+	if (mauth(&ma, 0, port) < 0) {
+		sprintf(errmsgbuf, "%s.\n", ma.errmsg);
+		errmsg = errmsgbuf;
+		goto error_out;
+	}
+
+	strncpy(remuser, &(ma.username[0]), sizeof(remuser));
+	remuser[sizeof(remuser)-1] = '\0';
+	strcpy(locuser, remuser);
+	strncpy(cmdbuf, &(ma.cmd[0]), sizeof(cmdbuf));
+	cmdbuf[sizeof(cmdbuf)-1] = '\0';
 	if (!strcmp(locuser, "root")) paranoid = 1;
 
 	hostname = findhostname(fromp, remuser, locuser, cmdbuf);
+	if (hostname == NULL)
+		goto error_out;
 
 	setpwent();
 	pwd = doauth(remuser, hostname, locuser);
 	if (pwd == NULL) {
 		fail("Permission denied.\n", 
 		     remuser, hostname, locuser, cmdbuf);
+		goto error_out;
 	}
 
 	if (chdir(pwd->pw_dir) < 0) {
@@ -413,10 +401,53 @@ doit(struct sockaddr_in *fromp)
 
 
 	if (pwd->pw_uid != 0 && !access(_PATH_NOLOGIN, F_OK)) {
-		error("Logins currently disabled.\n");
+		errmsg = "Logins currently disabled.\n";
+		goto error_out;
+	}
+
+error_out:
+	/* Set up the socket for the client. */
+	sock = 0;
+	if (port != 0) {
+		int rv;
+		char c;
+
+		if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+			syslog(LOG_ERR,"create socket: %m");
+			exit(1);
+		}
+		fromp->sin_port = htons(port);
+		if (connect(sock, (struct sockaddr *)fromp, sizeof(*fromp)) < 0) {
+			syslog(LOG_ERR,"connect second port: %m");
+			exit(1);
+		}
+
+		/* Sync with client to avoid race condition */
+		rv = read(1,&c,1);
+		if (rv != 1 || c != '\0') {
+			syslog (LOG_ERR, "%s: %m", "mrshd: Client not ready.");
+			exit(1);
+		}
+	}
+
+	/* Error message, sent on stderr stream */
+	if (errmsg != NULL) {
+		char buf[BUFSIZ], *bp = buf;
+		snprintf(bp, sizeof(buf)-1, "%c%s", '\01', errmsg);
+		fd_write_n(sock, buf, strlen(buf));
 		exit(1);
 	}
 
+	/* Send random number back on stderr */
+	if (port != 0) {
+		unsigned int rand = htonl(ma.rand);
+		if (fd_write_n(sock,&rand,sizeof(unsigned int)) < 0) {
+			syslog(LOG_ERR,"%s: %m","write to stderr port: ");
+			error("Write error, %s.\n", strerror(errno));
+			exit(1);
+		}
+	}
+					
 	(void) write(2, "\0", 1);
 	sent_null = 1;
 
@@ -509,7 +540,6 @@ static void network_init(int fd, struct sockaddr_in *fromp)
 	struct linger linger;
 	socklen_t fromlen;
 	int on=1;
-	int port;
 
 	fromlen = sizeof(*fromp);
 	if (getpeername(fd, (struct sockaddr *) fromp, &fromlen) < 0) {
@@ -568,15 +598,6 @@ static void network_init(int fd, struct sockaddr_in *fromp)
       }
 #endif
 
-	/*
-	 * Check originating port for validity.
-	 */
-	port = ntohs(fromp->sin_port);
-	if (port >= IPPORT_RESERVED || port < IPPORT_RESERVED/2) {
-	    syslog(LOG_NOTICE|LOG_AUTH, "Connection from %s on illegal port",
-		   inet_ntoa(fromp->sin_addr));
-	    exit(1);
-	}
 }
 
 int
@@ -610,6 +631,11 @@ main(int argc, char *argv[])
 		case 'L':
 			paranoid = 1;
 			break;
+
+		case 'V':
+			printf("%s %s-%s\n", PACKAGE, VERSION, RELEASE);
+			printf("Protocol Level = %s\n", MRSH_PROTOCOL_VERSION);
+			exit(0);
 
 		case '?':
 		default:

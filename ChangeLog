@@ -1,5 +1,86 @@
 2003-09-05  Albert Chu  <chu11@llnl.gov>
 
+	* mcmd, mauth, rsh-compat: New directories and files.
+
+	* common/fd.h, common/fd.c: New Files.
+	
+	* common/Makefile.am: Added build for fd library.
+
+	* common/version.h: 
+	Added MRSH_PROTOCOL_VERSION.  
+	Remove pkg char array.
+
+	* config/ac_gethostbyname_r.m4, config/ac_ipv6.m4,
+	config/ac_mauth.m4, config/ac_mcmd.m4, config/ac_munge.m4,
+	config/ac_struct_sa_len.m4, config/acx_pthread.m4: 
+	New autoconf macros.
+
+	* mrcp/mrcp.c (sink): Fixed known memory leak in rcp. 
+
+	* mrcp/mrcp.c (toremote, tolocal), mrlogin/mrlogin.c (main),
+	mrsh/mrsh.c (main):
+	Added munge authentication through call to mcmd.
+
+	* mrshd/mrshd.c (doit, findhostname), mrlogind/mrlogind.c (doit):
+	Added munge authentication through call to mauth.
+
+	* mrcp/mrcp.c (main), mrlogin/mrlogin.c (main), mrsh/mrsh.c
+	(main), mrlogind/mrlogind.c (main), mrshd/mrshd.c (main): 
+	Added -V option.
+
+	* mrshd/mrshd.c (network_init), mrlogind/network.c (network_init): 
+	Removed checks for reserved ports.
+
+	* mrsh/mrsh.c (main);
+	Added "rsh" as an acceptable binary name to call mrsh with.
+
+	* mrlogin/mrlogin.c (main);
+	Added "rlogin" as an acceptable binary name to mrlogin with.
+	
+	* mrcp/Makefile.am, mrlogin/Makefile.am, mrsh/Makefile.am:
+	Added mcmd library to build.
+	
+	* mrlogind/Makefile.am, mrshd/Makefile.am:
+	Added mauth library to build.
+	
+	* doc/Makefile.am: Removed installation of mrexec.1, mrexecd.8,
+	and in.mrexecd.8
+
+	* doc/mrcp.1, doc/mrlogin.1, doc/mrsh.1, doc/mrlogind.8,
+	doc/mrshd.8:
+	Updated to include information about munge authentication.
+	Updated to include -V option.
+	Removed all Kerberos and DES related information.
+	Removed all rcp, rlogin, rsh, rlogind, rshd specific information.
+
+	* etc/Makefile.am: Removed installation of mrexecd-xinetd.
+
+	* configure.ac:  Added munge, mcmd, and mauth configuration.
+
+	* Makefile.am, configure.ac: 
+	Added common, mcmd, mauth, and rsh-compat directories.
+
+	* Makefile.am, configure.ac: Removed compilation of mrexec and mrexecd.
+
+	* etc/mrshd-xinetd, etc/mrlogind-xinetd: 
+	Modified comments to be more appropriate for mrshd and mrlogind.
+
+	* mrsh.spec.in: 
+	Removed installation of mrexecd xinetd configuration file.
+	Removed chkconfig call to turn on mrexecd daemon.
+	Added rsh-compat subpackage.
+	
+	* README: Re-written for mrsh package.
+
+	* BUGS: 
+	Removed comments about rcs version from old rsh package.
+	Replaced rcmd with mcmd.
+
+	* NEWS:
+	Updated with information.
+
+2003-09-05  Albert Chu  <chu11@llnl.gov>
+
 	* mrcp/mrcp.c, mrcp/pathnames.h, mrlogin/des_rw.c,
 	mrlogin/mrlogin.c, mrlogind/auth.c, mrlogind/network.c,
 	mrlogind/sockconv.c, mrlogind/mrlogind.c, mrsh/mrsh.c,

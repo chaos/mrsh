@@ -75,6 +75,10 @@ AM_CONDITIONAL(WITH_PAM, test "$ac_have_pam" = "yes")
 AC_SHADOW
 AM_CONDITIONAL(WITH_SHADOW, test "$ac_have_shadow" = "yes")
 
+AC_MUNGE
+AC_MCMD
+AC_MAUTH
+
 ##
 # Epilogue.
 ##
@@ -84,13 +88,14 @@ AC_CONFIG_FILES( \
   common/Makefile \
   doc/Makefile \
   etc/Makefile \
+  mauth/Makefile \
+  mcmd/Makefile \
   mrcp/Makefile \
-  mrexec/Makefile \
-  mrexecd/Makefile \
   mrlogin/Makefile \
   mrlogind/Makefile \
   mrsh/Makefile \
   mrshd/Makefile \
+  rsh-compat/Makefile \
 )
 AC_OUTPUT
 

@@ -80,8 +80,9 @@ char rcsid[] = "$Id$";
 #include <string.h>
 #include <ctype.h>
 #include "pathnames.h"
+#include "mcmd.h"
 
-#define	OPTIONS "dfprt"
+#define	OPTIONS "dfprtV"
 
 struct passwd *pwd;
 u_short	port;
@@ -148,6 +149,10 @@ main(int argc, char *argv[])
 			iamremote = 1;
 			tflag = 1;
 			break;
+		case 'V':
+			printf("%s %s-%s\n", PACKAGE, VERSION, RELEASE);
+			printf("Protocol Level = %s\n", MRSH_PROTOCOL_VERSION);
+			exit(0);
 
 		case '?':
 		default:
@@ -277,7 +282,7 @@ toremote(const char *targ, int argc, char *argv[])
 					nospace();
 				(void)snprintf(bp, len, "%s -t %s", cmd, targ);
 				host = thost;
-					rem = rcmd(&host, port, pwd->pw_name,
+					rem = mcmd(&host, port, 
 					    tuser ? tuser : pwd->pw_name,
 					    bp, 0);
 				if (rem < 0)
@@ -340,7 +345,7 @@ tolocal(int argc, char *argv[])
 		if (!(bp = malloc(len)))
 			nospace();
 		(void)snprintf(bp, len, "%s -f %s", cmd, src);
-			rem = rcmd(&host, port, pwd->pw_name, suser, bp, 0);
+			rem = mcmd(&host, port, suser, bp, 0);
 		(void)free(bp);
 		if (rem < 0) {
 			++errs;
@@ -633,8 +638,8 @@ sink(int argc, char *argv[])
 	char ch, *targ;
 	const char *why;
 	int amt, count, exists, first, mask, mode;
-	int ofd, setimes, size, targisdir;
-	char *np, *vect[1], buf[BUFSIZ];
+	int ofd, setimes, size, targisdir, cursize = 0;
+	char *np, *vect[1], buf[BUFSIZ], *namebuf = NULL;
 
 #define	atime	tv[0]
 #define	mtime	tv[1]
@@ -656,8 +661,12 @@ sink(int argc, char *argv[])
 		targisdir = 1;
 	for (first = 1;; first = 0) {
 		cp = buf;
-		if (read(rem, cp, 1) <= 0)
+		if (read(rem, cp, 1) <= 0) {
+			if (namebuf)
+				free(namebuf);
 			return;
+		}
+
 		if (*cp++ == '\n')
 			SCREWUP("unexpected <newline>");
 		do {
@@ -676,6 +685,8 @@ sink(int argc, char *argv[])
 			continue;
 		}
 		if (buf[0] == 'E') {
+			if (namebuf)
+				free(namebuf);
 			(void)write(rem, "", 1);
 			return;
 		}
@@ -731,14 +742,18 @@ sink(int argc, char *argv[])
 		if (*cp++ != ' ')
 			SCREWUP("size not delimited");
 		if (targisdir) {
-			static char *namebuf;
-			static int cursize;
 			int need;
 
+			/* achu: Original rcp code had mem-leak here */
 			need = strlen(targ) + strlen(cp) + 250;
 			if (need > cursize) {
-				if (!(namebuf = malloc(need)))
+				if (namebuf)
+					free(namebuf);
+				if (!(namebuf = malloc(need))) {
 					error("out of memory\n");
+					exit(1);
+				}
+				cursize = need;
 			}
 			(void)snprintf(namebuf, need, "%s%s%s", targ,
 			    *targ ? "/" : "", cp);

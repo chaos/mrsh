@@ -4,19 +4,19 @@
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
-CPPFLAGS = -I../common -I../config -I../mcmd
+CPPFLAGS = -I../common -I../config $(MCMD_CFLAGS) 
 
-noinst_HEADERS = pathnames.h
+noinst_HEADERS = mcmd.h
 
-bin_PROGRAMS = mrsh
+noinst_LTLIBRARIES = libmcmd.la
 
-mrsh_SOURCES = mrsh.c
+libmcmd_la_SOURCES = mcmd.c
 
-mrsh_LDADD = ../mcmd/libmcmd.la
+libmcmd_la_LIBADD = ../common/libfd.la
 
-mrsh_LDFLAGS = $(MCMD_CFLAGS)
+libmcmd_la_LDFLAGS = $(MCMD_LIBS) 
 
-../mcmd/libmcmd.la : force-dependency-check
+../common/libfd.la : force-dependency-check
 	@cd `dirname $@` && make `basename $@`
 
 force-dependency-check:

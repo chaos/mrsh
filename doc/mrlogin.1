@@ -48,24 +48,26 @@
 .Os "Linux Mrsh"
 .Sh NAME
 .Nm mrlogin
-.Nd remote login
+.Nd munge authenticated remote login
 .Sh SYNOPSIS
-.Ar mrlogin
-.Op Fl 8EKLdx
+.Nm mrlogin
+.Op Fl 8ELd
 .Op Fl e Ar char
-.Op Fl k Ar realm
 .Op Fl l Ar username
 .Ar host
+.Nm mrlogin
+.Fl V
 .Sh DESCRIPTION
 .Nm Mrlogin
+is a modification of the
+.Nm rlogin
+command that uses munge authentication instead of reserved
+ports for security.  Just like
+.Nm rlogin,
+.Nm mrlogin
 starts a terminal session on a remote host
 .Ar host  .
 .Pp
-.Nm Mrlogin
-first attempts to use the Kerberos authorization mechanism, described below.
-If the remote host does not supporting Kerberos the standard Berkeley
-.Pa rhosts
-authorization mechanism is used.
 The options are as follows:
 .Bl -tag -width flag
 .It Fl 8
@@ -82,10 +84,6 @@ option stops any character from being recognized as an escape character.
 When used with the
 .Fl 8
 option, this provides a completely transparent connection.
-.It Fl K
-The
-.Fl K
-option turns off all Kerberos authentication.
 .It Fl L
 The
 .Fl L
@@ -105,25 +103,10 @@ option allows user specification of the escape character, which is
 ``~'' by default.
 This specification may be as a literal character, or as an octal
 value in the form \ennn.
-.It Fl k
-The
-.FL k
-option requests mrlogin to obtain tickets for the remote host
-in realm
-.Ar realm
-instead of the remote host's realm as determined by
-.Xr krb_realmofhost  3  .
-.It Fl x
-The
-.Fl x
-option turns on
-.Tn DES
-encryption for all data passed via the
-mrlogin session.
-This may impact response time and
-.Tn CPU
-utilization, but provides
-increased security.
+.It Fl V
+The 
+.Fl V
+option outputs the package and protocol version.
 .El
 .Pp
 A line of the form ``<escape char>.'' disconnects from the remote host.
@@ -140,35 +123,6 @@ the
 is transparent.
 Flow control via ^S/^Q and flushing of input and output on interrupts
 are handled properly.
-.Sh KERBEROS AUTHENTICATION
-Each user may have a private authorization list in the file
-.Pa .klogin
-in their home directory.
-Each line in this file should contain a Kerberos principal name of the
-form
-.Ar principal.instance@realm  .
-If the originating user is authenticated to one of the principals named
-in
-.Pa .klogin ,
-access is granted to the account.
-The principal
-.Ar accountname.@localrealm
-is granted access if
-there is no
-.Pa .klogin
-file.
-Otherwise a login and password will be prompted for on the remote machine
-as in
-.Xr login  1  .
-To avoid certain security problems, the
-.Pa .klogin
-file must be owned by
-the remote user.
-.Pp
-If Kerberos authentication fails, a warning message is printed and the
-standard Berkeley
-.Nm mrlogin
-is used instead.
 .Sh ENVIRONMENT
 The following environment variable is utilized by
 .Nm mrlogin :
@@ -177,19 +131,6 @@ The following environment variable is utilized by
 Determines the user's terminal type.
 .El
 .Sh SEE ALSO
-.Xr mrsh 1 ,
-.Xr kerberos 3 ,
-.Xr krb_sendauth 3 ,
-.Xr krb_realmofhost 3
-.Sh HISTORY
-The
-.Nm mrlogin
-command appeared in
-.Bx 4.2 .
+.Xr mrsh 1
 .Sh BUGS
-.Nm Mrlogin
-will be replaced by
-.Xr telnet  1
-in the near future.
-.Pp
 More of the environment should be propagated.
