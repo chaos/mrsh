@@ -1,3 +1,9 @@
+2004-10-28  Albert Chu  <chu11@llnl.gov>
+
+	* config/Make-rpm.mk: Updated with port fixes.
+
+	* mrsh.spec.in: Added port fixes.
+	
 2004-09-21  Albert Chu  <chu11@llnl.gov>
 
 	Added largefile support to mrcp (gnat mrsh/470).

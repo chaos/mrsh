@@ -29,10 +29,9 @@ Conflicts: rsh
 rsh compatability package for mrcp/mrlogin/mrsh
 
 %prep
-%setup -n %{name}-%{version}
+%setup -n %{name}-%{version}-%{release}
 
 %build
-./bootstrap
 %configure --program-prefix=%{?_program_prefix:%{_program_prefix}} %{?_without_pam}
 make
 
@@ -43,12 +42,12 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %files
 %defattr(-,root,root)
 %doc NEWS README ChangeLog COPYING DISCLAIMER
-/usr/share/man/man1/mrcp.1.gz
-/usr/share/man/man1/mrsh.1.gz
-/usr/share/man/man1/mrlogin.1.gz
-/usr/bin/mrcp
-/usr/bin/mrsh
-/usr/bin/mrlogin
+%{_mandir}/man1/mrcp.1*
+%{_mandir}/man1/mrsh.1*
+%{_mandir}/man1/mrlogin.1*
+%{_bindir}/mrcp
+%{_bindir}/mrsh
+%{_bindir}/mrlogin
 
 %files server
 %defattr(-,root,root)
@@ -58,24 +57,24 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %config(noreplace) /etc/pam.d/mrsh
 %config(noreplace) /etc/pam.d/mrlogin
 %endif
-/usr/share/man/man8/in.mrlogind.8.gz
-/usr/share/man/man8/in.mrshd.8.gz
-/usr/share/man/man8/mrlogind.8.gz
-/usr/share/man/man8/mrshd.8.gz
-/usr/sbin
+%{_mandir}/man8/in.mrlogind.8*
+%{_mandir}/man8/in.mrshd.8*
+%{_mandir}/man8/mrlogind.8*
+%{_mandir}/man8/mrshd.8*
+%{_sbindir}/*
 
 %files rsh-compat
 %defattr(-,root,root)
-/usr/share/man/man1/rcp.1.gz
-/usr/share/man/man1/rsh.1.gz
-/usr/share/man/man1/rlogin.1.gz
-/usr/share/man/man8/in.rlogind.8.gz
-/usr/share/man/man8/in.rshd.8.gz
-/usr/share/man/man8/rlogind.8.gz
-/usr/share/man/man8/rshd.8.gz
-/usr/bin/rcp
-/usr/bin/rsh
-/usr/bin/rlogin
+%{_mandir}/man1/rcp.1*
+%{_mandir}/man1/rsh.1*
+%{_mandir}/man1/rlogin.1*
+%{_mandir}/man8/in.rlogind.8*
+%{_mandir}/man8/in.rshd.8*
+%{_mandir}/man8/rlogind.8*
+%{_mandir}/man8/rshd.8*
+%{_bindir}/rcp
+%{_bindir}/rsh
+%{_bindir}/rlogin
 
 %post server
 if ! grep "^mshell" /etc/services > /dev/null; then
