@@ -126,7 +126,7 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
     char *m;
     char *vers_nptr;
     char num_seq[12] = {0};
-    size_t len;
+    socklen_t len;
     sigset_t blockme;
     sigset_t oldset;
 #ifdef HAVE_GETHOSTBYNAME_R_6

@@ -2,6 +2,8 @@
 
 	* mrsh.spec.in: Removed DISCLAIMER from package.
 
+	* src/mcmd/mcmd.c (mcmd): Type of 'len' changed from size_t to socklen_t.
+
 	* tagged mrsh-2-0-0-pre0
 
 2003-09-18  Albert Chu  <chu11@llnl.gov>
