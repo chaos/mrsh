@@ -1,3 +1,9 @@
+2003-09-26  Albert Chu  <chu11@llnl.gov>
+
+	* mrsh.spec.in: Removed DISCLAIMER from package.
+
+	* tagged mrsh-2-0-0-pre0
+
 2003-09-18  Albert Chu  <chu11@llnl.gov>
 
 	* mauth/mauth.c (check_interfaces):

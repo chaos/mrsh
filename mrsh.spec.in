@@ -42,7 +42,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 
 %files
 %defattr(-,root,root)
-%doc NEWS README ChangeLog DISCLAIMER COPYING
+%doc NEWS README ChangeLog COPYING
 /usr/man/man1/mrcp.1.gz
 /usr/man/man1/mrsh.1.gz
 /usr/man/man1/mrlogin.1.gz
