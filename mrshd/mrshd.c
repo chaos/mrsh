@@ -274,24 +274,6 @@ static struct passwd *doauth(const char *remuser,
     if (retcode == PAM_SUCCESS) {
 	retcode = pam_acct_mgmt(pamh, 0);
     }
-    else {
-        if (last_pam_msg != NULL) {
-            /* Dump all pam messages to syslog, Send only the
-             * last message to the user
-             */
-            ListIterator itr = list_iterator_create(pam_msgs);
-            char *msg;
-            while (msg = (char *)list_next(itr)) 
-                syslog(LOG_ERR, "pam_msg: %s\n", msg);
-            list_iterator_destroy(itr);
-            snprintf(errmsgbuf, ERRMSGLEN, "%s\n", last_pam_msg);
-            errmsg = errmsgbuf;
-            list_destroy(pam_msgs);
-            return NULL;
-        }
-        else
-            goto error;
-    }
     if (retcode == PAM_SUCCESS) {
 	/*
 	 * Why do we need to set groups here?
@@ -313,6 +295,20 @@ static struct passwd *doauth(const char *remuser,
     }
     if (retcode != PAM_SUCCESS) {
         pam_end(pamh, retcode);
+        if (last_pam_msg != NULL) {
+            /* Dump all pam messages to syslog, Send only the
+             * last message to the user
+             */
+            ListIterator itr = list_iterator_create(pam_msgs);
+            char *msg;
+            while (msg = (char *)list_next(itr)) 
+                syslog(LOG_ERR, "pam_msg: %s\n", msg);
+            list_iterator_destroy(itr);
+            snprintf(errmsgbuf, ERRMSGLEN, "%s\n", last_pam_msg);
+            errmsg = errmsgbuf;
+            list_destroy(pam_msgs);
+            return NULL;
+        }
         goto error;
     }
     list_destroy(pam_msgs);
