@@ -1,6 +1,6 @@
 # default: on
 # description: The mrshd server for the mrsh(1) program.
-service shell
+service mshell
 {
 	socket_type		= stream
 	wait			= no

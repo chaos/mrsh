@@ -3,7 +3,11 @@
 	* mrshd/mrshd.c (main), mrlogind/auth.c (auth_checkoptions):
 	Removed syslog message indicating that rhost functionality has
 	been moved to pam_rhosts_auth.
-	
+
+	* etc/mrlogind-xinetd: Renamed service name to mlogin.
+
+	* etc/mrshd-xinetd: Renamed service name to mshell.
+
 2003-09-05  Albert Chu  <chu11@llnl.gov>
 
 	* mcmd, mauth, rsh-compat: New directories and files.

@@ -1,6 +1,6 @@
 # default: on
 # description: mrlogind is the server for the mrlogin(1) program.
-service login
+service mlogin
 {
 	socket_type		= stream
 	wait			= no
