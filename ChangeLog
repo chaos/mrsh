@@ -1,3 +1,12 @@
+2003-01-26  Albert Chu <chu11@llnl.gov>
+
+	* etc/mrexecd-xinetd: Removed from repository.
+
+	* etc/mrlogin.pam, etc/mrsh.pam: New files.
+
+	* etc/Makefile.am, mrsh.spec.in: Support new files and
+	--without-pam packing option.
+
 2003-01-16  Albert Chu <chu11@llnl.gov>
 
 	* mrsh.spec.in: Xinetd conditional restarts now.
