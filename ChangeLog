@@ -8,6 +8,8 @@
 
 	* etc/mrshd-xinetd: Renamed service name to mshell.
 
+	* mauth/mauth.c (mauth): Reworded munge_decode error message.
+	
 2003-09-05  Albert Chu  <chu11@llnl.gov>
 
 	* mcmd, mauth, rsh-compat: New directories and files.
