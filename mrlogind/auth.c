@@ -76,10 +76,12 @@ int sock_conv(int num_msg, const struct pam_message **msgm,
 static pam_handle_t *pamh;
 
 void auth_checkoptions(void) {
+#if 0
     if (use_rhosts==0 || deny_all_rhosts_hequiv || allow_root_rhosts) {
 	syslog(LOG_ERR, "-l, -L, and -h functionality has been moved to "
 	       "pam_rhosts_auth in /etc/pam.conf");
     }
+#endif
 }
 
 void auth_finish(void) {

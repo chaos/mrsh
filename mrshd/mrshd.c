@@ -647,9 +647,11 @@ main(int argc, char *argv[])
 	argv += optind;
 
 #ifdef USE_PAM
+#if 0
        if (_check_rhosts_file == 0 || allow_root_rhosts)
                syslog(LOG_ERR, "-l and -h functionality has been moved to "
                                "pam_rhosts_auth in /etc/pam.conf");
+#endif
 #endif /* USE_PAM */
 
 	network_init(0, &from);
