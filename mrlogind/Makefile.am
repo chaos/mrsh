@@ -19,7 +19,7 @@ else
 in_mrlogind_SOURCES = auth.c network.c mrlogind.c
 endif 
 
-in_mrlogind_CFLAGS = -I../common -I../config -I../mauth
+in_mrlogind_CFLAGS = -I$(srcdir)/../common -I../config -I$(srcdir)/../mauth
 
 ../mauth/libmauth.la : force-dependency-check
 	@cd `dirname $@` && make `basename $@`

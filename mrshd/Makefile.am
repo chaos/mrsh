@@ -16,7 +16,7 @@ endif
 
 in_mrshd_LDADD = ../mauth/libmauth.la
 
-in_mrshd_CFLAGS = -I../common -I../config -I../mauth
+in_mrshd_CFLAGS = -I$(srcdir)/../common -I../config -I$(srcdir)/../mauth
 
 ../mauth/libmauth.la : force-dependency-check
 	@cd `dirname $@` && make `basename $@`

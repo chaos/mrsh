@@ -1,3 +1,9 @@
+2004-06-07  Albert Chu  <chu11@llnl.gov>
+
+	* mauth/Makefile.am, mcmd/Makefile.am, mcrp/Makefile.am,
+	mrsh/Makefile.am, mrlogin/Makefile.am, mrlogind/Makefile.am,
+	mrshd/Makefile.am: Minor fixes to fix distcheck.
+	
 2004-05-19  Albert Chu  <chu11@llnl.gov>
 
 	* Makefile.am, src/mrshd/Makefile.am, rsh-compat/Makefile.am,

@@ -10,7 +10,7 @@ bin_PROGRAMS = mrsh
 
 mrsh_SOURCES = mrsh.c
 
-mrsh_CFLAGS = -I../common -I../config -I../mcmd
+mrsh_CFLAGS = -I$(srcdir)/../common -I../config -I$(srcdir)/../mcmd
 
 mrsh_LDADD = ../mcmd/libmcmd.la
 
