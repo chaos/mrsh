@@ -108,7 +108,6 @@ char rcsid[] =
 static pam_handle_t *pamh;
 
 #include "list.h"
-static List pam_msgs = NULL;
 extern char *last_pam_msg;
 extern int mrsh_conv(int num_msg, const struct pam_message **msg,
                      struct pam_response **resp, void *appdata_ptr);
@@ -246,6 +245,7 @@ static struct passwd *doauth(const char *remuser,
 #ifdef USE_PAM
     static struct pam_conv conv;
     int retcode;
+    List pam_msgs = NULL;
 #endif
     struct passwd *pwd = ma.pwd;
     if (pwd == NULL) goto error;
@@ -272,6 +272,7 @@ static struct passwd *doauth(const char *remuser,
     
     retcode = pam_authenticate(pamh, 0);
     if (retcode == PAM_SUCCESS) {
+        last_pam_msg = NULL;
 	retcode = pam_acct_mgmt(pamh, 0);
     }
     if (retcode == PAM_SUCCESS) {
@@ -287,10 +288,12 @@ static struct passwd *doauth(const char *remuser,
             pam_end(pamh, PAM_SYSTEM_ERR);
             goto error;
         }
+        last_pam_msg = NULL;
         retcode = pam_setcred(pamh, PAM_ESTABLISH_CRED);
     }
     
     if (retcode == PAM_SUCCESS) {
+        last_pam_msg = NULL;
         retcode = pam_open_session(pamh,0);
     }
     if (retcode != PAM_SUCCESS) {

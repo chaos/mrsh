@@ -1,3 +1,7 @@
+2003-12-16  Albert Chu <chu11@llnl.gov>
+
+	* mrshd/mrshd.c (doauth): Cleaned up code and fixed up code logic.
+
 2003-12-15  Albert Chu <chu11@llnl.gov>
 
 	* mrshd/mrshconv.c, mrshd/mrshd.c: Moved last_pam_msg declaration
