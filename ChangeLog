@@ -7,6 +7,8 @@
 	etc/xinetd/Makefile.am, etc/xinetd/mrlogind, etc/xinetd/mrshd: New files.
 
 	* configure.ac, etc/Makefile.am: Updated appropriately for new files.
+
+	* rsh-compat/Makefile.am: Cleaned up. 
 	
 2004-06-07  Albert Chu  <chu11@llnl.gov>
 
