@@ -1,5 +1,9 @@
 2003-12-12  Albert Chu <chu11@llnl.gov>
 
+	* mcmd/mcmd.c (mcmd): Initial s2 to -1 for safety.
+	
+2003-12-12  Albert Chu <chu11@llnl.gov>
+
         Fix gethostbyname bug found by Mark Grondona (gnat mrsh/349) 
 
 	* mauth/mauth.c (check_munge_ip): Removed calls to gethostname and
@@ -34,6 +38,8 @@
 
 	* mrshd/mrshd.c: Globally made all error messages end in "\n"
 	rather than ".\n" for consistency with mauth.
+
+	* tagged mrsh-2-0-0-pre5
 
 2003-12-11  Albert Chu <chu11@llnl.gov>
 

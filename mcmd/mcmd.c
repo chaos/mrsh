@@ -244,6 +244,7 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
     sprintf(haddrdot, "%u.%u.%u.%u", hptr[0], hptr[1], hptr[2], hptr[3]);
 
     lport = 0;
+    s2 = -1;
     if (fd2p != NULL) {
         /*
          * Start the socket setup for the stderr.
