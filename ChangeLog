@@ -12,6 +12,9 @@
 
 	Fix error message reporting
 
+	* mauth/mauth.c (mauth): More detailed munge_decode error returned
+	to user.
+
 	* mrshd/mrshd.c (doit): Error out with "Internal System Error"
 	when list_create fails, rather than exiting.
 
@@ -25,7 +28,6 @@
 	
 	* mrshd/mrshd.c: Globally made all error messages end in "\n"
 	rather than ".\n" for consistency with mauth.
-
 
 2003-12-11  Albert Chu <chu11@llnl.gov>
 
