@@ -16,3 +16,5 @@ if WITH_PAM
 	install -m444 mrsh.pam $(DESTDIR)$(PAMDDIR)/mrsh
 	install -m444 mrlogin.pam $(DESTDIR)$(PAMDDIR)/mrlogin
 endif
+
+EXTRA_DIST = mrshd-xinetd mrlogind-xinetd mrsh.pam mrlogin.pam

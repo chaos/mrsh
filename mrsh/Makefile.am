@@ -4,13 +4,13 @@
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
-CPPFLAGS = -I../common -I../config -I../mcmd
-
 noinst_HEADERS = pathnames.h
 
 bin_PROGRAMS = mrsh
 
 mrsh_SOURCES = mrsh.c
+
+mrsh_CFLAGS = -I../common -I../config -I../mcmd
 
 mrsh_LDADD = ../mcmd/libmcmd.la
 

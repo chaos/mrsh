@@ -4,14 +4,10 @@
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
-CPPFLAGS = -I../common -I../config
-
 noinst_HEADERS = mauth.h
-
 noinst_LTLIBRARIES = libmauth.la
-
-libmauth_la_SOURCES = mauth.c mauth.h
-
+libmauth_la_SOURCES = mauth.c
+libmauth_la_CFLAGS = -I../common -I../config
 libmauth_la_LIBADD = ../common/libfd.la
 
 libmauth_la_LDFLAGS = $(MAUTH_LIBS)

@@ -1,3 +1,13 @@
+2004-05-19  Albert Chu  <chu11@llnl.gov>
+
+	* Makefile.am, src/mrshd/Makefile.am, rsh-compat/Makefile.am,
+	etc/Makefile.am: Fix dist issues.
+
+	* common/Makefile.am, mauth/Makefile.am, mcmd/Makefile.am,
+	mrcp/Makefile.am, mrsh/Makefile.am, mrlogin/Makefile.am,
+	mrshd/Makefile.am, mrlogind/Makefile.am, configure.ac: Cleanup and
+	fixes.
+	
 2004-05-06  Mark Grondona  <grondona1@llnl.gov>
 
 	* mrlogind/mrlogind.c (doit): Change signal handler for SIGCHLD

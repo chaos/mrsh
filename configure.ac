@@ -11,12 +11,14 @@ AC_INIT([mrsh])
 AC_META
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_SRCDIR([README])
+AC_CANONICAL_SYSTEM
 
 ##
 # Automake support.
 ##
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
 AM_CONFIG_HEADER([config/config.h])
+AM_MAINTAINER_MODE
 
 ##
 # Checks for programs.
