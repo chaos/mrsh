@@ -15,6 +15,9 @@ Changes in mrsh-2.0:
 * Added the -V option to mrcp, mrsh, mrlogin, in.mrshd, and
   in.mrlogind.
 * Fixed ia64 portability bug that prohibited logins to succeed.
+* Fixed munge authentication check bug when remote host was unable
+  to resolve the current hostname.
+* Output more useful information to user or syslog about errors.
 * Increased protocol version to 2.0.
 
 $Id$
