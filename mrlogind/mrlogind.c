@@ -424,7 +424,6 @@ static void doit(int netfd) {
     /* achu: It is possible to disclose information by fatally
      * exitting here.  We will accept this for now.
      */
-
     
     if (!hostok) {
         syslog(LOG_ERR, "Host address mismatch.");
@@ -432,9 +431,12 @@ static void doit(int netfd) {
     }
 
     if (!authenticated) {
-        strncpy(termtype, &(ma.cmd[0]), sizeof(termtype));
-        termtype[sizeof(termtype) - 1] = '\0';
+        syslog(LOG_ERR, "Authentication Failed.");
+        fatal(netfd, "Permission Denied", 0);
     }
+
+    strncpy(termtype, &(ma.cmd[0]), sizeof(termtype));
+    termtype[sizeof(termtype) - 1] = '\0';
 
     pid = forkpty(&master, line, NULL, &win);
     if (pid < 0) {

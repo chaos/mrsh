@@ -1,3 +1,8 @@
+2003-10-03  Albert Chu  <chu11@llnl.gov>
+
+	* mrlogind/mrlogind.c (doit): Modified code to fatally exit
+	if PAM authentication failed.
+
 2003-09-30  Albert Chu  <chu11@llnl.gov>
 
 	* mauth/mauth.c (getifrlen): Added fix that will allow mauth to
