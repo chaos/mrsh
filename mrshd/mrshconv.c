@@ -15,7 +15,7 @@
 #include <security/pam_misc.h>
 #include "list.h"
 
-extern char *last_pam_msg;
+char *last_pam_msg = NULL;
 
 int mrsh_conv(int num_msg, const struct pam_message **msg,
               struct pam_response **resp, void *appdata_ptr) {

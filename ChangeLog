@@ -1,3 +1,8 @@
+2003-12-15  Albert Chu <chu11@llnl.gov>
+
+	* mrshd/mrshconv.c, mrshd/mrshd.c: Moved last_pam_msg declaration
+	from mrshd.c to mrshconv.c.
+
 2003-12-12  Albert Chu <chu11@llnl.gov>
 
 	* mcmd/mcmd.c (mcmd): Initialize s2 to -1 for safety.  Fix

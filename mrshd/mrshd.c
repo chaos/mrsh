@@ -109,7 +109,7 @@ static pam_handle_t *pamh;
 
 #include "list.h"
 static List pam_msgs = NULL;
-char *last_pam_msg = NULL;
+extern char *last_pam_msg;
 extern int mrsh_conv(int num_msg, const struct pam_message **msg,
                      struct pam_response **resp, void *appdata_ptr);
 #endif /* USE_PAM */
