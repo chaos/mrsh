@@ -2,6 +2,8 @@
 
 	* mrsh/mrsh.c (main): Set SO_KEEPALIVE on sockets, to prevent mrsh
 	from hanging.
+
+	* tagged mrsh-2-0-0-pre7
 	
 2003-01-26  Albert Chu <chu11@llnl.gov>
 
