@@ -106,6 +106,12 @@ char rcsid[] =
 #include <security/pam_appl.h>
 #include <security/pam_misc.h>
 static pam_handle_t *pamh;
+
+#include "list.h"
+static List pam_msgs = NULL;
+char *last_pam_msg = NULL;
+extern int mrsh_conv(int num_msg, const struct pam_message **msg,
+                     struct pam_response **resp, void *appdata_ptr);
 #endif /* USE_PAM */
 
 #define	OPTIONS	"ahlLnV"
@@ -127,8 +133,9 @@ extern	char	**environ;
 static void error(const char *fmt, ...);
 static void doit(struct sockaddr_in *fromp);
 
+#define ERRMSGLEN           4096
+static char errmsgbuf[ERRMSGLEN];
 static const char *errmsg = NULL;
-static char errmsgbuf[4096];
 static struct mauth ma;
 
 extern int _check_rhosts_file;
@@ -231,13 +238,12 @@ static void stderr_parent(int sock, int pype, int pid) {
     exit(0);
 }
 
-
 static struct passwd *doauth(const char *remuser, 
 			     const char *hostname, 
 			     const char *locuser)
 {
 #ifdef USE_PAM
-    static struct pam_conv conv = { misc_conv, NULL };
+    static struct pam_conv conv = { mrsh_conv, (void *)&pam_msgs };
     int retcode;
 #endif
     struct passwd *pwd = ma.pwd;
@@ -384,10 +390,35 @@ doit(struct sockaddr_in *fromp)
 		goto error_out;
 
 	setpwent();
+#ifdef USE_PAM
+        if ((pam_msgs = list_create((ListDelF)free)) == NULL) {
+            syslog(LOG_ERR, "list_create() failed\n");
+            exit (1);
+        }
+#endif
 	pwd = doauth(remuser, hostname, locuser);
 	if (pwd == NULL) {
+#ifdef USE_PAM
+                if (last_pam_msg != NULL) {
+                    /* Dump all pam messages to syslog, Send only the
+                     * last message to the user
+                     */
+                    ListIterator itr = list_iterator_create(pam_msgs);
+                    char *msg;
+                    while (msg = (char *)list_next(itr)) 
+                        syslog(LOG_ERR, "pam_msg: %s\n", msg);
+                    list_iterator_destroy(itr);
+                    snprintf(errmsgbuf, ERRMSGLEN, "%s\n", last_pam_msg);
+                    errmsg = errmsgbuf;
+                }
+                else
+                    fail("Permission denied.\n", 
+                         remuser, hostname, locuser, cmdbuf);
+                list_destroy(pam_msgs);
+#else
 		fail("Permission denied.\n", 
 		     remuser, hostname, locuser, cmdbuf);
+#endif
 		goto error_out;
 	}
 
@@ -658,7 +689,3 @@ main(int argc, char *argv[])
 	doit(&from);
 	return 0;
 }
-
-
-
-

@@ -1,7 +1,16 @@
+2003-10-31  Albert Chu <chu11@llnl.gov>
+
+	* mrshd/list.h, mrshd/list.c, mrshd/mrshconv.c: New files.
+
+	* mrshd/mrshd.c (doauth, doit): Modified to use new mrsh_conv pam
+	conversation function that fixes bug.  See comments in mrshconv.c.
+	
 2003-10-17  Albert Chu <chu11@llnl.gov>
 
 	* mrsh.spec.in: Make default owner and group of mrsh-rsh-compat
 	subpackage root.
+
+	* Tagged mrsh-2-0-0-pre3
 	
 2003-10-09  Mark Grondona <grondona1@llnl.gov>
 
@@ -13,6 +22,8 @@
 
 	* mauth/mauth.c (mauth): Copied values from password entry
 	into local structure.
+
+	* Tagged mrsh-2-0-0-pre2
 
 2003-10-03  Albert Chu  <chu11@llnl.gov>
 
