@@ -12,6 +12,8 @@
 	* rsh-compat/Makefile.am: Fix bug in build when symlinks already
 	existed.
 
+	* Tagged mrsh-2-0-0-pre4
+	
 2003-10-17  Albert Chu <chu11@llnl.gov>
 
 	* mrsh.spec.in: Make default owner and group of mrsh-rsh-compat
