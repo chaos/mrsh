@@ -1,3 +1,10 @@
+2003-09-30  Albert Chu  <chu11@llnl.gov>
+
+	* mauth/mauth.c (getifrlen): Added fix that will allow mauth to
+	work properly on both 32 and 64 bit architectures.
+
+	* tagged mrsh-2-0-0-pre1
+
 2003-09-26  Albert Chu  <chu11@llnl.gov>
 
 	* mrsh.spec.in: Removed DISCLAIMER from package.

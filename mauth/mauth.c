@@ -74,6 +74,9 @@ int getifrlen(struct ifreq *ifr) {
             len = sizeof(struct sockaddr_in);
             break;
     }
+    
+    if (len < (sizeof(struct ifreq) - IFNAMSIZ))
+        len = sizeof(struct ifreq) - IFNAMSIZ;
 #endif /* HAVE_SA_LEN */
 
     return len;
