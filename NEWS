@@ -9,7 +9,11 @@ Changes in mrsh-2.0:
   respectively.  They are now both subpackages of mrsh.
 * Fixed memory leak in mrcp that can cause a crash when recursively
   copying deeply nested directories.
-* Added the -V option to mrcp, mrsh, mrlogin, in.mrshd, and in.mrlogind.
+* Fixed pam conversation bug in mrshd that caused mrsh client to fail.
+* Added more useful messages to mrsh/mrlogin for when connections are
+  reset from the remote host. 
+* Added the -V option to mrcp, mrsh, mrlogin, in.mrshd, and
+  in.mrlogind.
 * Fixed ia64 portability bug that prohibited logins to succeed.
 * Increased protocol version to 2.0.
 
