@@ -478,7 +478,6 @@ doit(struct sockaddr_in *fromp)
 		 */
 	}
 
-
 	if (pwd->pw_uid != 0 && !access(_PATH_NOLOGIN, F_OK)) {
                 syslog(LOG_ERR, "Logins currently disabled\n");
 		errmsg = "Logins currently disabled";
