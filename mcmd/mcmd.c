@@ -188,18 +188,18 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
         int rand_fd;
           
         if ((rand_fd = open ("/dev/urandom", O_RDONLY | O_NONBLOCK)) < 0) {
-            perror("mcmd: Open of /dev/urandom failed.");
+            perror("mcmd: Open of /dev/urandom failed");
             exit(1);
         }
 	  
         do {
             if ((rv = read (rand_fd, &randy, sizeof(uint32_t))) < 0) {
-                perror("mcmd: Read of /dev/urandom failed.");
+                perror("mcmd: Read of /dev/urandom failed");
                 close(rand_fd);
                 exit(1);
             }
             if (rv < (int) (sizeof(uint32_t))) {
-                perror("mcmd: Read returned too few bytes.");
+                perror("mcmd: Read returned too few bytes");
                 close(rand_fd);
                 exit(1);
             }
@@ -218,7 +218,7 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
     len = sizeof(struct sockaddr_in);
 
     if ((s = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-        perror("mcmd: socket call stdout failed.");
+        perror("mcmd: socket call stdout failed");
         exit(1);
     }
 
@@ -275,7 +275,7 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
 
         memset(hostname, '\0', MAXHOSTNAMELEN+1);
         if (gethostname(hostname, MAXHOSTNAMELEN) < 0) {
-            perror("mcmd: gethostname call failed.");
+            perror("mcmd: gethostname call failed");
             exit(1);
         }
 
@@ -297,7 +297,7 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
         struct sockaddr_in sin2;
 
         if ((s2 = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-            perror("mcmd: socket call for stderr failed.");
+            perror("mcmd: socket call for stderr failed");
             goto bad;
         }
 
@@ -306,7 +306,7 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
         sin2.sin_addr.s_addr = htonl(INADDR_ANY);
         sin2.sin_port = 0;
         if (bind(s2, (struct sockaddr *)&sin2, sizeof(sin2)) < 0) {
-            perror("mcmd: bind failed.");
+            perror("mcmd: bind failed");
             close(s2);
             goto bad;
         }
@@ -318,7 +318,7 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
          * for the return (stderr) connection...
          */
         if (getsockname(s2,&m_socket,&len) < 0) {
-            perror("mcmd: getsockname failed.");
+            perror("mcmd: getsockname failed");
             close(s2);
             goto bad;
         }
@@ -327,7 +327,7 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
         lport = ntohs(getp->sin_port);
 
         if (listen(s2, 5) < 0) {
-            perror("mcmd: listen() failed.");
+            perror("mcmd: listen() failed");
             close(s2);
             goto bad;
         }
@@ -378,7 +378,7 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
               (strlen(num_seq)+1) + strlen(cmd)+2);
     tmbuf = mbuf = malloc(mcount);
     if (tmbuf == NULL) {
-        perror("mcmd: Error from malloc.");
+        perror("mcmd: Error from malloc");
         close(s2);
         goto bad;
     }
@@ -426,9 +426,9 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
             free(tmbuf);
             if (rv == -1) {
                 if (errno == EPIPE)
-                    perror("mcmd: Lost connection (EPIPE).");
+                    perror("mcmd: Lost connection (EPIPE)");
                 else
-                    perror("mcmd: Write of stderr port.");
+                    perror("mcmd: Write of stderr port");
             }
             else
                 fprintf(stderr, "mcmd: write incorrect number of bytes.\n");
@@ -449,9 +449,9 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
         free(tmbuf);
         if (rv == -1) {
             if (errno == EPIPE)
-                perror("mcmd: Lost connection (EPIPE).");
+                perror("mcmd: Lost connection (EPIPE)");
             else
-                perror("mcmd: Write of munge data.");
+                perror("mcmd: Write of munge data");
         }
         else
             fprintf(stderr, "mcmd: write incorrect number of bytes.\n");
@@ -476,7 +476,7 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
         maxfd = (s > s2) ? s : s2;
         if (select(maxfd + 1, &reads, 0, 0, 0) < 1 || !FD_ISSET(s2, &reads)) {
             if (errno != 0)
-                perror("mcmd: Select failed (setting up stderr).");
+                perror("mcmd: Select failed (setting up stderr)");
             else {
                 char buf[100];
                 int rv = read(s, buf, 100);
@@ -495,7 +495,7 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
         len = sizeof(from); /* arg to accept */
         
         if ((s3 = accept(s2, (struct sockaddr *)&from, &len)) < 0) {
-            perror("mcmd: accept (stderr) failed.");
+            perror("mcmd: accept (stderr) failed");
             close(s2);
             goto bad;
         }
@@ -514,7 +514,7 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
          * socket is up prior to the daemon running the command.
          */
         if (write(s,"",1) != 1) { 
-            perror("mcmd: Could not communicate to daemon to proceed.");
+            perror("mcmd: Could not communicate to daemon to proceed");
             close(s3);
             goto bad;
         }
@@ -524,8 +524,11 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
          * our random number we generated onto this socket.
          */
         rv = fd_read_n(s3, &rand, sizeof(rand));
-        if (rv != (ssize_t) (sizeof(rand))) {
-            perror("mcmd: Bad read of verification number.");
+        if (rv <= 0) {
+            if (rv == 0)
+                perror("mcmd: Connection closed by remote host");
+            else
+                perror("mcmd: Bad read of verification number");
             close(s3);
             goto bad;
         }
@@ -538,11 +541,18 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
             memcpy(tptr,(char *) &rand,sizeof(rand));
             tptr += sizeof(rand);
             if ((fd_read_line (s3, tptr, LINEBUFSIZE - sizeof(rand))) < 0) {
-                perror("mcmd: Read error from remote host.");
+                perror("mcmd: Read error from remote host");
                 close(s3);
                 goto bad;
             }
-            fprintf(stderr,"mcmd error returned: %s\n", &tmpbuf[0]);
+            /* Legacy rsh may consider the first byte an error code,
+             * so don't output this byte.
+             */
+            if (tmpbuf[0] == '\01')
+              tptr = &tmpbuf[1];
+            else
+              tptr = &tmpbuf[0];
+            fprintf(stderr,"mcmd error returned: %s\n", tptr);
             close(s3);
             goto bad;
         }
@@ -554,7 +564,7 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
     }
 
     if ((rv = read(s, &c, 1)) < 0) {
-        perror("mcmd: read: protocol failure."); 
+        perror("mcmd: read: protocol failure"); 
         goto bad2;
     }
 
@@ -568,7 +578,7 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
         char tmpbuf[LINEBUFSIZE];
       
         if (fd_read_line (s, &tmpbuf[0], LINEBUFSIZE ) < 0) {
-            perror("mcmd: Error from remote host.");
+            perror("mcmd: Error from remote host");
             goto bad2;
         }
         fprintf(stderr,"mcmd error returned: %s\n",&tmpbuf[0]);

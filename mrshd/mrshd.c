@@ -196,6 +196,7 @@ static void fail(const char *errorstr,
 	if (paranoid) {
 	    syslog(LOG_INFO|LOG_AUTH, "mrsh command was '%s'", cmdbuf);
 	}
+	memset(errmsgbuf, '\0', ERRMSGLEN);
 	sprintf(errmsgbuf, errorstr, hostname);
 	errmsg = errmsgbuf;
 }
@@ -335,6 +336,7 @@ static struct passwd *doauth(const char *remuser,
             while (msg = (char *)list_next(itr)) 
                 syslog(LOG_ERR, "pam_msg: %s\n", msg);
             list_iterator_destroy(itr);
+	    memset(errmsgbuf, '\0', ERRMSGLEN);
             snprintf(errmsgbuf, ERRMSGLEN, "%s", last_pam_msg);
             errmsg = errmsgbuf;
             list_destroy(pam_msgs);
