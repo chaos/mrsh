@@ -1,6 +1,6 @@
 # default: on
-# description: The rshd server is the server for the rcmd(3) routine and, \
-#	consequently, for the rsh(1) program.  The server provides \
+# description: The mrshd server is the server for the rcmd(3) routine and, \
+#	consequently, for the mrsh(1) program.  The server provides \
 #	remote execution facilities with authentication based on \
 #	privileged port numbers from trusted hosts.
 service shell
@@ -10,6 +10,6 @@ service shell
 	user			= root
 	log_on_success		+= USERID
 	log_on_failure 		+= USERID
-	server			= /usr/sbin/in.rshd
+	server			= /usr/sbin/in.mrshd
 	disable			= yes
 }

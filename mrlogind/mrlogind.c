@@ -17,6 +17,17 @@
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
+ * 5. This is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published
+ *    by the Free Software Foundation; either version 2 of the
+ *    License, or (at your option) any later version.
+ * 6. This is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ * 7. You should have received a copy of the GNU General Public License;
+ *    if not, write to the Free Software Foundation, Inc., 59 Temple
+ *    Place, Suite 330, Boston, MA  02111-1307  USA.
  *
  * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -37,11 +48,11 @@ char copyright[] =
   "All rights reserved.\n";
 
 /* 
- * From: @(#)rlogind.c	5.53 (Berkeley) 4/20/91
+ * From: @(#)mrlogind.c	5.53 (Berkeley) 4/20/91
  */
 char rcsid[] = 
   "$Id$";
-#include "../version.h"
+#include "version.h"
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -74,7 +85,7 @@ char rcsid[] =
 
 #include "pathnames.h"
 #include "logwtmp.h"
-#include "rlogind.h"
+#include "mrlogind.h"
 
 pid_t forkpty(int *, char *, struct termios *, struct winsize *);
 int logout(const char *);
@@ -103,10 +114,10 @@ void fatal(int f, const char *msg, int syserr) {
     network_anticonfirm();
 
     if (!syserr) {
-	snprintf(buf, sizeof(buf), "rlogind: %s.\r\n", msg);
+	snprintf(buf, sizeof(buf), "mrlogind: %s.\r\n", msg);
     }
     else {
-	snprintf(buf, sizeof(buf), "rlogind: %s: %s.\r\n", 
+	snprintf(buf, sizeof(buf), "mrlogind: %s: %s.\r\n", 
 		 msg, strerror(errno));
     }
     write(f, buf, strlen(buf));
@@ -139,7 +150,7 @@ static int control(int pty, char *cp, int n) {
 }
 
 /*
- * rlogin "protocol" machine.
+ * mrlogin "protocol" machine.
  */
 static void protocol(int f, int p) {
 	static char magic[2] = { (char)0377, (char)0377 };
@@ -155,7 +166,7 @@ static void protocol(int f, int p) {
 	 * (our controlling tty is the master pty).
 	 */
 	(void) signal(SIGTTOU, SIG_IGN);
-	send(f, oobdata, 1, MSG_OOB);	/* indicate new rlogin */
+	send(f, oobdata, 1, MSG_OOB);	/* indicate new mrlogin */
 	if (f > p)
 		nfd = f + 1;
 	else
@@ -358,7 +369,7 @@ static void child(const char *hname, const char *termtype,
     } 
     else {
 	if (localuser[0] == '-') {
-	    syslog(LOG_AUTH|LOG_INFO, "rlogin with an option as a name!");
+	    syslog(LOG_AUTH|LOG_INFO, "mrlogin with an option as a name!");
 	    exit(1);
 	}
 	auth_finish();
@@ -413,7 +424,7 @@ static void doit(int netfd) {
     network_confirm();
 
     if (!hostok) {
-	write(netfd, "rlogind: Host address mismatch.\r\n", 33);
+	write(netfd, "mrlogind: Host address mismatch.\r\n", 33);
     }
 
     pid = forkpty(&master, line, NULL, &win);
@@ -440,7 +451,7 @@ int main(int argc, char **argv) {
     int ch;
     use_rhosts = 1;     /* default */
 
-    openlog("rlogind", LOG_PID | LOG_CONS, LOG_AUTH);
+    openlog("mrlogind", LOG_PID | LOG_CONS, LOG_AUTH);
 
     opterr = 0;
     while ((ch = getopt(argc, argv, "ahLln")) != EOF) {
@@ -451,7 +462,7 @@ int main(int argc, char **argv) {
 	    case 'l': use_rhosts = 0; break;
 	    case 'n': keepalive = 0; break;
 	    case '?': default:
-		syslog(LOG_ERR, "usage: rlogind [-ahLln]");
+		syslog(LOG_ERR, "usage: mrlogind [-ahLln]");
 		break;
 	}
     }

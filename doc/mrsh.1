@@ -16,6 +16,17 @@
 .\" 4. Neither the name of the University nor the names of its contributors
 .\"    may be used to endorse or promote products derived from this software
 .\"    without specific prior written permission.
+.\" 5. This is free software; you can redistribute it and/or modify it
+.\"    under the terms of the GNU General Public License as published
+.\"    by the Free Software Foundation; either version 2 of the
+.\"    License, or (at your option) any later version.
+.\" 6. This is distributed in the hope that it will be useful, but
+.\"    WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"    GNU General Public License for more details.
+.\" 7. You should have received a copy of the GNU General Public License;
+.\"    if not, write to the Free Software Foundation, Inc., 59 Temple
+.\"    Place, Suite 330, Boston, MA  02111-1307  USA.
 .\"
 .\" THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
 .\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -29,36 +40,36 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.\"	from: @(#)rsh.1	6.10 (Berkeley) 7/24/91
+.\"	from: @(#)mrsh.1	6.10 (Berkeley) 7/24/91
 .\"	$Id$
 .\"
-.Dd August 15, 1999
-.Dt RSH 1
-.Os "Linux NetKit (0.17)"
+.Dd August 26, 2003
+.Dt MRSH 1
+.Os "Linux Mrsh"
 .Sh NAME
-.Nm rsh
+.Nm mrsh
 .Nd remote shell
 .Sh SYNOPSIS
-.Nm rsh
+.Nm mrsh
 .Op Fl Kdnx
 .Op Fl k Ar realm
 .Op Fl l Ar username
 .Ar host
 .Op command
 .Sh DESCRIPTION
-.Nm Rsh
+.Nm Mrsh
 executes
 .Ar command
 on
 .Ar host  .
 .Pp
-.Nm Rsh
+.Nm Mrsh
 copies its standard input to the remote command, the standard
 output of the remote command to its standard output, and the
 standard error of the remote command to its standard error.
 Interrupt, quit and terminate signals are propagated to the remote
 command;
-.Nm rsh
+.Nm mrsh
 normally terminates when the remote command does.
 The options are as follows:
 .Bl -tag -width flag
@@ -78,7 +89,7 @@ sockets used for communication with the remote host.
 The
 .Fl k
 option causes
-.Nm rsh
+.Nm mrsh
 to obtain tickets for the remote host in
 .Ar realm
 instead of the remote host's realm as determined by
@@ -90,7 +101,7 @@ The
 option allows the remote name to be specified.
 Kerberos authentication is used, and authorization is determined
 as in
-.Xr rlogin  1  .
+.Xr mrlogin  1  .
 .It Fl n
 The
 .Fl n
@@ -111,13 +122,13 @@ This may introduce a significant delay in response time.
 If no
 .Ar command
 is specified, you will be logged in on the remote host using
-.Xr rlogin  1  .
+.Xr mrlogin  1  .
 .Pp
 Shell metacharacters which are not quoted are interpreted on local machine,
 while quoted metacharacters are interpreted on the remote machine.
 For example, the command
 .Pp
-.Dl rsh otherhost cat remotefile >> localfile
+.Dl mrsh otherhost cat remotefile >> localfile
 .Pp
 appends the remote file
 .Ar remotefile
@@ -125,7 +136,7 @@ to the local file
 .Ar localfile ,
 while
 .Pp
-.Dl rsh otherhost cat remotefile \&">>\&" other_remotefile
+.Dl mrsh otherhost cat remotefile \&">>\&" other_remotefile
 .Pp
 appends
 .Ar remotefile
@@ -135,30 +146,30 @@ to
 .\" Many sites specify a large number of host names as commands in the
 .\" directory /usr/hosts.
 .\" If this directory is included in your search path, you can use the
-.\" shorthand ``host command'' for the longer form ``rsh host command''.
+.\" shorthand ``host command'' for the longer form ``mrsh host command''.
 .Sh FILES
 .Bl -tag -width /etc/hosts -compact
 .It Pa /etc/hosts
 .El
 .Sh SEE ALSO
-.Xr rlogin 1 ,
+.Xr mrlogin 1 ,
 .Xr kerberos 3 ,
 .Xr krb_sendauth 3 ,
 .Xr krb_realmofhost 3
 .Sh HISTORY
 The
-.Nm rsh
+.Nm mrsh
 command appeared in
 .Bx 4.2 .
 .Sh BUGS
 If you are using
 .Xr csh  1
 and put a
-.Nm rsh
+.Nm mrsh
 in the background without redirecting its input away from the terminal,
 it will block even if no reads are posted by the remote command.
 If no input is desired you should redirect the input of
-.Nm rsh
+.Nm mrsh
 to
 .Pa /dev/null
 using the
@@ -171,12 +182,12 @@ You cannot run an interactive command
 or
 .Xr vi  1  )
 using
-.Nm rsh  ;
+.Nm mrsh  ;
 use
-.Xr rlogin  1
+.Xr mrlogin  1
 instead.
 .Pp
 Stop signals stop the local
-.Nm rsh
+.Nm mrsh
 process only; this is arguably wrong, but currently hard to fix for reasons
 too complicated to explain here.

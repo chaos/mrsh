@@ -16,6 +16,17 @@
 .\" 4. Neither the name of the University nor the names of its contributors
 .\"    may be used to endorse or promote products derived from this software
 .\"    without specific prior written permission.
+.\" 5. This is free software; you can redistribute it and/or modify it
+.\"    under the terms of the GNU General Public License as published
+.\"    by the Free Software Foundation; either version 2 of the
+.\"    License, or (at your option) any later version.
+.\" 6. This is distributed in the hope that it will be useful, but
+.\"    WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"    GNU General Public License for more details.
+.\" 7. You should have received a copy of the GNU General Public License;
+.\"    if not, write to the Free Software Foundation, Inc., 59 Temple
+.\"    Place, Suite 330, Boston, MA  02111-1307  USA.
 .\"
 .\" THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
 .\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -29,31 +40,31 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.\"     from: @(#)rshd.8	6.11 (Berkeley) 4/20/91
+.\"     from: @(#)mrshd.8	6.11 (Berkeley) 4/20/91
 .\"	$Id$
 .\"
-.Dd April 20, 1991
-.Dt RSHD 8
-.Os "Linux NetKit (0.17)"
+.Dd August 26, 2003
+.Dt MRSHD 8
+.Os "Linux Mrsh"
 .Sh NAME
-.Nm rshd
+.Nm mrshd
 .Nd remote shell server
 .Sh SYNOPSIS
-.Nm rshd
+.Nm mrshd
 .Op Fl ahlnL
 .Sh DESCRIPTION
 The
-.Nm rshd
+.Nm mrshd
 server
 is the server for the 
 .Xr rcmd 3
 routine and, consequently, for the
-.Xr rsh 1
+.Xr mrsh 1
 program.  The server provides remote execution facilities
 with authentication based on privileged port numbers from trusted hosts.
 .Pp
 The
-.Nm rshd
+.Nm mrshd
 server
 listens for service requests at the port indicated in
 the ``cmd'' service specification; see
@@ -115,7 +126,7 @@ shell is retrieved on the initial socket.  The length of
 the command is limited by the upper bound on the size of
 the system's argument list.  
 .It
-.Nm Rshd
+.Nm Mrshd
 then validates the user using
 .Xr ruserok 3 ,
 which uses the file
@@ -140,13 +151,13 @@ option should not be trusted without verifying that it works as
 expected with the particular version of libc installed on your system
 (and should be tested again after any libc update) because some
 versions of libc may not honor the flags used by
-.Nm rshd .
+.Nm mrshd .
 .Pp
 Also note that the design of the
 .Pa .rhosts
 system is COMPLETELY INSECURE except on a carefully firewalled private
 network. Under all other circumstances,
-.Nm rshd
+.Nm mrshd
 should be disabled entirely.
 .Pp
 .It
@@ -155,7 +166,7 @@ and the command line is passed to the normal login
 shell of the user.  The
 shell inherits the network connections established
 by
-.Nm rshd .
+.Nm mrshd .
 .El
 .Pp
 Transport-level keepalive messages are enabled unless the
@@ -212,7 +223,7 @@ on the connection associated with the
 and is not preceded by a flag byte.
 .El
 .Sh SEE ALSO
-.Xr rsh 1 ,
+.Xr mrsh 1 ,
 .Xr rcmd 3 ,
 .Xr ruserok 3
 .Sh BUGS

@@ -17,6 +17,17 @@
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
+ * 5. This is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published
+ *    by the Free Software Foundation; either version 2 of the
+ *    License, or (at your option) any later version.
+ * 6. This is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ * 7. You should have received a copy of the GNU General Public License;
+ *    if not, write to the Free Software Foundation, Inc., 59 Temple
+ *    Place, Suite 330, Boston, MA  02111-1307  USA.
  *
  * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -36,10 +47,10 @@ char copyright[] =
  "All rights reserved.\n";
 
 /*
- * From: @(#)rsh.c	5.24 (Berkeley) 7/1/91
+ * From: @(#)mrsh.c	5.24 (Berkeley) 7/1/91
  */
 char rcsid[] = "$Id$";
-#include "../version.h"
+#include "version.h"
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -64,7 +75,7 @@ char rcsid[] = "$Id$";
 #include "pathnames.h"
 
 /*
- * rsh - remote shell
+ * mrsh - remote shell
  */
 static int rfd2;
 static char *copyargs(char **);
@@ -78,7 +89,7 @@ main(int argc, char *argv[])
 	struct passwd *pw;
 	struct servent *sp;
 	long omask;
-	int argoff, asrsh, ch, dflag, nflag, one, pid=0, rem, uid;
+	int argoff, asmrsh, ch, dflag, nflag, one, pid=0, rem, uid;
 	char *p;
 	char *args, *host, *user;
 	char *null = NULL;
@@ -87,19 +98,19 @@ main(int argc, char *argv[])
 	saved_environ = __environ;
 	__environ = &null;
 
-	argoff = asrsh = dflag = nflag = 0;
+	argoff = asmrsh = dflag = nflag = 0;
 	one = 1;
 	host = user = NULL;
 
-	/* if called as something other than "rsh", use it as the host name */
+	/* if called as something other than "mrsh", use it as the host name */
 	p = strrchr(argv[0], '/');
 	if (p) p++;
 	else p = argv[0];
 
-	if (!strcmp(p, "rsh")) asrsh = 1;
+	if (!strcmp(p, "mrsh")) asmrsh = 1;
 	else host = p;
 
-	/* handle "rsh host flags" */
+	/* handle "mrsh host flags" */
 	if (!host && argc > 2 && argv[1][0] != '-') {
 		host = argv[1];
 		argoff = 1;
@@ -110,7 +121,7 @@ main(int argc, char *argv[])
 		switch(ch) {
 		case 'K':
 			break;
-		case 'L':	/* -8Lew are ignored to allow rlogin aliases */
+		case 'L':	/* -8Lew are ignored to allow mrlogin aliases */
 		case 'e':
 		case 'w':
 		case '8':
@@ -134,15 +145,15 @@ main(int argc, char *argv[])
 	if (!host && !(host = argv[optind++]))
 		usage();
 
-	/* if no further arguments, must have been called as rlogin. */
+	/* if no further arguments, must have been called as mrlogin. */
 	if (!argv[optind]) {
 		if (setuid(getuid())) {
-			fprintf(stderr, "rsh: setuid: %s\n", strerror(errno));
+			fprintf(stderr, "mrsh: setuid: %s\n", strerror(errno));
 			exit(1);
 		}
-		if (asrsh) argv[0] = (char *)"rlogin";
-		execve(_PATH_RLOGIN, argv, saved_environ);
-		fprintf(stderr, "rsh: can't exec %s.\n", _PATH_RLOGIN);
+		if (asmrsh) argv[0] = (char *)"mrlogin";
+		execve(_PATH_MRLOGIN, argv, saved_environ);
+		fprintf(stderr, "mrsh: can't exec %s.\n", _PATH_MRLOGIN);
 		exit(1);
 	}
 
@@ -150,7 +161,7 @@ main(int argc, char *argv[])
 	argv += optind;
 
 	if (!(pw = getpwuid(uid = getuid()))) {
-		fprintf(stderr, "rsh: unknown user id.\n");
+		fprintf(stderr, "mrsh: unknown user id.\n");
 		exit(1);
 	}
 	if (!user)
@@ -161,9 +172,9 @@ main(int argc, char *argv[])
 
 	sp = NULL;
 	if (sp == NULL)
-		sp = getservbyname("shell", "tcp");
+		sp = getservbyname("mshell", "tcp");
 	if (sp == NULL) {
-		fprintf(stderr, "rsh: shell/tcp: unknown service.\n");
+		fprintf(stderr, "mrsh: mshell/tcp: unknown service.\n");
 		exit(1);
 	}
 
@@ -173,23 +184,23 @@ main(int argc, char *argv[])
 		exit(1);
 
 	if (rfd2 < 0) {
-		fprintf(stderr, "rsh: can't establish stderr.\n");
+		fprintf(stderr, "mrsh: can't establish stderr.\n");
 		exit(1);
 	}
 
 	if (setuid(uid)) {
-		fprintf(stderr, "rsh: setuid: %s\n", strerror(errno));
+		fprintf(stderr, "mrsh: setuid: %s\n", strerror(errno));
 		exit(1);
 	}
 
 	if (dflag) {
 		if (setsockopt(rem, SOL_SOCKET, SO_DEBUG, &one,
 		    sizeof(one)) < 0)
-			fprintf(stderr, "rsh: setsockopt: %s.\n",
+			fprintf(stderr, "mrsh: setsockopt: %s.\n",
 			    strerror(errno));
 		if (setsockopt(rfd2, SOL_SOCKET, SO_DEBUG, &one,
 		    sizeof(one)) < 0)
-			fprintf(stderr, "rsh: setsockopt: %s.\n",
+			fprintf(stderr, "mrsh: setsockopt: %s.\n",
 			    strerror(errno));
 	}
 
@@ -205,7 +216,7 @@ main(int argc, char *argv[])
 		pid = fork();
 		if (pid < 0) {
 			fprintf(stderr,
-			    "rsh: fork: %s.\n", strerror(errno));
+			    "mrsh: fork: %s.\n", strerror(errno));
 			exit(1);
 		}
 	}
@@ -246,7 +257,7 @@ rewrite:	FD_ZERO(&rembits);
 		if (select(rem+1, 0, &rembits, 0, 0) < 0) {
 			if (errno != EINTR) {
 				fprintf(stderr,
-				    "rsh: select: %s.\n", strerror(errno));
+				    "mrsh: select: %s.\n", strerror(errno));
 				exit(1);
 			}
 			goto rewrite;
@@ -281,7 +292,7 @@ done:
 			   &readfrom, 0, 0, 0) < 0) {
 			if (errno != EINTR) {
 				fprintf(stderr,
-				    "rsh: select: %s.\n", strerror(errno));
+				    "mrsh: select: %s.\n", strerror(errno));
 				exit(1);
 			}
 			continue;
@@ -324,7 +335,7 @@ copyargs(char **argv)
 		cc += strlen(*ap) + 1;
 	args = malloc(cc);
 	if (!args) {
-		fprintf(stderr, "rsh: %s.\n", strerror(ENOMEM));
+		fprintf(stderr, "mrsh: %s.\n", strerror(ENOMEM));
 		exit(1);
 	}
 	for (p = args, ap = argv; *ap; ++ap) {
@@ -340,7 +351,7 @@ void
 usage(void)
 {
 	fprintf(stderr,
-	    "usage: rsh [-nd%s]%s[-l login] host [command]\n",
+	    "usage: mrsh [-nd%s]%s[-l login] host [command]\n",
 	    "", " ");
 	exit(1);
 }

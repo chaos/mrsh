@@ -17,6 +17,17 @@
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
+ * 5. This is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published
+ *    by the Free Software Foundation; either version 2 of the
+ *    License, or (at your option) any later version.
+ * 6. This is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ * 7. You should have received a copy of the GNU General Public License;
+ *    if not, write to the Free Software Foundation, Inc., 59 Temple
+ *    Place, Suite 330, Boston, MA  02111-1307  USA.
  *
  * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -36,20 +47,20 @@ char copyright[] =
  "All rights reserved.\n";
 
 /*
- * From: @(#)rlogin.c	5.33 (Berkeley) 3/1/91
- * Header: mit/rlogin/RCS/rlogin.c,v 5.2 89/07/26 12:11:21 kfall 
+ * From: @(#)mrlogin.c	5.33 (Berkeley) 3/1/91
+ * Header: mit/mrlogin/RCS/mrlogin.c,v 5.2 89/07/26 12:11:21 kfall 
  *     Exp Locker: kfall
  */
 char rcsid[] = 
   "$Id$";
-#include "../version.h"
+#include "version.h"
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 /*
- * rlogin - remote login
+ * mrlogin - remote login
  */
 #include <stdio.h>
 #include <sys/param.h>
@@ -72,7 +83,7 @@ char rcsid[] =
 #include <string.h>
 
 /*
- * rlogin has problems with urgent data when logging into suns which
+ * mrlogin has problems with urgent data when logging into suns which
  * results in the connection being closed with an IO error. SUN_KLUDGE
  * is a work around - the actual bug is probably in tcp.c in the kernel, but
  * I haven't managed to find it yet.
@@ -197,10 +208,10 @@ main(int argc, char **argv)
 	else
 		p = argv[0];
 
-	if (strcmp(p, "rlogin"))
+	if (strcmp(p, "mrlogin"))
 		host = p;
 
-	/* handle "rlogin host flags" */
+	/* handle "mrlogin host flags" */
 	if (!host && argc > 2 && argv[1][0] != '-') {
 		host = argv[1];
 		argoff = 1;
@@ -245,7 +256,7 @@ main(int argc, char **argv)
 		usage();
 
 	if (!(pw = getpwuid(uid = getuid()))) {
-		fprintf(stderr, "rlogin: unknown user id.\n");
+		fprintf(stderr, "mrlogin: unknown user id.\n");
 		exit(1);
 	}
 	if (!user)
@@ -253,9 +264,9 @@ main(int argc, char **argv)
 
 	sp = NULL;
 	if (sp == NULL)
-		sp = getservbyname("login", "tcp");
+		sp = getservbyname("mlogin", "tcp");
 	if (sp == NULL) {
-		fprintf(stderr, "rlogin: login/tcp: unknown service.\n");
+		fprintf(stderr, "mrlogin: mlogin/tcp: unknown service.\n");
 		exit(1);
 	}
 
@@ -289,17 +300,17 @@ main(int argc, char **argv)
 
 	if (dflag) {
 	    if (setsockopt(rem, SOL_SOCKET, SO_DEBUG, &one, sizeof(one)) < 0)
-	    	fprintf(stderr, "rlogin: setsockopt(SO_DEBUG): %s.\n", 
+	    	fprintf(stderr, "mrlogin: setsockopt(SO_DEBUG): %s.\n", 
 			strerror(errno));
 	}
 #ifdef IP_TOS
 	one = IPTOS_LOWDELAY;
 	if (setsockopt(rem, IPPROTO_IP, IP_TOS, (char *)&one, sizeof(one)) < 0)
-	    	fprintf(stderr, "rlogin: setsockopt(TOS): %s.\n", 
+	    	fprintf(stderr, "mrlogin: setsockopt(TOS): %s.\n", 
 			strerror(errno));
 #endif
 	if (setuid(uid)) {
-		fprintf(stderr, "rlogin: setuid: %s\n", strerror(errno));
+		fprintf(stderr, "mrlogin: setuid: %s\n", strerror(errno));
 		exit(1);
 	}
 
@@ -346,7 +357,7 @@ doit(long omask)
 
 	childpid = fork();
 	if (childpid == -1) {
-		fprintf(stderr, "rlogin: fork: %s.\n", strerror(errno));
+		fprintf(stderr, "mrlogin: fork: %s.\n", strerror(errno));
 		done(1);
 	}
 	if (childpid == 0) {
@@ -443,8 +454,8 @@ catch_child(int ignore)
 /*
  * writer: write to remote: 0 -> line.
  * ~.				terminate
- * ~^Z				suspend rlogin process.
- * ~<delayed-suspend char>	suspend rlogin process, but leave reader alone.
+ * ~^Z				suspend mrlogin process.
+ * ~<delayed-suspend char>	suspend mrlogin process, but leave reader alone.
  */
 static void
 writer(void)
@@ -636,7 +647,7 @@ oob_real(void)
 
 		for (;;) {
 			if (ioctl(rem, SIOCATMARK, &atmark) < 0) {
-				fprintf(stderr, "rlogin: ioctl: %s.\n",
+				fprintf(stderr, "mrlogin: ioctl: %s.\n",
 					strerror(errno));
 				break;
 			}
@@ -736,7 +747,7 @@ reader(int omask)
 		if (rcvcnt < 0) {
 			if (errno == EINTR)
 				continue;
-			fprintf(stderr, "rlogin: read: %s.\n",
+			fprintf(stderr, "mrlogin: read: %s.\n",
 				strerror(errno));
 			return -1;
 		}
@@ -826,7 +837,7 @@ copytochild(int ignore)
 static void
 msg(const char *str)
 {
-	fprintf(stderr, "rlogin: %s\r\n", str);
+	fprintf(stderr, "mrlogin: %s\r\n", str);
 }
 
 
@@ -834,7 +845,7 @@ static void
 usage(void)
 {
 	fprintf(stderr,
-	    "usage: rlogin [ -%s]%s[-e char] [ -l username ] host\n",
+	    "usage: mrlogin [ -%s]%s[-e char] [ -l username ] host\n",
 	    "8EL", " ");
 	exit(1);
 }

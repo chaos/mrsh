@@ -16,6 +16,17 @@
 .\" 4. Neither the name of the University nor the names of its contributors
 .\"    may be used to endorse or promote products derived from this software
 .\"    without specific prior written permission.
+.\" 5. This is free software; you can redistribute it and/or modify it
+.\"    under the terms of the GNU General Public License as published
+.\"    by the Free Software Foundation; either version 2 of the
+.\"    License, or (at your option) any later version.
+.\" 6. This is distributed in the hope that it will be useful, but
+.\"    WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"    GNU General Public License for more details.
+.\" 7. You should have received a copy of the GNU General Public License;
+.\"    if not, write to the Free Software Foundation, Inc., 59 Temple
+.\"    Place, Suite 330, Boston, MA  02111-1307  USA.
 .\"
 .\" THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
 .\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -29,28 +40,28 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.\"	from: @(#)rlogin.1	6.19 (Berkeley) 7/27/91
+.\"	from: @(#)mrlogin.1	6.19 (Berkeley) 7/27/91
 .\"	$Id$
 .\"
-.Dd August 15, 1999
-.Dt RLOGIN 1
-.Os "Linux NetKit (0.17)"
+.Dd August 26, 2003
+.Dt MRLOGIN 1
+.Os "Linux Mrsh"
 .Sh NAME
-.Nm rlogin
+.Nm mrlogin
 .Nd remote login
 .Sh SYNOPSIS
-.Ar rlogin
+.Ar mrlogin
 .Op Fl 8EKLdx
 .Op Fl e Ar char
 .Op Fl k Ar realm
 .Op Fl l Ar username
 .Ar host
 .Sh DESCRIPTION
-.Nm Rlogin
+.Nm Mrlogin
 starts a terminal session on a remote host
 .Ar host  .
 .Pp
-.Nm Rlogin
+.Nm Mrlogin
 first attempts to use the Kerberos authorization mechanism, described below.
 If the remote host does not supporting Kerberos the standard Berkeley
 .Pa rhosts
@@ -78,7 +89,7 @@ option turns off all Kerberos authentication.
 .It Fl L
 The
 .Fl L
-option allows the rlogin session to be run in ``litout'' (see
+option allows the mrlogin session to be run in ``litout'' (see
 .Xr tty 4 )
 mode.
 .It Fl d
@@ -97,7 +108,7 @@ value in the form \ennn.
 .It Fl k
 The
 .FL k
-option requests rlogin to obtain tickets for the remote host
+option requests mrlogin to obtain tickets for the remote host
 in realm
 .Ar realm
 instead of the remote host's realm as determined by
@@ -108,7 +119,7 @@ The
 option turns on
 .Tn DES
 encryption for all data passed via the
-rlogin session.
+mrlogin session.
 This may impact response time and
 .Tn CPU
 utilization, but provides
@@ -117,15 +128,15 @@ increased security.
 .Pp
 A line of the form ``<escape char>.'' disconnects from the remote host.
 Similarly, the line ``<escape char>^Z'' will suspend the
-.Nm rlogin
+.Nm mrlogin
 session, and ``<escape char><delayed-suspend char>'' suspends the
-send portion of the rlogin, but allows output from the remote system.
+send portion of the mrlogin, but allows output from the remote system.
 By default, the tilde (``~'') character is the escape character, and
 normally control-Y (``^Y'') is the delayed-suspend character.
 .Pp
 All echoing takes place at the remote site, so that (except for delays)
 the
-.Nm rlogin
+.Nm mrlogin
 is transparent.
 Flow control via ^S/^Q and flushing of input and output on interrupts
 are handled properly.
@@ -156,27 +167,27 @@ the remote user.
 .Pp
 If Kerberos authentication fails, a warning message is printed and the
 standard Berkeley
-.Nm rlogin
+.Nm mrlogin
 is used instead.
 .Sh ENVIRONMENT
 The following environment variable is utilized by
-.Nm rlogin :
+.Nm mrlogin :
 .Bl -tag -width TERM
 .It Ev TERM
 Determines the user's terminal type.
 .El
 .Sh SEE ALSO
-.Xr rsh 1 ,
+.Xr mrsh 1 ,
 .Xr kerberos 3 ,
 .Xr krb_sendauth 3 ,
 .Xr krb_realmofhost 3
 .Sh HISTORY
 The
-.Nm rlogin
+.Nm mrlogin
 command appeared in
 .Bx 4.2 .
 .Sh BUGS
-.Nm Rlogin
+.Nm Mrlogin
 will be replaced by
 .Xr telnet  1
 in the near future.

@@ -16,6 +16,17 @@
 .\" 4. Neither the name of the University nor the names of its contributors
 .\"    may be used to endorse or promote products derived from this software
 .\"    without specific prior written permission.
+.\" 5. This is free software; you can redistribute it and/or modify it
+.\"    under the terms of the GNU General Public License as published
+.\"    by the Free Software Foundation; either version 2 of the
+.\"    License, or (at your option) any later version.
+.\" 6. This is distributed in the hope that it will be useful, but
+.\"    WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"    GNU General Public License for more details.
+.\" 7. You should have received a copy of the GNU General Public License;
+.\"    if not, write to the Free Software Foundation, Inc., 59 Temple
+.\"    Place, Suite 330, Boston, MA  02111-1307  USA.
 .\"
 .\" THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
 .\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -29,28 +40,28 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.\"	from: @(#)rcp.1	6.14 (Berkeley) 7/27/91
+.\"	from: @(#)mrcp.1	6.14 (Berkeley) 7/27/91
 .\"	$Id$
 .\"
-.Dd August 15, 1999
-.Dt RCP 1
-.Os "Linux NetKit (0.17)"
+.Dd August 26, 2003
+.Dt MRCP 1
+.Os "Linux Mrsh"
 .Sh NAME
-.Nm rcp
+.Nm mrcp
 .Nd remote file copy
 .Sh SYNOPSIS
-.Nm rcp
+.Nm mrcp
 .Op Fl px
 .Op Fl k Ar realm
 .Ar file1 file2
-.Nm rcp
+.Nm mrcp
 .Op Fl px
 .Op Fl r
 .Op Fl k Ar realm
 .Ar file ...
 .Ar directory
 .Sh DESCRIPTION
-.Nm Rcp
+.Nm Mrcp
 copies files between machines.  Each
 .Ar file
 or
@@ -62,14 +73,14 @@ or a `/' before any `:'s).
 .Bl -tag -width flag
 .It Fl r
 If any of the source files are directories,
-.Nm rcp
+.Nm mrcp
 copies each subtree rooted at that name; in this case
 the destination must be a directory.
 .It Fl p
 The
 .Fl p
 option causes
-.Nm rcp
+.Nm mrcp
 to attempt to preserve (duplicate) in its copies the modification
 times and modes of the source files, ignoring the
 .Ar umask  .
@@ -83,7 +94,7 @@ on the destination host is used.
 The
 .Fl k
 option requests
-.Nm rcp
+.Nm mrcp
 to obtain tickets
 for the remote host in realm
 .Ar realm
@@ -95,7 +106,7 @@ The
 option turns on
 .Tn DES
 encryption for all data passed by
-.Nm rcp .
+.Nm mrcp .
 This may impact response time and
 .Tn CPU
 utilization, but provides
@@ -115,27 +126,27 @@ A
 on a remote host may be quoted (using \e, ", or \(aa)
 so that the metacharacters are interpreted remotely.
 .Pp
-.Nm Rcp
+.Nm Mrcp
 does not prompt for passwords; it performs remote execution
 via
-.Xr rsh  1  ,
+.Xr mrsh  1  ,
 and requires the same authorization.
 .Pp
-.Nm Rcp
+.Nm Mrcp
 handles third party copies, where neither source nor target files
 are on the current machine.
 .Sh SEE ALSO
 .Xr cp 1 ,
 .Xr ftp 1 ,
-.Xr rsh 1 ,
-.Xr rlogin 1
+.Xr mrsh 1 ,
+.Xr mrlogin 1
 .Sh HISTORY
 The
-.Nm rcp
+.Nm mrcp
 command appeared in
 .Bx 4.2 .
 The version of
-.Nm rcp
+.Nm mrcp
 described here
 has been reimplemented with Kerberos in
 .Bx 4.3 Reno .
@@ -154,4 +165,4 @@ The destination user and hostname may have to be specified as
 ``rhost.rname'' when the destination machine is running the
 .Bx 4.2
 version of
-.Nm rcp  .
+.Nm mrcp  .

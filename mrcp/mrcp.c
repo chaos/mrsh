@@ -17,6 +17,17 @@
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
+ * 5. This is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published
+ *    by the Free Software Foundation; either version 2 of the
+ *    License, or (at your option) any later version.
+ * 6. This is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ * 7. You should have received a copy of the GNU General Public License;
+ *    if not, write to the Free Software Foundation, Inc., 59 Temple
+ *    Place, Suite 330, Boston, MA  02111-1307  USA.
  *
  * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -36,17 +47,17 @@ char copyright[] =
  "All rights reserved.\n";
 
 /*
- * From: @(#)rcp.c	5.32 (Berkeley) 2/25/91
+ * From: @(#)mrcp.c	5.32 (Berkeley) 2/25/91
  */
 char rcsid[] = "$Id$";
-#include "../version.h"
+#include "version.h"
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 /*
- * rcp
+ * mrcp
  */
 #include <sys/param.h>
 #include <sys/stat.h>
@@ -80,7 +91,7 @@ int pflag, iamremote, iamrecursive, targetshouldbedirectory;
 static char **saved_environ;
 
 #define	CMDNEEDS	64
-char cmd[CMDNEEDS];		/* must hold "rcp -r -p -d\0" */
+char cmd[CMDNEEDS];		/* must hold "mrcp -r -p -d\0" */
 
 typedef struct _buf {
 	int	cnt;
@@ -125,7 +136,7 @@ main(int argc, char *argv[])
 		case 'r':
 			++iamrecursive;
 			break;
-		/* rshd-invoked options (server) */
+		/* mrshd-invoked options (server) */
 		case 'd':
 			targetshouldbedirectory = 1;
 			break;
@@ -145,15 +156,15 @@ main(int argc, char *argv[])
 	argc -= optind;
 	argv += optind;
 
-	sp = getservbyname(shell = "shell", "tcp");
+	sp = getservbyname(shell = "mshell", "tcp");
 	if (sp == NULL) {
-		(void)fprintf(stderr, "rcp: %s/tcp: unknown service\n", shell);
+		(void)fprintf(stderr, "mrcp: %s/tcp: unknown service\n", shell);
 		exit(1);
 	}
 	port = sp->s_port;
 
 	if (!(pwd = getpwuid(userid = getuid()))) {
-		(void)fprintf(stderr, "rcp: unknown user %d.\n", (int)userid);
+		(void)fprintf(stderr, "mrcp: unknown user %d.\n", (int)userid);
 		exit(1);
 	}
 
@@ -161,7 +172,7 @@ main(int argc, char *argv[])
 		/* follow "protocol", send data */
 		(void)response();
 		if (setuid(userid)) {
-			fprintf(stderr, "rcp: setuid: %s\n", strerror(errno));
+			fprintf(stderr, "mrcp: setuid: %s\n", strerror(errno));
 			exit(1);
 		}
 		source(argc, argv);
@@ -171,7 +182,7 @@ main(int argc, char *argv[])
 	if (tflag) {
 		/* receive data */
 		if (setuid(userid)) {
-			fprintf(stderr, "rcp: setuid: %s\n", strerror(errno));
+			fprintf(stderr, "mrcp: setuid: %s\n", strerror(errno));
 			exit(1);
 		}
 		sink(argc, argv);
@@ -184,8 +195,8 @@ main(int argc, char *argv[])
 		targetshouldbedirectory = 1;
 
 	rem = -1;
-	/* command to be executed on remote system using "rsh" */
-	(void)snprintf(cmd, sizeof(cmd), "rcp%s%s%s",
+	/* command to be executed on remote system using "mrsh" */
+	(void)snprintf(cmd, sizeof(cmd), "mrcp%s%s%s",
 	    iamrecursive ? " -r" : "", pflag ? " -p" : "",
 	    targetshouldbedirectory ? " -d" : "");
 
@@ -234,7 +245,7 @@ toremote(const char *targ, int argc, char *argv[])
 			if (*src == 0)
 				src = dot;
 			host = strchr(argv[i], '@');
-			len = strlen(_PATH_RSH) + strlen(argv[i]) +
+			len = strlen(_PATH_MRSH) + strlen(argv[i]) +
 			    strlen(src) + (tuser ? strlen(tuser) : 0) +
 			    strlen(thost) + strlen(targ) + CMDNEEDS + 20;
 			if (!(bp = malloc(len)))
@@ -248,13 +259,13 @@ toremote(const char *targ, int argc, char *argv[])
 					continue;
 				(void)snprintf(bp, len,
 				    "%s %s -l %s -n %s %s '%s%s%s:%s'",
-				    _PATH_RSH, host, suser, cmd, src,
+				    _PATH_MRSH, host, suser, cmd, src,
 				    tuser ? tuser : "", tuser ? "@" : "",
 				    thost, targ);
 			} else
 				(void)snprintf(bp, len,
 				    "%s %s -n %s %s '%s%s%s:%s'",
-				    _PATH_RSH, argv[i], cmd, src,
+				    _PATH_MRSH, argv[i], cmd, src,
 				    tuser ? tuser : "", tuser ? "@" : "",
 				    thost, targ);
 			(void)susystem(bp);
@@ -275,13 +286,13 @@ toremote(const char *targ, int argc, char *argv[])
 				tos = IPTOS_THROUGHPUT;
 				if (setsockopt(rem, IPPROTO_IP, IP_TOS,
 				    (char *)&tos, sizeof(int)) < 0)
-					perror("rcp: setsockopt TOS (ignored)");
+					perror("mrcp: setsockopt TOS (ignored)");
 #endif
 				if (response() < 0)
 					exit(1);
 				(void)free(bp);
 				if (setuid(userid)) {
-					fprintf(stderr, "rcp: setuid: %s\n",
+					fprintf(stderr, "mrcp: setuid: %s\n",
 						strerror(errno));
 				}
 			}
@@ -340,7 +351,7 @@ tolocal(int argc, char *argv[])
 		tos = IPTOS_THROUGHPUT;
 		if (setsockopt(rem, IPPROTO_IP, IP_TOS,
 		    (char *)&tos, sizeof(int)) < 0)
-			perror("rcp: setsockopt TOS (ignored)");
+			perror("mrcp: setsockopt TOS (ignored)");
 #endif
 		sink(1, argv + argc - 1);
 		(void)seteuid(0);
@@ -359,7 +370,7 @@ verifydir(const char *cp)
 			return;
 		errno = ENOTDIR;
 	}
-	error("rcp: %s: %s.\n", cp, strerror(errno));
+	error("mrcp: %s: %s.\n", cp, strerror(errno));
 	exit(1);
 }
 
@@ -390,7 +401,7 @@ okname(const char *cp0)
 	} while (*++cp);
 	return(1);
 bad:
-	(void)fprintf(stderr, "rcp: invalid user name %s\n", cp0);
+	(void)fprintf(stderr, "mrcp: invalid user name %s\n", cp0);
 	return 0;
 }
 
@@ -407,7 +418,7 @@ susystem(const char *s)
 		const char **argsfoo;
 		char **argsbar;
 		if (setuid(userid)) {
-			fprintf(stderr, "rcp: child: setuid: %s\n", 
+			fprintf(stderr, "mrcp: child: setuid: %s\n", 
 				strerror(errno));
 			_exit(1);
 		}
@@ -445,7 +456,7 @@ source(int argc, char *argv[])
 	for (x = 0; x < argc; x++) {
 		name = argv[x];
 		if ((f = open(name, O_RDONLY, 0)) < 0) {
-			error("rcp: %s: %s\n", name, strerror(errno));
+			error("mrcp: %s: %s\n", name, strerror(errno));
 			continue;
 		}
 		if (fstat(f, &stb) < 0)
@@ -464,7 +475,7 @@ source(int argc, char *argv[])
 			/* FALLTHROUGH */
 		default:
 notreg:			(void)close(f);
-			error("rcp: %s: not a plain file\n", name);
+			error("mrcp: %s: not a plain file\n", name);
 			continue;
 		}
 		last = strrchr(name, '/');
@@ -509,7 +520,7 @@ notreg:			(void)close(f);
 		if (readerr == 0)
 			(void)write(rem, "", 1);
 		else
-			error("rcp: %s: %s\n", name, strerror(readerr));
+			error("mrcp: %s: %s\n", name, strerror(readerr));
 		(void)response();
 	}
 }
@@ -522,7 +533,7 @@ rsource(char *name, struct stat *statp)
 	char *last, *vect[1], path[MAXPATHLEN];
 
 	if (!(dirp = opendir(name))) {
-		error("rcp: %s: %s\n", name, strerror(errno));
+		error("mrcp: %s: %s\n", name, strerror(errno));
 		return;
 	}
 	last = strrchr(name, '/');
@@ -605,7 +616,7 @@ lostconn(int ignore)
 	(void)ignore;
 
 	if (!iamremote)
-		(void)fprintf(stderr, "rcp: lost connection\n");
+		(void)fprintf(stderr, "mrcp: lost connection\n");
 	exit(1);
 }
 
@@ -634,7 +645,7 @@ sink(int argc, char *argv[])
 	if (!pflag)
 		(void)umask(mask);
 	if (argc != 1) {
-		error("rcp: ambiguous target\n");
+		error("mrcp: ambiguous target\n");
 		exit(1);
 	}
 	targ = *argv;
@@ -694,9 +705,9 @@ sink(int argc, char *argv[])
 		}
 		if (*cp != 'C' && *cp != 'D') {
 			/*
-			 * Check for the case "rcp remote:foo\* local:bar".
+			 * Check for the case "mrcp remote:foo\* local:bar".
 			 * In this case, the line "No match." can be returned
-			 * by the shell before the rcp command on the remote is
+			 * by the shell before the mrcp command on the remote is
 			 * executed so the ^Aerror_message convention isn't
 			 * followed.
 			 */
@@ -751,13 +762,13 @@ sink(int argc, char *argv[])
 			if (setimes) {
 				setimes = 0;
 				if (utimes(np, tv) < 0)
-				    error("rcp: can't set times on %s: %s\n",
+				    error("mrcp: can't set times on %s: %s\n",
 					np, strerror(errno));
 			}
 			continue;
 		}
 		if ((ofd = open(np, O_WRONLY|O_CREAT, mode)) < 0) {
-bad:			error("rcp: %s: %s\n", np, strerror(errno));
+bad:			error("mrcp: %s: %s\n", np, strerror(errno));
 			continue;
 		}
 		if (exists && pflag)
@@ -778,7 +789,7 @@ bad:			error("rcp: %s: %s\n", np, strerror(errno));
 			do {
 				j = read(rem, cp, amt);
 				if (j <= 0) {
-					error("rcp: %s\n",
+					error("mrcp: %s\n",
 					    j ? strerror(errno) :
 					    "dropped connection");
 					exit(1);
@@ -798,7 +809,7 @@ bad:			error("rcp: %s: %s\n", np, strerror(errno));
 		    write(ofd, bp->buf, count) != count)
 			wrerr = YES;
 		if (ftruncate(ofd, size)) {
-			error("rcp: can't truncate %s: %s\n", np,
+			error("mrcp: can't truncate %s: %s\n", np,
 			    strerror(errno));
 			wrerr = DISPLAYED;
 		}
@@ -807,14 +818,14 @@ bad:			error("rcp: %s: %s\n", np, strerror(errno));
 		if (setimes && wrerr == NO) {
 			setimes = 0;
 			if (utimes(np, tv) < 0) {
-				error("rcp: can't set times on %s: %s\n",
+				error("mrcp: can't set times on %s: %s\n",
 				    np, strerror(errno));
 				wrerr = DISPLAYED;
 			}
 		}
 		switch(wrerr) {
 		case YES:
-			error("rcp: %s: %s\n", np, strerror(errno));
+			error("mrcp: %s: %s\n", np, strerror(errno));
 			break;
 		case NO:
 			(void)write(rem, "", 1);
@@ -824,7 +835,7 @@ bad:			error("rcp: %s: %s\n", np, strerror(errno));
 		}
 	}
 screwup:
-	error("rcp: protocol screwup: %s\n", why);
+	error("mrcp: protocol screwup: %s\n", why);
 	exit(1);
 }
 
@@ -835,7 +846,7 @@ allocbuf(BUF *bp, int fd, int blksize)
 	int size;
 
 	if (fstat(fd, &stb) < 0) {
-		error("rcp: fstat: %s\n", strerror(errno));
+		error("mrcp: fstat: %s\n", strerror(errno));
 		return(0);
 	}
 	size = roundup(stb.st_blksize, blksize);
@@ -846,7 +857,7 @@ allocbuf(BUF *bp, int fd, int blksize)
 			free(bp->buf);
 		bp->buf = malloc(size);
 		if (!bp->buf) {
-			error("rcp: malloc: out of memory\n");
+			error("mrcp: malloc: out of memory\n");
 			return NULL;
 		}
 	}
@@ -876,7 +887,7 @@ error(const char *fmt, ...)
 static void 
 nospace(void)
 {
-	(void)fprintf(stderr, "rcp: out of memory.\n");
+	(void)fprintf(stderr, "mrcp: out of memory.\n");
 	exit(1);
 }
 
@@ -884,6 +895,6 @@ static void
 usage(void)
 {
 	(void)fprintf(stderr,
-	    "usage: rcp [-p] f1 f2; or: rcp [-rp] f1 ... fn directory\n");
+	    "usage: mrcp [-p] f1 f2; or: mrcp [-rp] f1 ... fn directory\n");
 	exit(1);
 }

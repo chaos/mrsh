@@ -17,6 +17,17 @@
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
+ * 5. This is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published
+ *    by the Free Software Foundation; either version 2 of the
+ *    License, or (at your option) any later version.
+ * 6. This is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ * 7. You should have received a copy of the GNU General Public License;
+ *    if not, write to the Free Software Foundation, Inc., 59 Temple
+ *    Place, Suite 330, Boston, MA  02111-1307  USA.
  *
  * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -40,11 +51,11 @@ char copyright[] =
  "All rights reserved.\n";
 
 /*
- * From: @(#)rshd.c	5.38 (Berkeley) 3/2/91
+ * From: @(#)mrshd.c	5.38 (Berkeley) 3/2/91
  */
 char rcsid[] = 
   "$Id$";
-#include "../version.h"
+#include "version.h"
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -139,11 +150,11 @@ static void fail(const char *errorstr,
 		 const char *locuser,
 		 const char *cmdbuf) 
 {
-	/* log the (failed) rsh request */
-	syslog(LOG_INFO|LOG_AUTH, "rsh denied to %s@%s as %s: %s",
+	/* log the (failed) mrsh request */
+	syslog(LOG_INFO|LOG_AUTH, "mrsh denied to %s@%s as %s: %s",
 	       remuser, hostname, locuser, errorstr);
 	if (paranoid) {
-	    syslog(LOG_INFO|LOG_AUTH, "rsh command was '%s'", cmdbuf);
+	    syslog(LOG_INFO|LOG_AUTH, "mrsh command was '%s'", cmdbuf);
 	}
 	error(errorstr, hostname);
 	exit(1);
@@ -240,7 +251,7 @@ static struct passwd *doauth(const char *remuser,
     if (pwd->pw_uid==0) paranoid = 1;
 
 #ifdef USE_PAM
-    retcode = pam_start("rsh", locuser, &conv, &pamh);
+    retcode = pam_start("mrsh", locuser, &conv, &pamh);
     if (retcode != PAM_SUCCESS) {
 	syslog(LOG_ERR, "pam_start: %s\n", pam_strerror(pamh, retcode));
 	exit (1);
@@ -575,7 +586,7 @@ main(int argc, char *argv[])
 	struct sockaddr_in from;
 	_check_rhosts_file=1;
 
-	openlog("rshd", LOG_PID | LOG_ODELAY, LOG_DAEMON);
+	openlog("mrshd", LOG_PID | LOG_ODELAY, LOG_DAEMON);
 
 	opterr = 0;
 	while ((ch = getopt(argc, argv, OPTIONS)) != EOF) {
@@ -602,7 +613,7 @@ main(int argc, char *argv[])
 
 		case '?':
 		default:
-			syslog(LOG_ERR, "usage: rshd [-%s]", OPTIONS);
+			syslog(LOG_ERR, "usage: mrshd [-%s]", OPTIONS);
 			exit(2);
 		}
 	}

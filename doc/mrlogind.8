@@ -16,6 +16,17 @@
 .\" 4. Neither the name of the University nor the names of its contributors
 .\"    may be used to endorse or promote products derived from this software
 .\"    without specific prior written permission.
+.\" 5. This is free software; you can redistribute it and/or modify it
+.\"    under the terms of the GNU General Public License as published
+.\"    by the Free Software Foundation; either version 2 of the
+.\"    License, or (at your option) any later version.
+.\" 6. This is distributed in the hope that it will be useful, but
+.\"    WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"    GNU General Public License for more details.
+.\" 7. You should have received a copy of the GNU General Public License;
+.\"    if not, write to the Free Software Foundation, Inc., 59 Temple
+.\"    Place, Suite 330, Boston, MA  02111-1307  USA.
 .\"
 .\" THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
 .\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -29,27 +40,27 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.\"     from: @(#)rlogind.8	6.12 (Berkeley) 3/16/91
+.\"     from: @(#)mrlogind.8	6.12 (Berkeley) 3/16/91
 .\"	$Id$
 .\"
-.Dd March 16, 1991
-.Dt RLOGIND 8
-.Os "Linux NetKit (0.17)"
+.Dd August 26, 2003
+.Dt MRLOGIND 8
+.Os "Linux Mrsh"
 .Sh NAME
-.Nm rlogind
+.Nm mrlogind
 .Nd remote login server
 .Sh SYNOPSIS
-.Nm rlogind
+.Nm mrlogind
 .Op Fl ahlLn
 .Sh DESCRIPTION
-.Nm Rlogind
+.Nm Mrlogind
 is the server for the 
-.Xr rlogin 1
+.Xr mrlogin 1
 program.  The server provides a remote login facility
 with authentication based on privileged port numbers from trusted hosts.
 .Pp
 Options supported by
-.Nm rlogind :
+.Nm mrlogind :
 .Bl -tag -width Ds
 .It Fl a
 Ask hostname for verification.
@@ -87,7 +98,7 @@ options should also not be trusted without verifying that they work as
 expected with the particular version of libc installed on your system
 (and should be tested again after any libc update) because some
 versions of libc may not honor the internal flags used by
-.Nm rlogind .
+.Nm mrlogind .
 As the
 .Fl L
 option bypasses the libc functions entirely, it is not subject to this
@@ -99,12 +110,12 @@ system is COMPLETELY INSECURE except on a carefully firewalled private
 network. Always use the 
 .Fl L
 option under all other circumstances. Also, since
-.Nm rlogind
+.Nm mrlogind
 does not encrypt communications, it should not, in general, be used at
 all. Consider
 .Xr ssh 8 .
 .Pp
-.Nm Rlogind
+.Nm Mrlogind
 listens for service requests at the port indicated in
 the ``login'' service specification; see
 .Xr services 5 .
@@ -135,9 +146,9 @@ Normal authentication is bypassed if the address verification fails.
 .El
 .Pp
 Once the source port and address have been checked, 
-.Nm rlogind
+.Nm mrlogind
 proceeds with the authentication process described in
-.Xr rshd 8 .
+.Xr mrshd 8 .
 It then allocates a pseudo terminal (see 
 .Xr pty 4 ) ,
 and manipulates file descriptors so that the slave
@@ -158,7 +169,7 @@ prompted to log in as if on a standard terminal line.
 The parent of the login process manipulates the master side of
 the pseudo terminal, operating as an intermediary
 between the login process and the client instance of the
-.Xr rlogin
+.Xr mrlogin
 program.  In normal operation, the packet protocol described
 in
 .Xr pty 4
@@ -195,7 +206,7 @@ by the server failed.
 .Sh SEE ALSO
 .Xr login 1 ,
 .Xr ruserok 3 ,
-.Xr rshd 8
+.Xr mrshd 8
 .Sh BUGS
 The authentication procedure used here assumes the integrity
 of each client machine and the connecting medium.  This is

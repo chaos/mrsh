@@ -1,5 +1,36 @@
 2003-09-05  Albert Chu  <chu11@llnl.gov>
 
+	* mrcp/mrcp.c, mrcp/pathnames.h, mrlogin/des_rw.c,
+	mrlogin/mrlogin.c, mrlogind/auth.c, mrlogind/network.c,
+	mrlogind/sockconv.c, mrlogind/mrlogind.c, mrsh/mrsh.c,
+	mrsh/pathnames.h, mrshd/mrshd.c:
+	Search and replaced rsh, rcp, and rlogin with mrsh, mrcp, and mrlogin
+	respectively.
+	Added GNU GPL License information.
+
+	* mrcp/mrcp.c, mrexec/mrexec.c, mrexecd/mrexecd.c,
+	mrlogin/mrlogin.c, mrlogind/mrlogind.c, mrsh/mrsh.c,
+	mrshd/mrshd.c:
+	Replaced "../version.h" with "version.h".
+
+	* doc/mrcp.1, doc/mrlogin.1, doc/mrsh.1, doc/mrlogind.8,
+	doc/mrshd.8:
+	Search and replaced rsh, rcp, and rlogin with mrsh, mrcp, and mrlogin
+	respectively.
+	Added GNU GPL License information.
+	Updated modification date to August 26, 2003.
+	Changed package name from Netkit to Mrsh.
+
+	* etc/mrshd-xinetd, etc/mrlogind-xinetd:
+	Search and replaced rsh and rlogin with mrsh and mrlogin
+	respectively.
+
+	* BUGS:
+	Search and replaced rsh, rcp, rexec, and rlogin with mrsh, mrcp,
+	mrexec, and mrlogin respectively.
+
+2003-09-05  Albert Chu  <chu11@llnl.gov>
+
 	* Initial commit of rsh source code.
 
 	* Modified all configuration and Makefiles to use autoconf and

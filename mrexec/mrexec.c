@@ -51,7 +51,7 @@
 #include "config.h"
 #endif
 
-#include "../version.h"
+#include "version.h"
 
 #include <sys/types.h>
 #include <sys/socket.h>

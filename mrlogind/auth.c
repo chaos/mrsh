@@ -17,6 +17,17 @@
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
+ * 5. This is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published
+ *    by the Free Software Foundation; either version 2 of the
+ *    License, or (at your option) any later version.
+ * 6. This is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ * 7. You should have received a copy of the GNU General Public License;
+ *    if not, write to the Free Software Foundation, Inc., 59 Temple
+ *    Place, Suite 330, Boston, MA  02111-1307  USA.
  *
  * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -38,7 +49,7 @@
 #include <sys/types.h>
 #include <pwd.h>
 
-#include "rlogind.h"
+#include "mrlogind.h"
 
 #ifdef USE_PAM
 
@@ -117,7 +128,7 @@ int auth_checkauth(const char *remoteuser, const char *host,
     char *ln;
     int retval;
 
-    retval = pam_start("rlogin", localuser, &conv, &pamh);
+    retval = pam_start("mrlogin", localuser, &conv, &pamh);
     if (retval != PAM_SUCCESS) {
 	syslog(LOG_ERR, "pam_start: %s\n", pam_strerror(pamh, retval));
 	fatal(STDERR_FILENO, "initialization failed", 0);
@@ -131,7 +142,7 @@ int auth_checkauth(const char *remoteuser, const char *host,
     network_confirm();
     retval = attempt_auth();
     if (retval != PAM_SUCCESS) {
-	syslog(LOG_ERR, "PAM authentication failed for in.rlogind");
+	syslog(LOG_ERR, "PAM authentication failed for in.mrlogind");
 	return -1;
     }
 
@@ -163,22 +174,22 @@ int auth_checkauth(const char *remoteuser, const char *host,
     if (pwd==NULL) {
         syslog(LOG_ERR, "user returned by PAM does not exist\n");
 	/* don't print this - it tells people which accounts exist */
-	/*fprintf(stderr, "rlogind: internal error\n");*/
+	/*fprintf(stderr, "mrlogind: internal error\n");*/
 	return -1;
     }
     if (setgid(pwd->pw_gid) != 0) {
         syslog(LOG_ERR, "cannot assume gid for user returned by PAM\n");
-	fprintf(stderr, "rlogind: internal error\n");
+	fprintf(stderr, "mrlogind: internal error\n");
 	return -1;
     }
     if (initgroups(localuser, pwd->pw_gid) != 0) {
         syslog(LOG_ERR, "initgroups failed for user returned by PAM\n");
-	fprintf(stderr, "rlogind: internal error\n");
+	fprintf(stderr, "mrlogind: internal error\n");
 	return -1;
     }
     retval = pam_setcred(pamh, PAM_ESTABLISH_CRED);
     if (retval != PAM_SUCCESS) {
-	syslog(LOG_ERR,"PAM authentication failed for in.rlogind");
+	syslog(LOG_ERR,"PAM authentication failed for in.mrlogind");
 	return -1;
     }
 
@@ -188,7 +199,7 @@ int auth_checkauth(const char *remoteuser, const char *host,
 #else /* not USE_PAM */
 
 /*
- * Standard rlogin processing...
+ * Standard mrlogin processing...
  */
 
 #include <sys/socket.h>   /* for ruserok() in libc5 (!) */

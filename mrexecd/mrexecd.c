@@ -63,7 +63,7 @@ char copyright[] =
  */
 char rcsid[] = 
   "$Id$";
-#include "../version.h"
+#include "version.h"
 
 #if HAVE_CONFIG_H
 #include "config.h"
