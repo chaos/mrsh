@@ -417,10 +417,11 @@ doit(struct sockaddr_in *fromp)
                     snprintf(errmsgbuf, ERRMSGLEN, "%s\n", last_pam_msg);
                     errmsg = errmsgbuf;
                 }
-                else
+                else {
                     syslog(LOG_ERR, "PAM Authentication Failure\n");
                     fail("Permission Denied\n", 
                          remuser, hostname, locuser, cmdbuf);
+                }
                 list_destroy(pam_msgs);
 #else
                 syslog(LOG_ERR, "Authentication Failure\n");
