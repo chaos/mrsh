@@ -85,7 +85,7 @@ int getifrlen(struct ifreq *ifr) {
     return len;
 }
 
-int check_interfaces(struct mauth *ma, void *munge_addr, int h_length) {
+int check_interfaces(struct mauth *ma, void *munge_addr, int addr_len) {
     struct ifconf ifc;
     struct ifreq *ifr;
     struct ifreq ifaddr;
@@ -163,7 +163,7 @@ int check_interfaces(struct mauth *ma, void *munge_addr, int h_length) {
         if (strcmp(addr,"127.0.0.1") == 0)
             continue;
 
-        if (memcmp(munge_addr, (void *)&sin->sin_addr.s_addr, h_length) == 0) {
+        if (memcmp(munge_addr, (void *)&sin->sin_addr.s_addr, addr_len) == 0) {
             found++;
             break;
         }

@@ -7,6 +7,8 @@
 	* mauth/mauth.c (mauth): Added forgotten syslog of version
 	mismatch.
 
+	* mauth/mauth.c (check_interfaces): Renamed h_length parameter to
+	ip_len.
 	
 2003-10-31  Albert Chu <chu11@llnl.gov>
 
