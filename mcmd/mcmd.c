@@ -356,7 +356,7 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
         fprintf(stderr,"munge_encode: %s\n", munge_ctx_strerror(ctx));
         munge_ctx_destroy(ctx);
         close(s2);
-        free(tmpbuf);
+        free(tmbuf);
         goto bad;
     }
     
