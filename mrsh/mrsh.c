@@ -237,6 +237,17 @@ main(int argc, char *argv[])
 			    strerror(errno));
 	}
 
+        /* set SO_KEEPALIVE to prevent mrsh from hanging indefinitely */
+        if (setsockopt(rem, SOL_SOCKET, SO_KEEPALIVE, &one, 
+            sizeof(one)) < 0)
+                fprintf(stderr, "mrsh: setsockopt: %s.\n",
+                    strerror(errno));
+
+        if (setsockopt(rfd2, SOL_SOCKET, SO_KEEPALIVE, &one, 
+            sizeof(one)) < 0)
+                fprintf(stderr, "mrsh: setsockopt: %s.\n",
+                    strerror(errno));
+        
 	omask = sigblock(sigmask(SIGINT)|sigmask(SIGQUIT)|sigmask(SIGTERM));
 	if (signal(SIGINT, SIG_IGN) != SIG_IGN)
 		signal(SIGINT, sendsig);

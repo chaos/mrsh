@@ -9,6 +9,7 @@ Changes in mrsh-2.0:
   respectively.  They are now both subpackages of mrsh.
 * Fixed memory leak in mrcp that can cause a crash when recursively
   copying deeply nested directories.
+* Fixed bug hanging mrsh clients bug.
 * Fixed pam conversation bug in mrshd that caused mrsh client to fail.
 * Added more useful messages to mrsh/mrlogin for when connections are
   reset from the remote host. 

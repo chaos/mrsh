@@ -1,3 +1,8 @@
+2004-02-06  Albert Chu <chu11@llnl.gov>
+
+	* mrsh/mrsh.c (main): Set SO_KEEPALIVE on sockets, to prevent mrsh
+	from hanging.
+	
 2003-01-26  Albert Chu <chu11@llnl.gov>
 
 	* etc/mrexecd-xinetd: Removed from repository.
