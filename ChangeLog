@@ -1,3 +1,7 @@
+2005-03-12  Albert Chu  <chu11@llnl.gov>
+
+	* etc/pam/mrsh, etc/pam/mrlogin: Remove rhosts checks from default.
+
 2005-02-14  Albert Chu  <chu11@llnl.gov>
 
 	* mrlogind/mrlogind.h, mrlogind/auth.c (auth_env): New function.

@@ -4,6 +4,5 @@
 auth       required	pam_nologin.so
 auth       required	pam_securetty.so
 auth       required     pam_env.so
-auth       required     pam_rhosts_auth.so
 account    required	pam_stack.so service=system-auth
 session    required	pam_stack.so service=system-auth
