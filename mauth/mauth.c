@@ -22,7 +22,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h>     /* sockaddr_in, htonl */
 #include <arpa/inet.h>
-#include <netdb.h>
 #include <net/if.h>         /* struct ifreq, struct ifconf */
 
 #include <munge.h> 
@@ -179,47 +178,17 @@ int check_interfaces(struct mauth *ma, void *munge_addr, int addr_len) {
 }
 
 int check_munge_ip(struct mauth *ma, char *ip) {
-    int found = 0;
-    struct sockaddr_in sin;
-    struct hostent *hptr;
-    struct in_addr *inptr;
-    char *chrptr = NULL;
+    struct in_addr in;
  
-    if (gethostname(ma->hostname, MAXHOSTNAMELEN) < 0) {
-        syslog(LOG_ERR, "failed gethostname: %m");
-        snprintf(ma->errmsg, MAXERRMSGLEN, "Internal System Error");
-        return -1;
-    }
-
-    if ((chrptr = strchr(ma->hostname,'.')) != NULL)
-        *chrptr = '\0';
-
-    if ((hptr = gethostbyname(ma->hostname)) == NULL) {
-        syslog(LOG_ERR, "failed gethostbyname: %m");
-        snprintf(ma->errmsg, MAXERRMSGLEN, "Internal System Error");
-        return -1;
-    }
-
     strncpy(ma->ip, ip, INET_ADDRSTRLEN);
 
-    if (inet_pton(AF_INET, &(ma->ip[0]), &sin.sin_addr.s_addr) <= 0) {
+    if (inet_pton(AF_INET, &(ma->ip[0]), &in) <= 0) {
         syslog(LOG_ERR, "failed inet_pton: %m");
         snprintf(ma->errmsg, MAXERRMSGLEN, "Internal System Error");
         return -1;
     }
 
-    found = 0;
-    while ((inptr = (struct in_addr *) *hptr->h_addr_list++) != NULL) {
-        if (memcmp(&inptr->s_addr, &sin.sin_addr.s_addr, hptr->h_length) == 0) {
-            found++;
-            break;
-        }
-    }
-
-    if (!found)
-        found = check_interfaces(ma, &sin.sin_addr.s_addr, hptr->h_length);
-
-    return found;
+    return check_interfaces(ma, &in, sizeof(struct in_addr));
 } 
 
 static void _copy_passwd_struct(struct passwd *to, struct passwd *from) {
@@ -302,7 +271,7 @@ int mauth(struct mauth *ma, int fd, int cport) {
     strncpy(ma->username, m_head, MAXUSERNAMELEN);
     if ((ma->pwd = getpwnam(ma->username)) == NULL) {
         syslog(LOG_ERR, "bad getpwnam(): %m"); 
-        snprintf(ma->errmsg, MAXERRMSGLEN, "Internal System Error");
+        snprintf(ma->errmsg, MAXERRMSGLEN, "Permission Denied");
         goto bad;
     }
 

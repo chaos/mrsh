@@ -33,7 +33,6 @@ struct mauth {
   char username[MAXUSERNAMELEN+1];
   char version[MAXVERSIONLEN];
   char ip[INET_ADDRSTRLEN+1];
-  char hostname[MAXHOSTNAMELEN+1];
   char cmd[ARG_MAX+1];
   char errmsg[MAXERRMSGLEN+1];
 };

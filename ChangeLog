@@ -1,3 +1,24 @@
+2003-12-12  Albert Chu <chu11@llnl.gov>
+
+        Fix gethostbyname bug found by Mark Grondona (gnat mrsh/349) 
+
+	* mauth/mauth.c (check_munge_ip): Removed calls to gethostname and
+	gethostbyname.  Checks now fall through to check_interfaces.
+
+	* mauth/mauth.c (mauth): getpwnam() error message changed from
+	"Internal System Error" to "Permission Denied".
+
+	* mauth/mauth.h: Removed hostname field from struct mauth.
+
+	* mrshd/mrshd.c: Globally made all error messages end in "\n"
+	rather than ".\n" for consistency with mauth.
+
+	* mrshd/mrshd.c (doit): Error out with "Internal System Error"
+	when list_create fails, rather than exiting.
+
+	* mrshd/mrshd.c (doauth): Error out rather than exiting on
+	pam_start error.
+
 2003-12-11  Albert Chu <chu11@llnl.gov>
 
 	* mauth/mauth.c (mauth, munge_parse): Added struct mauth *

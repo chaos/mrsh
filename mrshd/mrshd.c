@@ -242,6 +242,10 @@ static struct passwd *doauth(const char *remuser,
 			     const char *hostname, 
 			     const char *locuser)
 {
+    /* No need to set errmsg in doauth().  Error messages output
+     * when caller seens return value of NULL
+     */
+
 #ifdef USE_PAM
     static struct pam_conv conv = { mrsh_conv, (void *)&pam_msgs };
     int retcode;
@@ -254,7 +258,7 @@ static struct passwd *doauth(const char *remuser,
     retcode = pam_start("mrsh", locuser, &conv, &pamh);
     if (retcode != PAM_SUCCESS) {
 	syslog(LOG_ERR, "pam_start: %s\n", pam_strerror(pamh, retcode));
-	exit (1);
+        return NULL;
     }
     pam_set_item (pamh, PAM_RUSER, remuser);
     pam_set_item (pamh, PAM_RHOST, hostname);
@@ -313,7 +317,7 @@ static const char *findhostname(struct sockaddr_in *fromp,
 
 	if (hostname==NULL) {
 	    /* out of memory? */
-	    errmsg = "Out of memory.\n";
+	    errmsg = "Out of memory\n";
 	    return NULL;
 	}
 
@@ -373,8 +377,8 @@ doit(struct sockaddr_in *fromp)
 #endif
 
 	if (mauth(&ma, 0, port) < 0) {
-		sprintf(errmsgbuf, "%s.\n", ma.errmsg);
-		errmsg = errmsgbuf;
+                sprintf(errmsgbuf, "%s\n", ma.errmsg);
+                errmsg = errmsgbuf;
 		goto error_out;
 	}
 
@@ -393,7 +397,8 @@ doit(struct sockaddr_in *fromp)
 #ifdef USE_PAM
         if ((pam_msgs = list_create((ListDelF)free)) == NULL) {
             syslog(LOG_ERR, "list_create() failed\n");
-            exit (1);
+            errmsg = "Internal System Error\n";
+            goto error_out;
         }
 #endif
 	pwd = doauth(remuser, hostname, locuser);
@@ -412,11 +417,11 @@ doit(struct sockaddr_in *fromp)
                     errmsg = errmsgbuf;
                 }
                 else
-                    fail("Permission denied.\n", 
+                    fail("Permission denied\n", 
                          remuser, hostname, locuser, cmdbuf);
                 list_destroy(pam_msgs);
 #else
-		fail("Permission denied.\n", 
+		fail("Permission denied\n", 
 		     remuser, hostname, locuser, cmdbuf);
 #endif
 		goto error_out;
@@ -425,14 +430,14 @@ doit(struct sockaddr_in *fromp)
 	if (chdir(pwd->pw_dir) < 0) {
 		chdir("/");
 		/*
-		 * error("No remote directory.\n");
+		 * error("No remote directory\n");
 		 * exit(1);
 		 */
 	}
 
 
 	if (pwd->pw_uid != 0 && !access(_PATH_NOLOGIN, F_OK)) {
-		errmsg = "Logins currently disabled.\n";
+		errmsg = "Logins currently disabled\n";
 		goto error_out;
 	}
 
@@ -474,7 +479,7 @@ error_out:
 		unsigned int rand = htonl(ma.rand);
 		if (fd_write_n(sock,&rand,sizeof(unsigned int)) < 0) {
 			syslog(LOG_ERR,"%s: %m","write to stderr port: ");
-			error("Write error, %s.\n", strerror(errno));
+			error("Write error, %s\n", strerror(errno));
 			exit(1);
 		}
 	}
@@ -484,12 +489,12 @@ error_out:
 
 	if (port) {
 		if (pipe(pv) < 0) {
-			error("Can't make pipe.\n");
+			error("Can't make pipe\n");
 			exit(1);
 		}
 		pid = fork();
 		if (pid == -1)  {
-			error("Can't fork; try again.\n");
+			error("Can't fork; try again\n");
 			exit(1);
 		}
 		if (pid) {
