@@ -1,7 +1,7 @@
 2003-12-12  Albert Chu <chu11@llnl.gov>
 
 	* mcmd/mcmd.c (mcmd): Initialize s2 to -1 for safety.  Fix
-	mem-leak.
+	mem-leak.  Renamed vers_nptr to mpvers.
 	
 2003-12-12  Albert Chu <chu11@llnl.gov>
 

@@ -124,7 +124,7 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
     char *mbuf;
     char *tmbuf;
     char *m;
-    char *vers_nptr;
+    char *mpvers;
     char num_seq[12] = {0};
     socklen_t len;
     sigset_t blockme;
@@ -321,9 +321,9 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
      * line's last strlen() call.)
      */
 
-    vers_nptr = MRSH_PROTOCOL_VERSION;
+    mpvers = MRSH_PROTOCOL_VERSION;
     
-    mcount = ((strlen(remuser)+1) + (strlen(vers_nptr)+1) + 
+    mcount = ((strlen(remuser)+1) + (strlen(mpvers)+1) + 
               (strlen(haddrdot)+1) + (strlen(num)+1) + 
               (strlen(num_seq)+1) + strlen(cmd)+2);
     tmbuf = mbuf = malloc(mcount);
@@ -341,8 +341,8 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
 
     mptr = strcpy(mbuf, remuser);
     mptr += strlen(remuser)+1;
-    mptr = strcpy(mptr, vers_nptr);
-    mptr += strlen(vers_nptr)+1;
+    mptr = strcpy(mptr, mpvers);
+    mptr += strlen(mpvers)+1;
     mptr = strcpy(mptr, haddrdot);
     mptr += strlen(haddrdot)+1;
     mptr = strcpy(mptr, num);
