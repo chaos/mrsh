@@ -5,6 +5,10 @@
 	* mrsh.spec.in: Added port fixes.
 
 	* Makefile.am: Added DISCLAIMER to fix distcheck.
+
+	* META: Update version
+	
+	* tagged mrsh-2-2-1
 	
 2004-09-21  Albert Chu  <chu11@llnl.gov>
 
