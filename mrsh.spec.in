@@ -82,4 +82,4 @@ if ! grep "^mlogin" /etc/services > /dev/null; then
 fi
 /sbin/chkconfig mrshd on
 /sbin/chkconfig mrlogind on
-/etc/rc.d/init.d/xinetd reload
+/etc/rc.d/init.d/xinetd condrestart

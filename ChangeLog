@@ -1,3 +1,7 @@
+2003-01-16  Albert Chu <chu11@llnl.gov>
+
+	* mrsh.spec.in: Xinetd conditional restarts now.
+	
 2003-12-29  Albert Chu <chu11@llnl.gov>
 
 	* doc/in.rshd.8, doc/rshd.8, doc/in.rlogind.8, doc/rlogind.8: New files.
