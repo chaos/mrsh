@@ -317,7 +317,7 @@ static const char *findhostname(struct sockaddr_in *fromp,
 
 	if (hostname==NULL) {
 	    /* out of memory? */
-	    errmsg = "Out of memory\n";
+	    errmsg = "Out of Memory\n";
 	    return NULL;
 	}
 
