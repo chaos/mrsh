@@ -474,7 +474,6 @@ error_out:
 		}
 	}
 
-	/* Error message, sent on stderr stream */
 	if (errmsg != NULL) {
 		char buf[BUFSIZ], *bp = buf;
 		snprintf(bp, sizeof(buf)-1, "%c%s\n", '\01', errmsg);
