@@ -1,0 +1,14 @@
+# default: on
+# description: rlogind is the server for the rlogin(1) program.  The server \
+#	provides a remote login facility with authentication based on \
+#	privileged port numbers from trusted hosts.
+service login
+{
+	socket_type		= stream
+	wait			= no
+	user			= root
+	log_on_success		+= USERID
+	log_on_failure 		+= USERID
+	server			= /usr/sbin/in.rlogind
+	disable			= yes
+}

@@ -1,0 +1,12 @@
+2003-09-05  Albert Chu  <chu11@llnl.gov>
+
+	* Initial commit of rsh source code.
+
+	* Modified all configuration and Makefiles to use autoconf and
+	automake.
+
+	* mrcp/mrcp.c, mrexec/mrexec.c, mrexecd/mrexecd.c,
+	mrlogin/des_rw.c, mrlogin/mrlogin.c, mrlogind/auth.c,
+	mrlogind/network.c, mrlogind/sockconv.c, mrlogind/mrlogind.c,
+	mrsh/mrsh.c, mrshd/mrshd.c:
+	Each file now #includes config.h.

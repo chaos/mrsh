@@ -1,0 +1,16 @@
+rcp:
+	- should call rsh instead of using root
+	- pukes on files in /proc
+	- should warn that the connection isn't encrypted
+
+rlogin: 
+	- should use sigaction
+	- should warn that the connection isn't encrypted
+
+rsh:
+	- should try rexec if rcmd doesn't work
+	- should warn that the connection isn't encrypted
+
+rexecd:
+	- apparently the anti-portscanning fix (rcs rev 1.12 -> 1.13) 
+	  causes rexecd to not work with some or all rexec clients.

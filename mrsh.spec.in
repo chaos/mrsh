@@ -1,0 +1,53 @@
+Name: @PACKAGE@
+Version: @VERSION@
+Release: @RELEASE@
+Epoch: 3
+Summary: Remote shell program that uses munge authentication
+Copyright: none
+Group: System Environment/Base
+Source: %{name}-%{version}-%{release}.tgz
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
+Requires: munge >= 0.1-0
+
+%description
+Remote shell programs that use munge authentication rather than
+reserved ports for security.
+
+%package server
+Summary: Servers for remote access commands (mrsh, mrlogin, mrcp)
+Group: System Environment/Daemons
+Requires: xinetd
+%description server
+Server daemons for remote access commands (mrsh, mrlogin, mrcp)
+
+%prep
+%setup -n %{name}-%{version}
+
+%build
+./bootstrap
+./configure --prefix=/usr
+make
+
+%install
+rm -rf $RPM_BUILD_ROOT
+DESTDIR="$RPM_BUILD_ROOT" make install
+
+%files
+%defattr(-,root,root)
+%doc NEWS README ChangeLog DISCLAIMER COPYING
+/usr/man/man1
+/usr/bin
+
+%files server
+%defattr(-,root,root)
+%config(noreplace) /etc/xinetd.d/mrshd
+%config(noreplace) /etc/xinetd.d/mrlogind
+%config(noreplace) /etc/xinetd.d/mrexecd
+/usr/man/man8
+/usr/sbin
+
+%post server
+/sbin/chkconfig mrshd on
+/sbin/chkconfig mrlogind on
+/sbin/chkconfig mrexecd on
+/etc/rc.d/init.d/xinetd reload

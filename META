@@ -1,0 +1,9 @@
+##
+# $Id$
+##
+# Metadata for RPM/TAR makefile targets
+##
+  Meta:		1
+  Name:		mrsh
+  Version:	2.0
+  Release:	0.pre0

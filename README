@@ -1,0 +1,122 @@
+This is netkit-rsh-0.17 for Linux.
+
+This package updates netkit-rsh-0.16.1.
+
+If you're reading this off a CD, go right away and check the net
+archives for later versions and security fixes. As of this writing the
+home site for NetKit is
+	ftp://ftp.uk.linux.org/pub/linux/Networking/netkit
+
+Contents:
+	rexec		Password-based remote execution program
+	rsh		Non-password-based remote execution program
+	rcp		Remote copy program using rsh
+	rlogin		Remote login program
+	rshd		Daemon for rsh connections
+	rexecd		Daemon for rexec connections
+	rlogind		Daemon for rlogin connections
+	
+Note: None of these programs provide encryption or strong
+authentication of network connections. As such, their use is
+discouraged. The "ssh" protocol and package is a cryptographically
+secure replacement.
+
+Requires:
+	Working compiler, libc, and kernel, and a recent ncurses or
+	libtermcap.
+
+Security:
+	This release contains no security fixes relative to
+	netkit-rsh-0.16. However, as noted above, all programs in this
+	package are inherently insecure except on trusted networks.
+	They should not be used at all except with great caution.
+	This package is maintained chiefly for the sake of compatibility.
+
+	Note: do not rely on the behavior of the options that limit 
+	the use of .rhosts or /etc/hosts.equiv without testing them, as
+	some of them depend on undocumented libc interfaces that may not
+	work correctly on all systems.
+
+	Versions of these programs prior to netkit-rsh-0.10 should not
+	be used.
+
+	WARNING: The PAM support in this version may be screwed up. If
+	you use PAM, please be sure to double- and triple-check the
+	behavior of rshd, rlogind, and rexecd to make sure they don't
+	inadvertently grant access when it should be denied. If in doubt,
+	get the SRPMs from Red Hat and use their sources instead.
+
+Installation:
+	Do "./configure --help" and decide what options you want. The
+	defaults should be suitable for most Linux systems. Then run
+	the configure script.
+
+	Do "make" to compile.
+	Then (as root) do "make install".
+
+	Save a backup copy of any mission-critical program in case the
+	new one doesn't work, and so forth. We warned you.
+
+	If you get gcc warnings from files in /usr/include, they are
+	due to problems in your libc, not netkit. (You may only see
+	them when compiling netkit because netkit turns on a lot of
+	compiler warnings.)
+
+DEC CC:
+	The DEC compiler for the Alpha is now freely available. This
+	is a much better compiler with gcc, that is, it generates much
+	better code. If you have the DEC compiler, you can explicitly
+	use the DEC compiler instead of gcc by configuring like this:
+
+		./configure --with-c-compiler=ccc
+
+	It is known to generate spurious warnings on some files. Also,
+	some headers from some versions of glibc confuse it; that may
+	prevent	netkit from working. Other problems should be reported
+	as bugs.
+
+Bugs:
+	Please make sure the header files in /usr/include match the
+	libc version installed in /lib and /usr/lib. If you have weird
+	problems this is the most likely culprit.
+
+	Also, before reporting a bug, be sure you're working with the
+	latest version.
+
+	If something doesn't compile for you, fix it and send diffs.
+	If you can't, send the compiler's error output.
+
+	If it compiles but doesn't work, send as complete a bug report as 
+	you can. Patches and fixes are welcome, as long as you describe 
+	adequately what they're supposed to fix. Please, one patch per
+	distinct fix. Please do NOT send the whole archive back or
+	reindent the source.
+
+	Be sure to send all correspondence in e-mail to the netkit address.
+	Postings to netnews or mailing lists will not be seen due to the 
+	enormous volume. Also, anything that doesn't get filed in the bug
+	database is quite likely to end up forgotten.
+
+	Please don't report known bugs (see the BUGS file(s)) unless you
+	are including fixes. :-)
+
+	Mail should be sent to: netbug@ftp.uk.linux.org
+
+
+Early in April 2000, a hacker broke into the machine that was hosting
+the netkit bug database for me and trashed it. Unfortunately, it seems
+backups hadn't gotten done for a while, so three months of mail (since
+mid-January) was lost. So, if you sent something and didn't hear back,
+or you sent something, heard back, but the changes failed to appear in
+this release (unlikely but possible) - please resend.
+
+Please see http://www.hcs.harvard.edu/~dholland/computers/netkit.html
+if you are curious why it was so long between the 0.10 and 0.16 releases.
+
+Future plans for netkit maintenance are still up in the air, but in the
+meantime new releases will still appear from time to time. I don't have
+a whole lot of cycles to spare to work on netkit, so things are likely
+to continue to be fairly slow.
+
+David A. Holland
+23 July 2000

@@ -1,0 +1,96 @@
+##*****************************************************************************
+## $Id$
+##*****************************************************************************
+## Process this file with autoconf to produce a configure script.
+##*****************************************************************************
+
+##
+# Prologue.
+##
+AC_INIT([mrsh])
+AC_META
+AC_CONFIG_AUX_DIR([config])
+AC_CONFIG_SRCDIR([README])
+
+##
+# Automake support.
+##
+AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
+AM_CONFIG_HEADER([config/config.h])
+
+##
+# Checks for programs.
+##
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_PROG_LIBTOOL
+AC_PROG_MAKE_SET
+
+##
+# Checks for header files.
+##
+AC_HEADER_STDC
+AC_CHECK_HEADERS( \
+  stdio.h \
+  stdlib.h \
+  string.h \
+  unistd.h \
+  getopt.h \
+  types.h \
+)
+
+##
+# Checks for typedefs, structures, and compiler characteristics.
+##
+AC_C_BIGENDIAN
+AC_C_CONST
+AC_TYPE_UID_T
+
+##
+# Checks for library functions.
+##
+AC_FUNC_MALLOC
+AC_CHECK_FUNCS( \
+  strcmp \
+  strlen \
+  strcpy \
+  strchr \
+)
+
+##
+# Program checks
+##
+AC_SIGNALS
+AC_NCURSES
+AC_CRYPT
+AC_FORKPTY
+AC_LOGWTMP
+AC_TYPE_SOCKLEN_T
+AC_SNPRINTF
+LIBS="$LIBS $LIBTERMCAP $LIBCRYPT $LIBFORKPTY $LIBLOGWTMP"
+
+AC_PAM
+AM_CONDITIONAL(WITH_PAM, test "$ac_have_pam" = "yes")
+
+AC_SHADOW
+AM_CONDITIONAL(WITH_SHADOW, test "$ac_have_shadow" = "yes")
+
+##
+# Epilogue.
+##
+AC_CONFIG_FILES( \
+  mrsh.spec \
+  Makefile \
+  common/Makefile \
+  doc/Makefile \
+  etc/Makefile \
+  mrcp/Makefile \
+  mrexec/Makefile \
+  mrexecd/Makefile \
+  mrlogin/Makefile \
+  mrlogind/Makefile \
+  mrsh/Makefile \
+  mrshd/Makefile \
+)
+AC_OUTPUT
+

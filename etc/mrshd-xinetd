@@ -1,0 +1,15 @@
+# default: on
+# description: The rshd server is the server for the rcmd(3) routine and, \
+#	consequently, for the rsh(1) program.  The server provides \
+#	remote execution facilities with authentication based on \
+#	privileged port numbers from trusted hosts.
+service shell
+{
+	socket_type		= stream
+	wait			= no
+	user			= root
+	log_on_success		+= USERID
+	log_on_failure 		+= USERID
+	server			= /usr/sbin/in.rshd
+	disable			= yes
+}
