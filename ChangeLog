@@ -1,3 +1,8 @@
+2003-09-18  Albert Chu  <chu11@llnl.gov>
+
+	* mauth/mauth.c (check_interfaces):
+	Fixed memory leak.
+
 2003-09-12  Albert Chu  <chu11@llnl.gov>
 
 	* mrshd/mrshd.c (main), mrlogind/auth.c (auth_checkoptions):

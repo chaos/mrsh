@@ -163,6 +163,7 @@ int check_interfaces(struct mauth *ma, void *munge_addr, int h_length) {
         }
     }
 
+    free(buf);
     return found;
 
  bad:
