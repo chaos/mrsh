@@ -2,6 +2,8 @@
 
 	* rsh-compat/Makefile.am: Fixes for link creation.
 
+	* configure.ac; Added AC_PROG_LN_S check.
+
 	* tagged mrsh-2-2-1
 	
 2004-10-28  Albert Chu  <chu11@llnl.gov>

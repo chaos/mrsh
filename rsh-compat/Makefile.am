@@ -9,11 +9,11 @@ man8_MANS = rshd.8 in.rshd.8 rlogind.8 in.rlogind.8
 
 all:
 	rm -f rsh
-	ln -s $(bindir)/mrsh rsh
+	$(LN_S) $(bindir)/mrsh rsh
 	rm -f rcp
-	ln -s $(bindir)/mrcp rcp
+	$(LN_S) $(bindir)/mrcp rcp
 	rm -f rlogin
-	ln -s $(bindir)/mrlogin rlogin
+	$(LN_S) $(bindir)/mrlogin rlogin
 
 EXTRA_DIST = rsh.1 rcp.1 rlogin.1 \
 	     rshd.8 in.rshd.8 rlogind.8 in.rlogind.8 
