@@ -90,6 +90,8 @@ AC_CONFIG_FILES( \
   common/Makefile \
   doc/Makefile \
   etc/Makefile \
+  etc/pam/Makefile \
+  etc/xinetd/Makefile \
   mauth/Makefile \
   mcmd/Makefile \
   mrcp/Makefile \

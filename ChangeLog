@@ -1,3 +1,13 @@
+2004-06-21  Albert Chu  <chu11@llnl.gov>
+
+	* etc/mrlogind-xinetd, etc/mrshd-xinetd, etc/mrsh.pam,
+	etc/mrlogin.pam: Removed files.
+
+	* etc/pam/Makefile.am, etc/pam/mrlogin, etc/pam/mrsh,
+	etc/xinetd/Makefile.am, etc/xinetd/mrlogind, etc/xinetd/mrshd: New files.
+
+	* configure.ac, etc/Makefile.am: Updated appropriately for new files.
+	
 2004-06-07  Albert Chu  <chu11@llnl.gov>
 
 	* mauth/Makefile.am, mcmd/Makefile.am, mcrp/Makefile.am,
