@@ -1,3 +1,9 @@
+2004-10-29  Albert Chu  <chu11@llnl.gov>
+
+	* rsh-compat/Makefile.am: Fixes for link creation.
+
+	* tagged mrsh-2-2-1
+	
 2004-10-28  Albert Chu  <chu11@llnl.gov>
 
 	* config/Make-rpm.mk: Updated with port fixes.
@@ -7,9 +13,6 @@
 	* Makefile.am: Added DISCLAIMER to fix distcheck.
 
 	* META: Update version
-	
-	* tagged mrsh-2-2-1
-	
 2004-09-21  Albert Chu  <chu11@llnl.gov>
 
 	Added largefile support to mrcp (gnat mrsh/470).

@@ -7,25 +7,20 @@
 man1_MANS = rsh.1 rcp.1 rlogin.1
 man8_MANS = rshd.8 in.rshd.8 rlogind.8 in.rlogind.8
 
-BUILT_SOURCES = rsh rcp rlogin
-RSHCOMPATFILES = rsh rcp rlogin
-RSHCOMPATFILESdir = $(bindir)
-RSHCOMPATFILES_DATA = $(RSHCOMPATFILES)
-
-rsh:
+all:
 	rm -f rsh
 	ln -s $(bindir)/mrsh rsh
-rcp:
 	rm -f rcp
 	ln -s $(bindir)/mrcp rcp
-rlogin:
 	rm -f rlogin
 	ln -s $(bindir)/mrlogin rlogin
 
 EXTRA_DIST = rsh.1 rcp.1 rlogin.1 \
 	     rshd.8 in.rshd.8 rlogind.8 in.rlogind.8 
 
-install-data-hook:
-	chmod 777 $(DESTDIR)/$(RSHCOMPATFILESdir)/rsh
-	chmod 777 $(DESTDIR)/$(RSHCOMPATFILESdir)/rcp
-	chmod 777 $(DESTDIR)/$(RSHCOMPATFILESdir)/rlogin
+install-exec-hook:
+	$(top_srcdir)/config/mkinstalldirs -m 755 $(DESTDIR)/$(bindir)
+	cp -d ./rsh $(DESTDIR)/$(bindir)
+	cp -d ./rcp $(DESTDIR)/$(bindir)
+	cp -d ./rlogin $(DESTDIR)/$(bindir)
+
