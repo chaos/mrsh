@@ -10,6 +10,7 @@ Changes in mrsh-2.0:
 * Fixed memory leak in mrcp that can cause a crash when recursively
   copying deeply nested directories.
 * Added the -V option to mrcp, mrsh, mrlogin, in.mrshd, and in.mrlogind.
+* Fixed ia64 portability bug that prohibited logins to succeed.
 * Increased protocol version to 2.0.
 
 $Id$
