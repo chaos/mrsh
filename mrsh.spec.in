@@ -85,7 +85,7 @@ if ! grep "^mlogin" /etc/services > /dev/null; then
 fi
 # 'condrestart' is not portable
 if [ -x /etc/init.d/xinetd ]; then
-    if /etc/rc.d/init.d/xinetd status | grep -q running; then
-       /etc/rc.d/init.d/xinetd restart
+    if /etc/init.d/xinetd status | grep -q running; then
+       /etc/init.d/xinetd restart
     fi
 fi
