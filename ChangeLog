@@ -26,8 +26,9 @@
 	family check to more appropriate location.  Removed pointless port
 	saving code, which was originally from rsh code.
 
-	* mrlogind/auth.c (auth_checkauth): Added additional syslog
-	messages and removed unnecessary fprintf messages.
+	* mrlogind/auth.c (auth_checkauth), mrlogind/network.c
+	(find_hostname, network_init): Added additional syslog messages
+	and removed unnecessary fprintf messages.
 
 	Misc
 
