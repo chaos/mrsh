@@ -22,7 +22,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h>     /* sockaddr_in, htonl */
 #include <arpa/inet.h>
-#include <netdb.h>
 #include <net/if.h>         /* struct ifreq, struct ifconf */
 
 #include <munge.h> 
@@ -33,17 +32,18 @@
 #define MAX_MBUF_SIZE     4096
 
 /* Static function prototypes */
-static char *munge_parse(char *, char *);
+static char *munge_parse(struct mauth *, char *, char *);
 static int   getifrlen(struct ifreq *);
 static int   check_interfaces(struct mauth *, void *, int h_length);
 static int   check_munge_ip(struct mauth *, char *);
 
-char *munge_parse(char *buf, char *end) {
+char *munge_parse(struct mauth *ma, char *buf, char *end) {
     int len = strlen(buf);
 
     buf += len + 1;
     if (buf >= end) {
         syslog(LOG_ERR, "parser went beyond valid data");
+        snprintf(ma->errmsg, MAXERRMSGLEN, "Internal Error");
         return NULL;
     }
     return buf;
@@ -321,10 +321,9 @@ int mauth(struct mauth *ma, int fd, int cport) {
 
     /* Verify version number */
 
-    if ((m_head = munge_parse(m_head, m_end)) == NULL) {
-        snprintf(ma->errmsg, MAXERRMSGLEN, "Internal Error");
+    if ((m_head = munge_parse(ma, m_head, m_end)) == NULL)
         goto bad;
-    }
+    
     strncpy(ma->version, m_head, MAXVERSIONLEN);
   
     if (strcmp(ma->version, MRSH_PROTOCOL_VERSION) != 0) {
@@ -336,10 +335,8 @@ int mauth(struct mauth *ma, int fd, int cport) {
 
     /* Verify IP address */
     
-    if ((m_head = munge_parse(m_head, m_end)) == NULL) {
-        snprintf(ma->errmsg, MAXERRMSGLEN, "Internal Error");
+    if ((m_head = munge_parse(ma, m_head, m_end)) == NULL)
         goto bad;
-    }
 
     if ((rv = check_munge_ip(ma, m_head)) < 0)
         goto bad;
@@ -352,10 +349,8 @@ int mauth(struct mauth *ma, int fd, int cport) {
 
     /* Verify Port */
 
-    if ((m_head = munge_parse(m_head, m_end)) == NULL) {
-        snprintf(ma->errmsg, MAXERRMSGLEN, "Internal Error");
+    if ((m_head = munge_parse(ma, m_head, m_end)) == NULL)
         goto bad;
-    }
 
     errno = 0;
     ma->port = strtol(m_head, (char **)NULL, 10);
@@ -373,10 +368,8 @@ int mauth(struct mauth *ma, int fd, int cport) {
 
     /* Get Random Number */
     
-    if ((m_head = munge_parse(m_head, m_end)) == NULL) {
-        snprintf(ma->errmsg, MAXERRMSGLEN, "Internal Error");
+    if ((m_head = munge_parse(ma, m_head, m_end)) == NULL)
         goto bad;
-    }
 
     errno = 0;
     ma->rand = strtol(m_head,(char **)NULL,10);
@@ -394,10 +387,8 @@ int mauth(struct mauth *ma, int fd, int cport) {
 
     /* Get Command */
 
-    if ((m_head = munge_parse(m_head, m_end)) == NULL) {
-        snprintf(ma->errmsg, MAXERRMSGLEN, "Internal Error");
+    if ((m_head = munge_parse(ma, m_head, m_end)) == NULL)
         goto bad;
-    }
     
     if ((int)strlen(m_head) < ARG_MAX) {
         strncpy(ma->cmd, m_head, ARG_MAX);

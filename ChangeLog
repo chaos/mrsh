@@ -1,3 +1,10 @@
+2003-12-11  Albert Chu <chu11@llnl.gov>
+
+	* mauth/mauth.c (mauth, munge_parse): Added struct mauth *
+	parameter.  Move all mauth error message writes from within mauth
+	into munge_parse function.
+
+	
 2003-10-31  Albert Chu <chu11@llnl.gov>
 
 	* mrshd/list.h, mrshd/list.c, mrshd/mrshconv.c: New files.
