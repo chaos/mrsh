@@ -22,6 +22,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>     /* sockaddr_in, htonl */
 #include <arpa/inet.h>
+#include <netdb.h>
 #include <net/if.h>         /* struct ifreq, struct ifconf */
 
 #include <munge.h> 
