@@ -420,8 +420,17 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
         if (select(maxfd + 1, &reads, 0, 0, 0) < 1 || !FD_ISSET(s2, &reads)) {
             if (errno != 0)
                 perror("mcmd: Select failed (setting up stderr).");
-            else
-                fprintf(stderr, "mcmd: Protocol failure in circuit setup.\n");
+            else {
+                char buf[100];
+                int rv = read(s, buf, 100);
+                if (rv == 0)
+                    fprintf(stderr, "mcmd: Connection closed by remote host.\n");
+                else if (rv > 0) 
+                    fprintf(stderr, "mcmd: Protocol failure in circuit setup.\n");
+                else { /* rv < 0 */
+                    fprintf(stderr, "mcmd: %s\n", strerror(errno));
+                }
+            }
             close(s2);
             goto bad;
         }

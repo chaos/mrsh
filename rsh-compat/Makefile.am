@@ -7,6 +7,9 @@
 man1_MANS = rsh.1 rcp.1 rlogin.1
 
 all:
+	rm -f rsh
+	rm -f rcp
+	rm -f rlogin
 	ln -s $(bindir)/mrsh rsh
 	ln -s $(bindir)/mrcp rcp
 	ln -s $(bindir)/mrlogin rlogin

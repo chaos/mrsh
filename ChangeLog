@@ -4,7 +4,14 @@
 
 	* mrshd/mrshd.c (doauth, doit): Modified to use new mrsh_conv pam
 	conversation function that fixes bug.  See comments in mrshconv.c.
+
+	* mcmd/mcmd.c (mcmd): Made output from select error more useful.
 	
+	* mrshd/Makefile.am: Added list.c and mrshconv.c to build.
+
+	* rsh-compat/Makefile.am: Fix bug in build when symlinks already
+	existed.
+
 2003-10-17  Albert Chu <chu11@llnl.gov>
 
 	* mrsh.spec.in: Make default owner and group of mrsh-rsh-compat
