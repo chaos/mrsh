@@ -1,3 +1,15 @@
+2004-09-21  Albert Chu  <chu11@llnl.gov>
+
+	Added largefile support to mrcp (gnat mrsh/470).
+
+	* configure.ac: Added call to AC_SYS_LARGEFILE.
+
+	* mrcp/mrcp.c (sink): Redeclare 'size' as off_t type instead of
+	integer.
+
+	* mrcp/mrcp.c (source): Output size depending on
+	sizeof(stb.st_size).
+	
 2004-06-21  Albert Chu  <chu11@llnl.gov>
 
 	* etc/mrlogind-xinetd, etc/mrshd-xinetd, etc/mrsh.pam,

@@ -529,8 +529,14 @@ notreg:			(void)close(f);
 				continue;
 			}
 		}
-		(void)snprintf(buf, sizeof(buf),
-		    "C%04o %ld %s\n", stb.st_mode&07777, stb.st_size, last);
+		if (sizeof(stb.st_size) > sizeof(long))
+			(void)snprintf(buf, sizeof(buf),
+		    		"C%04o %lld %s\n", 
+				stb.st_mode&07777, stb.st_size, last);
+		else
+			(void)snprintf(buf, sizeof(buf),
+		    		"C%04o %ld %s\n", 
+				stb.st_mode&07777, stb.st_size, last);
 		(void)write(rem, buf, (int)strlen(buf));
 		if (response() < 0) {
 			(void)close(f);
@@ -662,11 +668,11 @@ sink(int argc, char *argv[])
 	struct timeval tv[2];
 	enum { YES, NO, DISPLAYED } wrerr;
 	BUF *bp;
-	off_t i, j;
+	off_t i, j, size;
 	char ch, *targ;
 	const char *why;
 	int amt, count, exists, first, mask, mode;
-	int ofd, setimes, size, targisdir, cursize = 0;
+	int ofd, setimes, targisdir, cursize = 0;
 	char *np, *vect[1], buf[BUFSIZ], *namebuf = NULL;
 
 #define	atime	tv[0]
