@@ -1,3 +1,8 @@
+2003-12-22  Albert Chu <chu11@llnl.gov>
+
+	* mauth/mauth.c (check_interfaces): Removed section of code that
+	was logically never needed.
+	
 2003-12-16  Albert Chu <chu11@llnl.gov>
 
 	* mrshd/mrshd.c (doauth): Cleaned up code and fixed up code logic.

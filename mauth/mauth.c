@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/ioctl.h>
-#include <fcntl.h>          /* SIOCGIFADDR */
+#include <fcntl.h>
 #include <syslog.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -88,7 +88,6 @@ int getifrlen(struct ifreq *ifr) {
 int check_interfaces(struct mauth *ma, void *munge_addr, int addr_len) {
     struct ifconf ifc;
     struct ifreq *ifr;
-    struct ifreq ifaddr;
     int s, found = 0, lastlen = -1;
     int len = sizeof(struct ifreq) * 100;
     void *buf = NULL, *ptr = NULL;
@@ -147,14 +146,6 @@ int check_interfaces(struct mauth *ma, void *munge_addr, int addr_len) {
         /* Currently, we only care about IPv4 (i.e. AF_INET) */
         if (ifr->ifr_addr.sa_family != AF_INET)
             continue;
-
-        strcpy(ifaddr.ifr_name, ifr->ifr_name);
-        ifaddr.ifr_addr.sa_family = AF_INET;
-        if (ioctl(s, SIOCGIFADDR, &ifaddr) < 0) {
-            syslog(LOG_ERR, "ioctl SIOCGIFADDR failed: %m");
-            snprintf(ma->errmsg, MAXERRMSGLEN, "Internal System Error");
-            goto bad;
-        }
 
         sin = (struct sockaddr_in *)&ifr->ifr_addr;
 
