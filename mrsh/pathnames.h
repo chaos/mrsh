@@ -3,7 +3,7 @@
  *****************************************************************************
  *  Copyright (C) 2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
- *  Written by by Mike Haskell <haskell5@llnl.gov> and Albert Chu 
+ *  Written by Mike Haskell <haskell5@llnl.gov> and Albert Chu 
  *  <chu11@llnl.gov>
  *  UCRL-CODE-155697
  *  

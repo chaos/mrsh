@@ -3,7 +3,7 @@
  *****************************************************************************
  *  Copyright (C) 2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
- *  Written by by Mike Haskell <haskell5@llnl.gov> and Albert Chu 
+ *  Written by Mike Haskell <haskell5@llnl.gov> and Albert Chu 
  *  <chu11@llnl.gov>
  *  UCRL-CODE-155697
  *  
@@ -33,6 +33,9 @@
  *    modified for socket file descriptors by Erik Troan <ewt@redhat.com>
  *
  * $Log$
+ * Revision 1.3  2003/12/29 17:59:08  achu
+ * fix header typo
+ *
  * Revision 1.2  2003/12/25 00:55:05  achu
  * Added copyright/UCRL everywhere
  * removed all mrexec related code/doc/manpage
