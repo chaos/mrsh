@@ -43,9 +43,9 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %files
 %defattr(-,root,root)
 %doc NEWS README ChangeLog COPYING DISCLAIMER
-/usr/man/man1/mrcp.1.gz
-/usr/man/man1/mrsh.1.gz
-/usr/man/man1/mrlogin.1.gz
+/usr/man/man1/mrcp.1*
+/usr/man/man1/mrsh.1*
+/usr/man/man1/mrlogin.1*
 /usr/bin/mrcp
 /usr/bin/mrsh
 /usr/bin/mrlogin
@@ -54,21 +54,21 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %defattr(-,root,root)
 %config(noreplace) /etc/xinetd.d/mrshd
 %config(noreplace) /etc/xinetd.d/mrlogind
-/usr/man/man8/in.mrlogind.8.gz
-/usr/man/man8/in.mrshd.8.gz
-/usr/man/man8/mrlogind.8.gz
-/usr/man/man8/mrshd.8.gz
+/usr/man/man8/in.mrlogind.8*
+/usr/man/man8/in.mrshd.8*
+/usr/man/man8/mrlogind.8*
+/usr/man/man8/mrshd.8*
 /usr/sbin
 
 %files rsh-compat
 %defattr(-,root,root)
-/usr/man/man1/rcp.1.gz
-/usr/man/man1/rsh.1.gz
-/usr/man/man1/rlogin.1.gz
-/usr/man/man8/in.rlogind.8.gz
-/usr/man/man8/in.rshd.8.gz
-/usr/man/man8/rlogind.8.gz
-/usr/man/man8/rshd.8.gz
+/usr/man/man1/rcp.1*
+/usr/man/man1/rsh.1*
+/usr/man/man1/rlogin.1*
+/usr/man/man8/in.rlogind.8*
+/usr/man/man8/in.rshd.8*
+/usr/man/man8/rlogind.8*
+/usr/man/man8/rshd.8*
 /usr/bin/rcp
 /usr/bin/rsh
 /usr/bin/rlogin
