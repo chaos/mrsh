@@ -144,10 +144,10 @@ find_hostname(const struct sockaddr_in *fromp, int *hostokp)
 		hostok = 1;
 	}
 
-	/* 
-	 * Actually it might be null if we're out of memory, but
-	 * where do we go then? We'd have to bail anyhow.
-	 */
+        /* 
+         * Actually it might be null if we're out of memory, but
+         * where do we go then? We'd have to bail anyhow.
+         */
         if (hname == NULL) {
                 syslog(LOG_ERR, "find_hostname: Out of memory");
                 fatal(STDERR_FILENO, "Out of Memory", 0);
@@ -190,7 +190,7 @@ network_init(int f, int *hostokp)
 	alarm(60);
 	read(f, &c, 1);
 
-	if (c != 0) {
+        if (c != 0) {
                 syslog(LOG_ERR, "did not receive null from user");
                 fatal(STDERR_FILENO, "Protocol Error", 0);
         }
