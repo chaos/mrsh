@@ -33,7 +33,7 @@ rsh compatability package for mrcp/mrlogin/mrsh
 
 %build
 ./bootstrap
-./configure --prefix=/usr %{?_without_pam}
+%configure --program-prefix=%{?_program_prefix:%{_program_prefix}} %{?_without_pam}
 make
 
 %install

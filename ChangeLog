@@ -1,3 +1,7 @@
+2004-04-27  Albert Chu  <chu11@llnl.gov>
+
+	* mrsh.spec.in: Use %configure macro.
+
 2004-02-11  Albert Chu <chu11@llnl.gov>
 
 	* tagged mrsh-2-0-1
