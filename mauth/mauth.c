@@ -327,6 +327,8 @@ int mauth(struct mauth *ma, int fd, int cport) {
     strncpy(ma->version, m_head, MAXVERSIONLEN);
   
     if (strcmp(ma->version, MRSH_PROTOCOL_VERSION) != 0) {
+        syslog(LOG_ERR, "Client protocol version (%s) does not match server version (%s)",
+               ma->version, MRSH_PROTOCOL_VERSION);
         snprintf(ma->errmsg, MAXERRMSGLEN, 
                  "Client protocol version (%s) does not match server version (%s)", 
                  ma->version, MRSH_PROTOCOL_VERSION);

@@ -4,6 +4,9 @@
 	parameter.  Move all mauth error message writes from within mauth
 	into munge_parse function.
 
+	* mauth/mauth.c (mauth): Added forgotten syslog of version
+	mismatch.
+
 	
 2003-10-31  Albert Chu <chu11@llnl.gov>
 
