@@ -424,6 +424,9 @@ doit(struct sockaddr_in *fromp)
 	const char *hostname;
 	u_short port;
 	int pv[2], pid, ifd;
+#ifdef USE_PAM
+	char **env;
+#endif
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
@@ -591,6 +594,22 @@ error_out:
 	shellname = strrchr(theshell, '/');
 	if (shellname) shellname++;
 	else shellname = theshell;
+
+#ifdef USE_PAM
+	if ((env = (char **)pam_getenvlist(pamh))) {
+	    /* On some systems, putenv() requires that the string be
+	     * in its own malloced buffer.  So we will not free the
+	     * string buffers (i.e. env[i]), but we can free the array
+	     * of pointers (i.e. env).
+	     */
+	    int i;
+
+	    for (i = 0; env[i]; i++)
+		putenv(env[i]);
+
+	    free(env);
+	}
+#endif
 
 	endpwent();
 	if (paranoid) {

@@ -41,6 +41,7 @@ void auth_checkoptions(void);
 void auth_finish(void);
 int auth_checkauth(const char *remoteuser, const char *host,
 		   char *localuser, size_t localusermaxsize);
+char ** auth_env(char **extra_env, unsigned int extra_env_len);
 
 /* 
  * Global flag variables 

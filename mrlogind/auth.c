@@ -227,6 +227,58 @@ int auth_checkauth(const char *remoteuser, const char *host,
     return 0;
 }
 
+/* auth_env
+ * - Build an environment array out of the pam environment and an
+ * array of additional environment variables that have already been
+ * created.
+ * - Return new array if pam environment variables were found,
+ * otherwise return NULL.
+ */
+char **
+auth_env(char **extra_env, unsigned int extra_env_len)
+{
+    char **pam_env = NULL;
+    char **env = NULL;
+    int i, pam_env_len, env_len;
+
+    if ((pam_env = (char **)pam_getenvlist(pamh))) {
+    
+        for (pam_env_len = 0; pam_env[pam_env_len]; pam_env_len++) {}
+    
+        /* + 1 for ending NULL pointer */
+        env_len = pam_env_len + extra_env_len + 1;
+
+        if (env_len <= 1)
+            goto cleanup;
+
+        if (!(env = (char **)malloc(sizeof(char *) * env_len)))
+            goto cleanup;
+        memset(env, '\0', sizeof(char *) * env_len);
+
+        /* Environment variables in 'extra_env' take precedence, so they
+         * are added after the environment variables read via pam.
+         */
+        for (i = 0; i < pam_env_len; i++)
+            env[i] = pam_env[i];
+        for (i = 0; i < extra_env_len; i++)
+            env[pam_env_len + i] = extra_env[i];
+        env[pam_env_len + extra_env_len] = NULL;
+
+        /* The only thing we can free is the pam_env list of pointers */
+        free(pam_env);
+    }
+  
+    return env;
+ cleanup:
+    if (pam_env) {
+        for (i = 0; pam_env[i]; i++)
+            free(pam_env[i]);
+        free(pam_env);
+    }
+    free(env);
+    return NULL;
+}
+
 #else /* not USE_PAM */
 
 /*
@@ -305,4 +357,9 @@ int auth_checkauth(const char *remoteuser, const char *host,
     return 0;
 }
 
+char **
+auth_env(char **extra_env, unsigned int extra_env_len)
+{
+  return NULL;
+}
 #endif /* PAM */

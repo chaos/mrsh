@@ -380,6 +380,7 @@ static void child(const char *hname, const char *termtype,
 		  const char *localuser, int authenticated)
 {
     char *termenv[2];
+    char **env;
 
     setup_term(0, termtype);
 
@@ -390,11 +391,18 @@ static void child(const char *hname, const char *termtype,
     }
     termenv[1] = NULL;
 
+#ifdef USE_PAM
+    if (!(env = auth_env(&termenv[0], 1)))
+        env = &termenv[0];
+#else
+    env = &termenv[0];
+#endif
+
     if (authenticated) {
 	auth_finish();
 	closeall();
 	execle(_PATH_LOGIN, "login", "-p",
-	       "-h", hname, "-f", localuser, NULL, termenv);
+	       "-h", hname, "-f", localuser, NULL, env);
     } 
     else {
 	if (localuser[0] == '-') {
@@ -404,7 +412,7 @@ static void child(const char *hname, const char *termtype,
 	auth_finish();
 	closeall();
 	execle(_PATH_LOGIN, "login", "-p",
-	       "-h", hname, localuser, NULL, termenv);
+	       "-h", hname, localuser, NULL, env);
     }
     /* Can't exec login, croak */
     fatal(STDERR_FILENO, _PATH_LOGIN, 1);

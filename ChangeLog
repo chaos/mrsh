@@ -1,3 +1,10 @@
+2005-02-14  Albert Chu  <chu11@llnl.gov>
+
+	* mrlogind/mrlogind.h, mrlogind/auth.c (auth_env): New function.
+
+	* mrshd/mrshd.c (doit), mrlogind/mrlogind.c (child): Added support
+	for pam_env pam module.
+	
 2004-12-14  Albert Chu  <chu11@llnl.gov>
 
 	* etc/pam/mrsh, etc/pam/mrlogin: Fix for multilib systems.
