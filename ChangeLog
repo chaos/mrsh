@@ -2,6 +2,8 @@
 
 	* mrsh.spec.in: Removed DISCLAIMER from package.
 
+	* mrsh.spec.in: Added %post install of mlogin and mshell services.
+
 	* src/mcmd/mcmd.c (mcmd): Type of 'len' changed from size_t to socklen_t.
 
 	* tagged mrsh-2-0-0-pre0

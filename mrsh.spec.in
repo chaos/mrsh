@@ -66,6 +66,12 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 /usr/bin/rlogin
 
 %post server
+if ! grep "^mshell" /etc/services > /dev/null; then
+        echo "mshell          21212/tcp                  # mrshd" >> /etc/services
+fi
+if ! grep "^mlogin" /etc/services > /dev/null; then
+        echo "mlogin            541/tcp                  # mrlogind" >> /etc/services
+fi
 /sbin/chkconfig mrshd on
 /sbin/chkconfig mrlogind on
 /etc/rc.d/init.d/xinetd reload
