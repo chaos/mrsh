@@ -1,6 +1,7 @@
 2003-12-12  Albert Chu <chu11@llnl.gov>
 
-	* mcmd/mcmd.c (mcmd): Initial s2 to -1 for safety.
+	* mcmd/mcmd.c (mcmd): Initialize s2 to -1 for safety.  Fix
+	mem-leak.
 	
 2003-12-12  Albert Chu <chu11@llnl.gov>
 
