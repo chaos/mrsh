@@ -1,3 +1,9 @@
+2005-03-25  Albert Chu  <chu11@llnl.gov>
+
+	* META: Updated
+
+	* Tagged mrsh-2-4-1
+	
 2005-03-12  Albert Chu  <chu11@llnl.gov>
 
 	* etc/pam/mrsh, etc/pam/mrlogin: Remove rhosts checks from default.
