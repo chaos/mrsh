@@ -1,16 +1,9 @@
+The following are bugs that have been carried over from the original
+rsh source code.
+
 mrcp:
 	- should call mrsh instead of using root
 	- pukes on files in /proc
-	- should warn that the connection isn't encrypted
 
 mrlogin: 
 	- should use sigaction
-	- should warn that the connection isn't encrypted
-
-mrsh:
-	- should try mrexec if mcmd doesn't work
-	- should warn that the connection isn't encrypted
-
-mrexecd:
-	- apparently the anti-portscanning fix causes mrexecd to not
-          work with some or all mrexec clients.

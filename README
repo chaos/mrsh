@@ -1,4 +1,6 @@
-This is mrsh for Linux.
+Mrsh is a set of remote shell programs that use munge authentication
+rather than reserved ports for security.  The code for mrsh is based
+on the source code for rsh, rshd, rlogin, rlogind, and rcp.
 
 Contents:
 	mrsh		Munge Authenticated non-password-based 
@@ -13,21 +15,6 @@ Requires:
 
 Security:
         See munge for more details.
-
-Installation:
-	Do "./configure --help" and decide what options you want. The
-	defaults should be suitable for most Linux systems. Then run
-	the configure script.
-
-	Do "make" to compile.
-	Then (as root) do "make install".
-
-        Update xinetd files in /etc/xinetd.d/ appropriately.
-
-        Add pam configuration for mrshd and mrlogind appropriately.
-
-	Save a backup copy of any mission-critical program in case the
-	new one doesn't work, and so forth. We warned you.
 
 Bugs:
 	Please make sure the header files in /usr/include match the

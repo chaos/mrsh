@@ -1,3 +1,18 @@
+2003-12-24  Albert Chu <chu11@llnl.gov>
+
+	* DISCLAIMER: New file.
+
+	* mrsh.spec.in: Added DISCLAIMER.
+
+	* BUGS, README: Updated significantly.
+
+	* mrexec/Makefile.am, mrexec/mrexec.c, mrexecd/Makefile.am,
+	mrexecd/mrexecd.c, doc/in.mrexecd.8, doc/mrexec.1, doc/mrexecd.8:
+	Removed from repository.
+
+	* Added Copyright header with UCRL code to all source and
+	documentation.
+	
 2003-12-22  Albert Chu <chu11@llnl.gov>
 
 	* mauth/mauth.c (check_interfaces): Removed section of code that

@@ -1,3 +1,31 @@
+/*****************************************************************************\
+ *  $Id$
+ *****************************************************************************
+ *  Copyright (C) 2003 The Regents of the University of California.
+ *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
+ *  Written by by Mike Haskell <haskell5@llnl.gov> and Albert Chu 
+ *  <chu11@llnl.gov>
+ *  UCRL-CODE-155697
+ *  
+ *  This file is part of Mrsh, a collection of remote shell programs
+ *  that use munge based authentication rather than reserved ports for
+ *  security. For details, see http://www.llnl.gov/linux/.
+ *  
+ *  Mrsh is free software; you can redistribute it and/or modify 
+ *  it under the terms of the GNU General Public License as published by the 
+ *  Free Software Foundation; either version 2 of the License, or (at your 
+ *  option) any later version.
+ *  
+ *  Mrsh is distributed in the hope that it will be useful, but 
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+ *  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License 
+ *  for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License along
+ *  with Mrsh; if not, write to the Free Software Foundation, Inc.,
+ *  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
+\*****************************************************************************/
+
 /*
  * A generic conversation function for text based applications
  *
@@ -5,8 +33,14 @@
  *    modified for socket file descriptors by Erik Troan <ewt@redhat.com>
  *
  * $Log$
- * Revision 1.1  2003/09/05 16:05:42  achu
- * Initial revision
+ * Revision 1.2  2003/12/25 00:55:05  achu
+ * Added copyright/UCRL everywhere
+ * removed all mrexec related code/doc/manpage
+ * added DISCLAIMER
+ * updated BUGS/README
+ *
+ * Revision 1.1.1.1  2003/09/05 16:05:42  achu
+ * import
  *
  * Revision 1.6  1999/10/02 21:50:52  dholland
  * Various minor cleanup; straighten out (hopefully) the problems in
