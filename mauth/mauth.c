@@ -75,6 +75,9 @@ int getifrlen(struct ifreq *ifr) {
             break;
     }
     
+    /* On ia32 struct sockaddr_in6/sockaddr_in was the largest
+     * structure in struct ifreq, but not on ia64.  This fixes things
+     */
     if (len < (sizeof(struct ifreq) - IFNAMSIZ))
         len = sizeof(struct ifreq) - IFNAMSIZ;
 #endif /* HAVE_SA_LEN */
