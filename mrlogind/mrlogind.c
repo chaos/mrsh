@@ -482,7 +482,7 @@ static void doit(int netfd) {
     ioctl(master, TIOCPKT, &on);
     signal(SIGCHLD, cleanup);
     protocol(netfd, master);
-    signal(SIGCHLD, SIG_IGN);
+    signal(SIGCHLD, SIG_DFL);
     cleanup(0);
 }
 

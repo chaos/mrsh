@@ -1,3 +1,11 @@
+2004-05-06  Mark Grondona  <grondona1@llnl.gov>
+
+	* mrlogind/mrlogind.c (doit): Change signal handler for SIGCHLD
+	from SIG_INT to SIG_DFL to work around annoying console message
+	error output. (gnat mrsh/421) 
+
+	* tagged mrsh-2-1-1
+	
 2004-04-27  Albert Chu  <chu11@llnl.gov>
 
 	* mrsh.spec.in: Use %configure macro.
