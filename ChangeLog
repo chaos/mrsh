@@ -3,6 +3,8 @@
 	* config/Make-rpm.mk: Updated with port fixes.
 
 	* mrsh.spec.in: Added port fixes.
+
+	* Makefile.am: Added DISCLAIMER to fix distcheck.
 	
 2004-09-21  Albert Chu  <chu11@llnl.gov>
 
