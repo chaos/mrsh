@@ -240,25 +240,31 @@ static void stderr_parent(int sock, int pype, int pid) {
 
 static struct passwd *doauth(const char *remuser, 
 			     const char *hostname, 
-			     const char *locuser)
+			     const char *locuser,
+                             const char *cmdbuf)
 {
-    /* No need to set errmsg in doauth().  Error messages output
-     * when caller seens return value of NULL
-     */
-
 #ifdef USE_PAM
-    static struct pam_conv conv = { mrsh_conv, (void *)&pam_msgs };
+    static struct pam_conv conv;
     int retcode;
 #endif
     struct passwd *pwd = ma.pwd;
-    if (pwd == NULL) return NULL;
+    if (pwd == NULL) goto error;
     if (pwd->pw_uid==0) paranoid = 1;
 
 #ifdef USE_PAM
+    if ((pam_msgs = list_create((ListDelF)free)) == NULL) {
+        syslog(LOG_ERR, "list_create() failed\n");
+        errmsg = "Internal System Error\n";
+        return NULL;
+    }
+
+    conv.conv = mrsh_conv;
+    conv.appdata_ptr = (void *)&pam_msgs;
+
     retcode = pam_start("mrsh", locuser, &conv, &pamh);
     if (retcode != PAM_SUCCESS) {
 	syslog(LOG_ERR, "pam_start: %s\n", pam_strerror(pamh, retcode));
-        return NULL;
+        goto error;
     }
     pam_set_item (pamh, PAM_RUSER, remuser);
     pam_set_item (pamh, PAM_RHOST, hostname);
@@ -268,37 +274,68 @@ static struct passwd *doauth(const char *remuser,
     if (retcode == PAM_SUCCESS) {
 	retcode = pam_acct_mgmt(pamh, 0);
     }
+    else {
+        if (last_pam_msg != NULL) {
+            /* Dump all pam messages to syslog, Send only the
+             * last message to the user
+             */
+            ListIterator itr = list_iterator_create(pam_msgs);
+            char *msg;
+            while (msg = (char *)list_next(itr)) 
+                syslog(LOG_ERR, "pam_msg: %s\n", msg);
+            list_iterator_destroy(itr);
+            snprintf(errmsgbuf, ERRMSGLEN, "%s\n", last_pam_msg);
+            errmsg = errmsgbuf;
+            list_destroy(pam_msgs);
+            return NULL;
+        }
+        else
+            goto error;
+    }
     if (retcode == PAM_SUCCESS) {
 	/*
 	 * Why do we need to set groups here?
 	 * Also, this stuff should be moved down near where the setuid() is.
 	 */
-	if (setgid(pwd->pw_gid) != 0) {
-	    pam_end(pamh, PAM_SYSTEM_ERR);
-	    return NULL;
-	}
-	if (initgroups(locuser, pwd->pw_gid) != 0) {
-	    pam_end(pamh, PAM_SYSTEM_ERR);
-	    return NULL;
-	}
-	retcode = pam_setcred(pamh, PAM_ESTABLISH_CRED);
+        if (setgid(pwd->pw_gid) != 0) {
+            pam_end(pamh, PAM_SYSTEM_ERR);
+            goto error;
+        }
+        if (initgroups(locuser, pwd->pw_gid) != 0) {
+            pam_end(pamh, PAM_SYSTEM_ERR);
+            goto error;
+        }
+        retcode = pam_setcred(pamh, PAM_ESTABLISH_CRED);
     }
     
     if (retcode == PAM_SUCCESS) {
-	retcode = pam_open_session(pamh,0);
+        retcode = pam_open_session(pamh,0);
     }
     if (retcode != PAM_SUCCESS) {
-	pam_end(pamh, retcode);
-	return NULL;
+        pam_end(pamh, retcode);
+        goto error;
     }
+    list_destroy(pam_msgs);
     return pwd;
 #else
-    if (pwd->pw_uid==0 && !allow_root_rhosts) return NULL;
+    if (pwd->pw_uid==0 && !allow_root_rhosts) goto error;
     if (ruserok(hostname, pwd->pw_uid==0, remuser, locuser) < 0) {
-	return NULL;
+	goto error;
     }
     return pwd;
 #endif
+
+ error:
+#ifdef USE_PAM
+    if (pam_msgs)
+        list_destroy(pam_msgs);
+    syslog(LOG_ERR, "PAM AUthentication Failure\n");
+#else
+    syslog(LOG_ERR, "Authentication Failure\n");
+#endif
+    fail("Permission Denied\n", 
+         remuser, hostname, locuser, cmdbuf);
+    return NULL;
 }
 
 static const char *findhostname(struct sockaddr_in *fromp,
@@ -395,40 +432,11 @@ doit(struct sockaddr_in *fromp)
 		goto error_out;
 
 	setpwent();
-#ifdef USE_PAM
-        if ((pam_msgs = list_create((ListDelF)free)) == NULL) {
-            syslog(LOG_ERR, "list_create() failed\n");
-            errmsg = "Internal System Error\n";
-            goto error_out;
-        }
-#endif
-	pwd = doauth(remuser, hostname, locuser);
+
+	pwd = doauth(remuser, hostname, locuser, cmdbuf);
 	if (pwd == NULL) {
-#ifdef USE_PAM
-                if (last_pam_msg != NULL) {
-                    /* Dump all pam messages to syslog, Send only the
-                     * last message to the user
-                     */
-                    ListIterator itr = list_iterator_create(pam_msgs);
-                    char *msg;
-                    while (msg = (char *)list_next(itr)) 
-                        syslog(LOG_ERR, "pam_msg: %s\n", msg);
-                    list_iterator_destroy(itr);
-                    snprintf(errmsgbuf, ERRMSGLEN, "%s\n", last_pam_msg);
-                    errmsg = errmsgbuf;
-                }
-                else {
-                    syslog(LOG_ERR, "PAM Authentication Failure\n");
-                    fail("Permission Denied\n", 
-                         remuser, hostname, locuser, cmdbuf);
-                }
-                list_destroy(pam_msgs);
-#else
-                syslog(LOG_ERR, "Authentication Failure\n");
-                fail("Permission Denied\n", 
-                     remuser, hostname, locuser, cmdbuf);
-#endif
-		goto error_out;
+            /* doauth() syslogs and sets errmsg pointer */
+            goto error_out;
 	}
 
 	if (chdir(pwd->pw_dir) < 0) {

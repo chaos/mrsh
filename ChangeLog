@@ -7,6 +7,9 @@
 	failure and other locations. Fix typo, "denied" should be
 	"Denied".
 
+	* mrshd/mrshd.c (doit, doauth): Cleaned up code, moving code from
+	doit into doauth.
+
 2003-12-12  Albert Chu <chu11@llnl.gov>
 
 	* mcmd/mcmd.c (mcmd): Initialize s2 to -1 for safety.  Fix
