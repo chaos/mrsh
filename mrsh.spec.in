@@ -83,4 +83,9 @@ fi
 if ! grep "^mlogin" /etc/services > /dev/null; then
         echo "mlogin            541/tcp                  # mrlogind" >> /etc/services
 fi
-/etc/init.d/xinetd condrestart
+# 'condrestart' is not portable
+if [ -x /etc/init.d/xinetd ]; then
+    if /etc/rc.d/init.d/xinetd status | grep -q running; then
+       /etc/rc.d/init.d/xinetd restart
+    fi
+fi
