@@ -125,6 +125,10 @@ static int attempt_auth(void) {
 int auth_checkauth(const char *remoteuser, const char *host,
 		   char *localuser, size_t localusersize) 
 {
+    /* achu: No need to output error message to user in this
+     *  function.  Will be output by caller.
+     */
+
     static struct pam_conv conv = { sock_conv, NULL };
     struct passwd *pwd;
     char *ln;
@@ -133,7 +137,7 @@ int auth_checkauth(const char *remoteuser, const char *host,
     retval = pam_start("mrlogin", localuser, &conv, &pamh);
     if (retval != PAM_SUCCESS) {
 	syslog(LOG_ERR, "pam_start: %s\n", pam_strerror(pamh, retval));
-	fatal(STDERR_FILENO, "initialization failed", 0);
+	return -1;
     }
 	
     pam_set_item(pamh, PAM_USER, localuser);
@@ -156,6 +160,7 @@ int auth_checkauth(const char *remoteuser, const char *host,
 	 * remote user tell if he's found a valid username 
 	 * or not.
 	 */
+        syslog(LOG_ERR, "Authentication not adequate");
 	return -1;
     }
 
@@ -175,18 +180,14 @@ int auth_checkauth(const char *remoteuser, const char *host,
     pwd = getpwnam(localuser);
     if (pwd==NULL) {
         syslog(LOG_ERR, "user returned by PAM does not exist\n");
-	/* don't print this - it tells people which accounts exist */
-	/*fprintf(stderr, "mrlogind: internal error\n");*/
 	return -1;
     }
     if (setgid(pwd->pw_gid) != 0) {
         syslog(LOG_ERR, "cannot assume gid for user returned by PAM\n");
-	fprintf(stderr, "mrlogind: internal error\n");
 	return -1;
     }
     if (initgroups(localuser, pwd->pw_gid) != 0) {
         syslog(LOG_ERR, "initgroups failed for user returned by PAM\n");
-	fprintf(stderr, "mrlogind: internal error\n");
 	return -1;
     }
     retval = pam_setcred(pamh, PAM_ESTABLISH_CRED);
@@ -223,12 +224,19 @@ void auth_finish(void) {}
 int auth_checkauth(const char *remoteuser, const char *host,
 		   char *localuser, size_t localusersize) 
 {
+    /* achu: No need to output error message to user in this
+     *  function.  Will be output by caller.
+     */
+    int rv;
     struct passwd *pwd;
 
     (void)localusersize;
 
     pwd = getpwnam(localuser);
-    if (pwd == NULL) return -1;
+    if (pwd == NULL) {
+        syslog(LOG_ERR, "getpwnam failed: %m");
+        return -1;
+    }
 
     /*
      * The possibilities here are:
@@ -248,12 +256,24 @@ int auth_checkauth(const char *remoteuser, const char *host,
      * Setting deny_all_rhosts_hequiv prevents all cases from succeeding.
      */
 
-    if (deny_all_rhosts_hequiv) return -1;
-    if (!allow_root_rhosts && pwd->pw_uid == 0) return -1;
+    if (deny_all_rhosts_hequiv) {
+        syslog(LOG_ERR, "deny_all_rhosts_hequiv");
+        return -1;
+    }
+    if (!allow_root_rhosts && pwd->pw_uid == 0) {
+        syslog(LOG_ERR, "don't allow root access and user is root");
+        return -1;
+    }
 
     _check_rhosts_file = use_rhosts;
 
-    return ruserok(host, pwd->pw_uid==0, remoteuser, localuser);
+    rv = ruserok(host, pwd->pw_uid==0, remoteuser, localuser);
+    if (rv < 0) {
+        syslog(LOG_ERR, "ruserok failure: %m");
+        return -1;
+    }
+
+    return 0;
 }
 
 #endif /* PAM */

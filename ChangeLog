@@ -26,6 +26,9 @@
 	family check to more appropriate location.  Removed pointless port
 	saving code, which was originally from rsh code.
 
+	* mrlogind/auth.c (auth_checkauth): Added additional syslog
+	messages and removed unnecessary fprintf messages.
+
 	Misc
 
 	* mrshd/mrshd.c: Globally made all error messages end in "\n"
