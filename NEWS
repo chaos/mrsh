@@ -2,6 +2,11 @@ This file describes changes in recent versions of mrsh. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in mrsh-2.4:
+====================
+
+* Added pam_env module support.
+
 Changes in mrsh-2.3:
 ====================
 
