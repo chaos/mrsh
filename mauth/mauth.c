@@ -305,8 +305,8 @@ int mauth(struct mauth *ma, int fd, int cport) {
     /*  Copy struct passwd from this machine into local password
      *  structure, and point "pwd" to it
      */
-    _copy_passwd_struct(&cred, pwd);
-    ma->pwd = &cred;
+    _copy_passwd_struct(&(ma->cred), ma->pwd);
+    ma->pwd = &(ma->cred);
 
     if (ma->pwd->pw_uid != ma->uid) {
         if (ma->uid != 0) {
