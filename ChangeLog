@@ -7,6 +7,10 @@
 
 	* NEWS: Updated
 
+	* META: Updated
+
+	* Tagged mrsh-2-4-0-pre1
+
 2004-12-14  Albert Chu  <chu11@llnl.gov>
 
 	* etc/pam/mrsh, etc/pam/mrlogin: Fix for multilib systems.
