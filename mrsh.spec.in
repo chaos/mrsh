@@ -54,7 +54,10 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %defattr(-,root,root)
 %config(noreplace) /etc/xinetd.d/mrshd
 %config(noreplace) /etc/xinetd.d/mrlogind
-/usr/man/man8
+/usr/man/man8/in.mrlogind.8.gz
+/usr/man/man8/in.mrshd.8.gz
+/usr/man/man8/mrlogind.8.gz
+/usr/man/man8/mrshd.8.gz
 /usr/sbin
 
 %files rsh-compat
@@ -62,6 +65,10 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 /usr/man/man1/rcp.1.gz
 /usr/man/man1/rsh.1.gz
 /usr/man/man1/rlogin.1.gz
+/usr/man/man8/in.rlogind.8.gz
+/usr/man/man8/in.rshd.8.gz
+/usr/man/man8/rlogind.8.gz
+/usr/man/man8/rshd.8.gz
 /usr/bin/rcp
 /usr/bin/rsh
 /usr/bin/rlogin

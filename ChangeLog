@@ -4,6 +4,8 @@
 
 	* doc/Makefile.am: Include new files.
 
+	* mrsh.spec.in: Added new manpages.
+
 2003-12-24  Albert Chu <chu11@llnl.gov>
 
 	* DISCLAIMER: New file.
