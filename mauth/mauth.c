@@ -253,7 +253,7 @@ int mauth(struct mauth *ma, int fd, int cport) {
     if ((rv = munge_decode(mbuf, 0, (void **)&mptr, &buf_length, 
                            &ma->uid, &ma->gid)) != EMUNGE_SUCCESS) {
         syslog(LOG_ERR, "%s: %s", "munge_decode error", munge_strerror(rv));
-        snprintf(ma->errmsg, MAXERRMSGLEN, "Munge Authentication Failure: %s",
+        snprintf(ma->errmsg, MAXERRMSGLEN, "Authentication Failure: %s",
                  munge_strerror(rv));
         return -1;
     }
