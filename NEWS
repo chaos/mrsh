@@ -2,6 +2,12 @@ This file describes changes in recent versions of mrsh. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in mrsh-2.1:
+====================
+
+* Added workaround to mrlogind to stop "application bug" messages
+  from appearing on the console (gnats mrsh/421).
+
 Changes in mrsh-2.0:
 ====================
 * Mrsh package reorganized.  The mrshd and rsh-mrsh-compat
