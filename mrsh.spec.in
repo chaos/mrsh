@@ -58,6 +58,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 /usr/sbin
 
 %files rsh-compat
+%defattr(-,root,root)
 /usr/man/man1/rcp.1.gz
 /usr/man/man1/rsh.1.gz
 /usr/man/man1/rlogin.1.gz

@@ -1,3 +1,8 @@
+2003-10-17  Albert Chu <chu11@llnl.gov>
+
+	* mrsh.spec.in: Make default owner and group of mrsh-rsh-compat
+	subpackage root.
+	
 2003-10-09  Mark Grondona <grondona1@llnl.gov>
 
 	Incorporated a fix by Mark Grondonda.
