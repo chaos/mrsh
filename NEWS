@@ -2,6 +2,11 @@ This file describes changes in recent versions of mrsh. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in mrsh-2.2:
+====================
+
+* Added largefile support.
+
 Changes in mrsh-2.1:
 ====================
 
