@@ -10,6 +10,10 @@
 	* mrshd/mrshd.c (doit, doauth): Cleaned up code, moving code from
 	doit into doauth.
 
+	* mrsh/mrshd.c: Globally cleaned up errmsg output.  Output of "\n"
+	character moved from "errmsg" to the point right before the errmsg
+	is sent out.
+
 2003-12-12  Albert Chu <chu11@llnl.gov>
 
 	* mcmd/mcmd.c (mcmd): Initialize s2 to -1 for safety.  Fix

@@ -254,7 +254,7 @@ static struct passwd *doauth(const char *remuser,
 #ifdef USE_PAM
     if ((pam_msgs = list_create((ListDelF)free)) == NULL) {
         syslog(LOG_ERR, "list_create() failed\n");
-        errmsg = "Internal System Error\n";
+        errmsg = "Internal System Error";
         return NULL;
     }
 
@@ -304,7 +304,7 @@ static struct passwd *doauth(const char *remuser,
             while (msg = (char *)list_next(itr)) 
                 syslog(LOG_ERR, "pam_msg: %s\n", msg);
             list_iterator_destroy(itr);
-            snprintf(errmsgbuf, ERRMSGLEN, "%s\n", last_pam_msg);
+            snprintf(errmsgbuf, ERRMSGLEN, "%s", last_pam_msg);
             errmsg = errmsgbuf;
             list_destroy(pam_msgs);
             return NULL;
@@ -329,7 +329,7 @@ static struct passwd *doauth(const char *remuser,
 #else
     syslog(LOG_ERR, "Authentication Failure\n");
 #endif
-    fail("Permission Denied\n", 
+    fail("Permission Denied", 
          remuser, hostname, locuser, cmdbuf);
     return NULL;
 }
@@ -351,7 +351,7 @@ static const char *findhostname(struct sockaddr_in *fromp,
 	if (hostname==NULL) {
 	    /* out of memory? */
             syslog(LOG_ERR, "Out of Memory\n");
-	    errmsg = "Out of Memory\n";
+	    errmsg = "Out of Memory";
 	    return NULL;
 	}
 
@@ -364,7 +364,7 @@ static const char *findhostname(struct sockaddr_in *fromp,
 	hp = gethostbyname(hostname);
 	if (hp == NULL) {
 	    syslog(LOG_INFO, "Couldn't look up address for %s", hostname);
-	    fail("Couldn't get address for your host (%s)\n", 
+	    fail("Couldn't get address for your host (%s)", 
 		 remuser, inet_ntoa(fromp->sin_addr), locuser, cmdbuf);
 	    return NULL;
 	} 
@@ -377,7 +377,7 @@ static const char *findhostname(struct sockaddr_in *fromp,
 	}
 	syslog(LOG_NOTICE, "Host addr %s not listed for host %s",
 	       inet_ntoa(fromp->sin_addr), hp->h_name);
-	fail("Host address mismatch for %s\n", 
+	fail("Host address mismatch for %s", 
 	     remuser, inet_ntoa(fromp->sin_addr), locuser, cmdbuf);
 	return NULL;
 }
@@ -411,8 +411,7 @@ doit(struct sockaddr_in *fromp)
 #endif
 
 	if (mauth(&ma, 0, port) < 0) {
-                sprintf(errmsgbuf, "%s\n", ma.errmsg);
-                errmsg = errmsgbuf;
+                errmsg = ma.errmsg;
 		goto error_out;
 	}
 
@@ -446,7 +445,7 @@ doit(struct sockaddr_in *fromp)
 
 	if (pwd->pw_uid != 0 && !access(_PATH_NOLOGIN, F_OK)) {
                 syslog(LOG_ERR, "Logins currently disabled\n");
-		errmsg = "Logins currently disabled\n";
+		errmsg = "Logins currently disabled";
 		goto error_out;
 	}
 
@@ -478,7 +477,7 @@ error_out:
 	/* Error message, sent on stderr stream */
 	if (errmsg != NULL) {
 		char buf[BUFSIZ], *bp = buf;
-		snprintf(bp, sizeof(buf)-1, "%c%s", '\01', errmsg);
+		snprintf(bp, sizeof(buf)-1, "%c%s\n", '\01', errmsg);
 		fd_write_n(sock, buf, strlen(buf));
 		exit(1);
 	}
