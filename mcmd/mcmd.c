@@ -91,6 +91,7 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/stat.h>
+#include <sys/param.h>      /* MAXHOSTNAMELEN */
 
 #include <sys/socket.h>
 #include <sys/select.h>
@@ -104,12 +105,17 @@
 
 #include <munge.h>
 #include "fd.h"
+#include "common_defs.h"
 #include "mcmd.h"
 
 #ifdef HAVE_GETHOSTBYNAME_R
 #define HBUF_LEN     1024
 #else
 extern int h_errno;
+#endif
+
+#ifndef MAXHOSTNAMELEN
+#define MAXHOSTNAMELEN 64
 #endif
 
 #define LINEBUFSIZE  2048
@@ -164,19 +170,13 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
 #endif
     int h_ent_err = 0;
     unsigned char *hptr;
-    char haddrdot[16] = {0};
+    char haddrdot[MAXHOSTNAMELEN + MRSH_LOCALHOST_KEYLEN + 1] = {0};
     munge_ctx_t ctx;
 
     sigemptyset(&blockme);
     sigaddset(&blockme, SIGURG);
     sigaddset(&blockme, SIGPIPE);
     SET_PTHREAD();
-
-    if (strcmp(*ahost,"localhost") == 0) {
-        errno = EACCES;
-        fprintf(stderr, "mcmd: Can't use localhost\n");
-        exit(1);
-    }
 
     if (fd2p != NULL) { 
         /*
@@ -267,9 +267,26 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
     }
 
     /* save address in buffer */
-    memcpy(&m_in.s_addr, *h_ent->h_addr_list, h_ent->h_length);
-    hptr = (unsigned char *) &m_in;
-    sprintf(haddrdot, "%u.%u.%u.%u", hptr[0], hptr[1], hptr[2], hptr[3]);
+    if ((strcmp(*ahost, "localhost") == 0)
+        || (strcmp(*ahost, "127.0.0.1") == 0)) {
+        /* Special case for localhost  */
+
+        char hostname[MAXHOSTNAMELEN+1];
+
+        memset(hostname, '\0', MAXHOSTNAMELEN+1);
+        if (gethostname(hostname, MAXHOSTNAMELEN) < 0) {
+            perror("mcmd: gethostname call failed.");
+            exit(1);
+        }
+
+        strncpy(haddrdot, MRSH_LOCALHOST_KEY, MRSH_LOCALHOST_KEYLEN);
+        strncat(haddrdot, hostname, MAXHOSTNAMELEN);
+    }
+    else {
+        memcpy(&m_in.s_addr, *h_ent->h_addr_list, h_ent->h_length);
+        hptr = (unsigned char *) &m_in;
+        sprintf(haddrdot, "%u.%u.%u.%u", hptr[0], hptr[1], hptr[2], hptr[3]);
+    }
 
     lport = 0;
     s2 = -1;
@@ -336,7 +353,7 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
      * '\0'
      * protocol version                    < 12 bytes      "1.2"
      * '\0'
-     * IP address of requestor             7-15 bytes      "134.9.11.155"
+     * IP address of requestor [1]         7-15 bytes      "134.9.11.155" 
      * '\0'
      * stderr_port_number                  4-8 bytes       "50111"
      * '\0'
@@ -347,6 +364,11 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
      *
      * (The last extra null is accounted for in the following
      * line's last strlen() call.)
+     *
+     * [1] - With the exception when 127.0.0.1 or "localhost" are
+     * input by the user. In that situation, the MRSH_LOCALHOST_KEY
+     * and hostname are concatenated and the size may be much larger
+     * than 7-15 bytes.
      */
 
     mpvers = MRSH_PROTOCOL_VERSION;

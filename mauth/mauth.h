@@ -29,7 +29,6 @@
 #include <pwd.h>
 #include <sys/types.h>
 #include <sys/param.h>      /* MAXHOSTNAMELEN */
-#include <netinet/in.h>     /* INETADDRSTRLEN */
 
 #ifndef _MAUTH_H
 #define _MAUTH_H
@@ -42,10 +41,6 @@
 #define MAXHOSTNAMELEN 64
 #endif
 
-#ifndef INET_ADDRSTRLEN
-#define INET_ADDRSTRLEN 16
-#endif
-
 struct mauth {
   uid_t uid;
   gid_t gid;
@@ -55,7 +50,6 @@ struct mauth {
   struct passwd cred;
   char username[MAXUSERNAMELEN+1];
   char version[MAXVERSIONLEN];
-  char ip[INET_ADDRSTRLEN+1];
   char cmd[ARG_MAX+1];
   char errmsg[MAXERRMSGLEN+1];
 };

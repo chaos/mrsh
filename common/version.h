@@ -34,4 +34,4 @@
  * removed.
  */
 
-#define MRSH_PROTOCOL_VERSION   "2.0"
+#define MRSH_PROTOCOL_VERSION   "2.1"

@@ -1,3 +1,26 @@
+2004-12-08  Albert Chu  <chu11@llnl.gov>
+
+	* common/version.h: Increase protocol version number.
+
+	* common/common_defs.h: New file.
+
+	* common/Makefile.am: Add common_defs.h.
+
+	* mcmd/mcmd.c (mcmd): Handle special case of localhost or
+	127.0.0.1 input.
+
+	* mauth/mauth.c (check_munge_ip): Handle special case of localhost
+	or 127.0.0.1 input.
+
+	* mauth/mauth.h: Remove pointless INET_ADDRSTRLEN definitions.
+	Remove unused ip structure field.
+
+	* NEWS: Added info.
+
+	* META: Updated version.
+
+	* tagged mrsh-2-3-1
+
 2004-11-29  Albert Chu  <chu11@llnl.gov>
 
 	* NEWS: Added belated update.

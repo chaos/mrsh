@@ -50,6 +50,7 @@
 #include <munge.h> 
 
 #include "fd.h"
+#include "common_defs.h"
 #include "mauth.h"
 
 #define MAX_MBUF_SIZE     4096
@@ -193,10 +194,25 @@ int check_interfaces(struct mauth *ma, void *munge_addr, int addr_len) {
 
 int check_munge_ip(struct mauth *ma, char *ip) {
     struct in_addr in;
- 
-    strncpy(ma->ip, ip, INET_ADDRSTRLEN);
+    int ret;
 
-    if (inet_pton(AF_INET, &(ma->ip[0]), &in) <= 0) {
+    if ((ret = inet_pton(AF_INET, ip, &in)) <= 0) {
+        /* Possibly localhost special case */
+        if (ret == 0 
+            && strncmp(ip, 
+                       MRSH_LOCALHOST_KEY, 
+                       MRSH_LOCALHOST_KEYLEN) == 0) {
+            char hostname[MAXHOSTNAMELEN+1];
+
+            memset(hostname, '\0', MAXHOSTNAMELEN+1);
+            if (gethostname(hostname, MAXHOSTNAMELEN) < 0) {
+                syslog(LOG_ERR, "failed gethostname: %m");
+                snprintf(ma->errmsg, MAXERRMSGLEN, "Internal System Error");
+                return -1;
+            }
+            return (strcmp(ip + MRSH_LOCALHOST_KEYLEN, hostname) ? 0 : 1);
+        }
+
         syslog(LOG_ERR, "failed inet_pton: %m");
         snprintf(ma->errmsg, MAXERRMSGLEN, "Internal System Error");
         return -1;
@@ -252,7 +268,7 @@ int mauth(struct mauth *ma, int fd, int cport) {
      * '\0'
      * version number                          < 12 bytes      "1.2"
      * '\0'
-     * dotted_decimal_address_of_this_server   7-15 bytes      "134.9.11.155"
+     * dotted_decimal_addr_of_this_server [1]  7-15 bytes      "134.9.11.155"
      * '\0'
      * stderr_port_number                      4-8 bytes       "50111"
      * '\0'
@@ -261,6 +277,10 @@ int mauth(struct mauth *ma, int fd, int cport) {
      * users_command                           variable        "ls -al"
      * '\0' '\0'
      *
+     * [1] - With the exception when 127.0.0.1 or "localhost" are
+     * input by the user. In that situation, the MRSH_LOCALHOST_KEY
+     * and hostname are concatenated and the size may be much larger
+     * than 7-15 bytes.
      */
   
     mptr = &mbuf[0];
