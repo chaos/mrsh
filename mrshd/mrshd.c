@@ -317,6 +317,7 @@ static const char *findhostname(struct sockaddr_in *fromp,
 
 	if (hostname==NULL) {
 	    /* out of memory? */
+            syslog(LOG_ERR, "Out of Memory\n");
 	    errmsg = "Out of Memory\n";
 	    return NULL;
 	}
@@ -417,12 +418,14 @@ doit(struct sockaddr_in *fromp)
                     errmsg = errmsgbuf;
                 }
                 else
-                    fail("Permission denied\n", 
+                    syslog(LOG_ERR, "PAM Authentication Failure\n");
+                    fail("Permission Denied\n", 
                          remuser, hostname, locuser, cmdbuf);
                 list_destroy(pam_msgs);
 #else
-		fail("Permission denied\n", 
-		     remuser, hostname, locuser, cmdbuf);
+                syslog(LOG_ERR, "Authentication Failure\n");
+                fail("Permission Denied\n", 
+                     remuser, hostname, locuser, cmdbuf);
 #endif
 		goto error_out;
 	}
@@ -437,6 +440,7 @@ doit(struct sockaddr_in *fromp)
 
 
 	if (pwd->pw_uid != 0 && !access(_PATH_NOLOGIN, F_OK)) {
+                syslog(LOG_ERR, "Logins currently disabled\n");
 		errmsg = "Logins currently disabled\n";
 		goto error_out;
 	}
