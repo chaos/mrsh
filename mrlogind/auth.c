@@ -235,6 +235,7 @@ int auth_checkauth(const char *remoteuser, const char *host,
 
 #include <sys/socket.h>   /* for ruserok() in libc5 (!) */
 #include <netdb.h>        /* for ruserok() in glibc (!) */
+#include <syslog.h>      
 
 #if defined(__GLIBC__) && (__GLIBC__ >= 2)
 #define _check_rhosts_file  __check_rhosts_file

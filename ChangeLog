@@ -7,6 +7,9 @@
 	* etc/Makefile.am, mrsh.spec.in: Support new files and
 	--without-pam packing option.
 
+	* mrlogind/auth.c (auth_checkauth): Add syslog.h to fix
+	no pam build.
+
 2003-01-16  Albert Chu <chu11@llnl.gov>
 
 	* mrsh.spec.in: Xinetd conditional restarts now.
