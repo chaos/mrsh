@@ -6,6 +6,7 @@ Changes in mrsh-2.3:
 ====================
 
 * Added localhost support.
+* Increased protocol version to 2.1
 
 Changes in mrsh-2.2:
 ====================
