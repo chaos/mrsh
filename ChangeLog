@@ -1,3 +1,7 @@
+2004-12-14  Albert Chu  <chu11@llnl.gov>
+
+	* etc/pam/mrsh, etc/pam/mrlogin: Fix for multilib systems.
+	
 2004-12-08  Albert Chu  <chu11@llnl.gov>
 
 	* common/version.h: Increase protocol version number.
