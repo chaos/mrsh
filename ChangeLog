@@ -1,3 +1,14 @@
+2003-10-09  Mark Grondona <grondona1@llnl.gov>
+
+	Incorporated a fix by Mark Grondonda.
+
+	* mauth/mauth.h: Added struct passwd cred to mauth structure.
+
+	* mauth/mauth.c (_copy_passwd_struct): New Function.
+
+	* mauth/mauth.c (mauth): Copied values from password entry
+	into local structure.
+
 2003-10-03  Albert Chu  <chu11@llnl.gov>
 
 	* mrlogind/mrlogind.c (doit): Modified code to fatally exit

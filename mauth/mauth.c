@@ -218,6 +218,18 @@ int check_munge_ip(struct mauth *ma, char *ip) {
     return found;
 } 
 
+static void _copy_passwd_struct(struct passwd *to, struct passwd *from) {
+    to->pw_uid    = from->pw_uid;  
+    to->pw_gid    = from->pw_gid;
+    to->pw_name   = strdup(from->pw_name);
+    to->pw_passwd = strdup(from->pw_passwd);
+    to->pw_gecos  = strdup(from->pw_gecos);
+    to->pw_dir    = strdup(from->pw_dir);
+    to->pw_shell  = strdup(from->pw_shell);
+
+    return;
+}
+
 int mauth(struct mauth *ma, int fd, int cport) {
     int rv, buf_length;
     char mbuf[MAX_MBUF_SIZE];
@@ -289,6 +301,12 @@ int mauth(struct mauth *ma, int fd, int cport) {
         snprintf(ma->errmsg, MAXERRMSGLEN, "Internal System Error");
         goto bad;
     }
+
+    /*  Copy struct passwd from this machine into local password
+     *  structure, and point "pwd" to it
+     */
+    _copy_passwd_struct(&cred, pwd);
+    ma->pwd = &cred;
 
     if (ma->pwd->pw_uid != ma->uid) {
         if (ma->uid != 0) {

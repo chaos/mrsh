@@ -29,6 +29,7 @@ struct mauth {
   unsigned int rand;
   unsigned short port;
   struct passwd *pwd;
+  struct passwd cred;
   char username[MAXUSERNAMELEN+1];
   char version[MAXVERSIONLEN];
   char ip[INET_ADDRSTRLEN+1];
