@@ -137,6 +137,7 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
     int h_ent_err = 0;
     unsigned char *hptr;
     char haddrdot[16] = {0};
+    munge_ctx_t ctx;
 
     sigemptyset(&blockme);
     sigaddset(&blockme, SIGURG);
@@ -349,12 +350,16 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
     mptr += strlen(num_seq)+1;
     mptr = strcpy(mptr, cmd);
 
-    if ((rv = munge_encode(&m,0,mbuf,mcount)) != EMUNGE_SUCCESS) {
-        fprintf(stderr,"munge_encode: %s\n",munge_strerror((munge_err_t)rv));
+    ctx = munge_ctx_create();
+    if ((rv = munge_encode(&m,ctx,mbuf,mcount)) != EMUNGE_SUCCESS) {
+        fprintf(stderr,"munge_encode: %s\n", munge_ctx_strerror(ctx));
+        munge_ctx_destroy(ctx);
         close(s2);
         goto bad;
     }
     
+    munge_ctx_destroy(ctx);
+
     mcount = (strlen(m)+1);
 
     /*

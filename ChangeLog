@@ -10,14 +10,22 @@
 
 	* mauth/mauth.h: Removed hostname field from struct mauth.
 
-	* mrshd/mrshd.c: Globally made all error messages end in "\n"
-	rather than ".\n" for consistency with mauth.
+	Fix error message reporting
 
 	* mrshd/mrshd.c (doit): Error out with "Internal System Error"
 	when list_create fails, rather than exiting.
 
 	* mrshd/mrshd.c (doauth): Error out rather than exiting on
 	pam_start error.
+
+	* mcmd/mcmd.c (mcmd): Added munge context for better error
+	reporting.
+	
+	Misc
+	
+	* mrshd/mrshd.c: Globally made all error messages end in "\n"
+	rather than ".\n" for consistency with mauth.
+
 
 2003-12-11  Albert Chu <chu11@llnl.gov>
 
