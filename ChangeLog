@@ -4,6 +4,8 @@
 
 	* configure.ac; Added AC_PROG_LN_S check.
 
+	* mrsh.spec.in: Fixed port issues.
+
 	* tagged mrsh-2-2-1
 	
 2004-10-28  Albert Chu  <chu11@llnl.gov>

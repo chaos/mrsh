@@ -83,6 +83,4 @@ fi
 if ! grep "^mlogin" /etc/services > /dev/null; then
         echo "mlogin            541/tcp                  # mrlogind" >> /etc/services
 fi
-/sbin/chkconfig mrshd on
-/sbin/chkconfig mrlogind on
-/etc/rc.d/init.d/xinetd condrestart
+/etc/init.d/xinetd condrestart
