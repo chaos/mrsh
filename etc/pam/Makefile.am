@@ -16,7 +16,7 @@ endif
  
 install-data-hook:
 if WITH_PAM
-	chmod 444 $(PAMFILESdir)/mrlogin
-	chmod 444 $(PAMFILESdir)/mrsh
+	chmod 444 $(DESTDIR)/$(PAMFILESdir)/mrlogin
+	chmod 444 $(DESTDIR)/$(PAMFILESdir)/mrsh
 endif
 

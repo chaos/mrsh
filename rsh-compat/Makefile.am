@@ -24,3 +24,8 @@ rlogin:
 
 EXTRA_DIST = rsh.1 rcp.1 rlogin.1 \
 	     rshd.8 in.rshd.8 rlogind.8 in.rlogind.8 
+
+install-data-hook:
+	chmod 777 $(DESTDIR)/$(RSHCOMPATFILESdir)/rsh
+	chmod 777 $(DESTDIR)/$(RSHCOMPATFILESdir)/rcp
+	chmod 777 $(DESTDIR)/$(RSHCOMPATFILESdir)/rlogin

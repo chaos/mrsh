@@ -13,5 +13,5 @@ XINETDFILESdir = $(XINETDDIR)
 XINETDFILES_DATA = $(XINETDFILES)
 
 install-data-hook:
-	chmod 755 $(XINETDFILESdir)/mrlogind
-	chmod 755 $(XINETDFILESdir)/mrshd
+	chmod 755 $(DESTDIR)/$(XINETDFILESdir)/mrlogind
+	chmod 755 $(DESTDIR)/$(XINETDFILESdir)/mrshd
