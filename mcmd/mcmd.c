@@ -432,9 +432,8 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
                     fprintf(stderr, "mcmd: Connection closed by remote host.\n");
                 else if (rv > 0) 
                     fprintf(stderr, "mcmd: Protocol failure in circuit setup.\n");
-                else { /* rv < 0 */
+                else /* rv < 0 */
                     fprintf(stderr, "mcmd: %s\n", strerror(errno));
-                }
             }
             close(s2);
             goto bad;
@@ -447,6 +446,11 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
             perror("mcmd: accept (stderr) failed.");
             close(s2);
             goto bad;
+        }
+
+        if (from.sin_family != AF_INET) {
+            fprintf(stderr, "mcmd: bad family type: %d\n", from.sin_family);
+            goto bad2;      
         }
 
         close(s2);
@@ -486,7 +490,7 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
                 close(s3);
                 goto bad;
             }
-            fprintf(stderr,"Error from %s: %s\n",*ahost,&tmpbuf[0]);
+            fprintf(stderr,"mcmd error returned: %s\n", &tmpbuf[0]);
             close(s3);
             goto bad;
         }
@@ -495,11 +499,6 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
          * Set the stderr file descriptor for the user...
          */
         *fd2p = s3;
-        from.sin_port = ntohs((u_short)from.sin_port);
-        if (from.sin_family != AF_INET) {
-            fprintf(stderr, "mcmd: bad family type: %d\n", from.sin_family);
-            goto bad2;      
-        }
     }
 
     if ((rv = read(s, &c, 1)) < 0) {
