@@ -19,7 +19,7 @@ EXTRA_DIST = rsh.1 rcp.1 rlogin.1 \
 	     rshd.8 in.rshd.8 rlogind.8 in.rlogind.8 
 
 install-exec-hook:
-	$(top_srcdir)/config/mkinstalldirs -m 755 $(DESTDIR)/$(bindir)
+	$(install_sh) -d -m 755 $(DESTDIR)/$(bindir)
 	cp -d ./rsh $(DESTDIR)/$(bindir)
 	cp -d ./rcp $(DESTDIR)/$(bindir)
 	cp -d ./rlogin $(DESTDIR)/$(bindir)

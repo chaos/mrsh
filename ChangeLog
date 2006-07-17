@@ -1,3 +1,8 @@
+2006-07-17  Albert Chu  <chu11@llnl.gov>
+
+	* rsh-compat/Makefile.am: Replace use of 'mkinstalldirs' with
+	'install-sh' to work with newer automakes.
+	
 2005-03-31  Albert Chu  <chu11@llnl.gov>
 
 	* src/mrshd/mrshd.c (fail, doauth): Memset errmsgbuf.
