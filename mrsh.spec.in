@@ -3,7 +3,7 @@ Version: @VERSION@
 Release: @RELEASE@
 Epoch: 3
 Summary: Remote shell program that uses munge authentication
-Copyright: none
+License: none
 Group: System Environment/Base
 Source: %{name}-%{version}-%{release}.tgz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}

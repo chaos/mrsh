@@ -2,6 +2,12 @@
 
 	* rsh-compat/Makefile.am: Replace use of 'mkinstalldirs' with
 	'install-sh' to work with newer automakes.
+
+	* mrshd/mrshconv.c: Include syslog.h for builds on FC5 (patch 
+	from Jim Garlick)
+
+	* mrsh.spec.in: Replace "Copyright" tag with "License" tag for 
+	builds on FC5 (patch from Jim Garlick)
 	
 2005-03-31  Albert Chu  <chu11@llnl.gov>
 
