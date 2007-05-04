@@ -919,6 +919,7 @@ error(const char *fmt, ...)
 {
 	static FILE *fp;
 	va_list ap;
+        va_list apcpy;
 
 	va_start(ap, fmt);
 
@@ -926,9 +927,15 @@ error(const char *fmt, ...)
 	if (!fp && !(fp = fdopen(rem, "w")))
 		return;
 	fprintf(fp, "%c", 0x01);
-	vfprintf(fp, fmt, ap);
+        
+        va_copy(apcpy, ap);
+	vfprintf(fp, fmt, apcpy);
 	fflush(fp);
-	if (!iamremote)	vfprintf(stderr, fmt, ap);
+	if (!iamremote)	{
+                va_copy(apcpy, ap);
+                vfprintf(stderr, fmt, ap);
+                va_end(apcpy);
+        }
 
 	va_end(ap);
 }

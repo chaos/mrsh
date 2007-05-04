@@ -1,3 +1,7 @@
+2007-05-04  Albert Chu  <chu11@llnl.gov>
+
+	* mrcp/mrcp.c (error): Fix va_list bug (gnat/672).
+	
 2006-07-17  Albert Chu  <chu11@llnl.gov>
 
 	* rsh-compat/Makefile.am: Replace use of 'mkinstalldirs' with
