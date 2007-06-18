@@ -1,5 +1,7 @@
 2007-06-18  Albert Chu  <chu11@llnl.gov>
 
+	* mrsh.spec.in: Remove "Conflicts" tag for rsh-compat.
+
 	* META: Updated
 
 	* Tagged mrsh-2-5-2

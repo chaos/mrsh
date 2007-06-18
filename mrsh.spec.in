@@ -24,7 +24,6 @@ Server daemons for remote access commands (mrsh, mrlogin, mrcp)
 Summary: rsh compatability package for mrcp/mrlogin/mrsh
 Group: System Environment/Base
 Requires: mrsh
-Conflicts: rsh
 Provides: rsh
 %description rsh-compat
 rsh compatability package for mrcp/mrlogin/mrsh
