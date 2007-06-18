@@ -1,3 +1,9 @@
+2007-06-18  Albert Chu  <chu11@llnl.gov>
+
+	* META: Updated
+
+	* Tagged mrsh-2-5-2
+	
 2007-06-16  Albert Chu  <chu11@llnl.gov>
 
 	* mrsh.spec.in: Provide 'rsh' package in rsh-compat.
