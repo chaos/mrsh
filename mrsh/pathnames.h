@@ -40,22 +40,11 @@
  *    documentation and/or other materials provided with the distribution.
  * 3. All advertising materials mentioning features or use of this software
  *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
+ *      This product includes software developed by the University of
+ *      California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
- * 5. This is free software; you can redistribute it and/or modify it
- *    under the terms of the GNU General Public License as published
- *    by the Free Software Foundation; either version 2 of the
- *    License, or (at your option) any later version.
- * 6. This is distributed in the hope that it will be useful, but
- *    WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
- * 7. You should have received a copy of the GNU General Public License;
- *    if not, write to the Free Software Foundation, Inc., 59 Temple
- *    Place, Suite 330, Boston, MA  02111-1307  USA.
  *
  * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -69,8 +58,8 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	from: @(#)pathnames.h	5.2 (Berkeley) 4/9/90
- *	$Id$
+ *      from: @(#)pathnames.h   5.2 (Berkeley) 4/9/90
+ *      $Id$
  */
 
 #define	_PATH_MRLOGIN	"/usr/bin/mrlogin"

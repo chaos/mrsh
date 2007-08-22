@@ -1,3 +1,8 @@
+2007-08-22  Albert Chu  <chu11@llnl.gov>
+
+	* Globally put back original BSD license that was incorrectly
+	modified earlier.
+
 2007-06-18  Albert Chu  <chu11@llnl.gov>
 
 	* mrsh.spec.in: Remove "Conflicts" tag for rsh-compat.
