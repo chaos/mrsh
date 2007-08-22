@@ -3,6 +3,9 @@
 	* Globally put back original BSD license that was incorrectly
 	modified earlier.
 
+	* Globally remove BSD advertising close per
+	ftp://ftp.cs.berkeley.edu/pub/4bsd/README.Impt.License.Change.
+
 2007-06-18  Albert Chu  <chu11@llnl.gov>
 
 	* mrsh.spec.in: Remove "Conflicts" tag for rsh-compat.
