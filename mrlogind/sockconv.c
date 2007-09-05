@@ -23,7 +23,7 @@
  *  
  *  You should have received a copy of the GNU General Public License along
  *  with Mrsh; if not, write to the Free Software Foundation, Inc.,
- *  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
+ *  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
 \*****************************************************************************/
 
 /*
@@ -33,6 +33,9 @@
  *    modified for socket file descriptors by Erik Troan <ewt@redhat.com>
  *
  * $Log$
+ * Revision 1.4  2007/09/05 17:53:20  achu
+ * fix FSF address
+ *
  * Revision 1.3  2003/12/29 17:59:08  achu
  * fix header typo
  *
