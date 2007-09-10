@@ -5,8 +5,8 @@ Epoch: 3
 Summary: Remote shell program that uses munge authentication
 License: none
 Group: System Environment/Base
-Source: %{name}-%{version}-%{release}.tgz
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
+Source: %{name}-%{version}.tar.gz
+BuildRoot: %{_tmppath}/%{name}-%{version}
 Requires: munge >= 0.1-0
 
 %description
@@ -29,7 +29,7 @@ Provides: rsh
 rsh compatability package for mrcp/mrlogin/mrsh
 
 %prep
-%setup -q -n %{name}-%{version}-%{release}
+%setup -q
 
 %build
 %configure --program-prefix=%{?_program_prefix:%{_program_prefix}} %{?_without_pam}
