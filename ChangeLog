@@ -4,6 +4,8 @@
 
 	* META: Updated
 
+	* mrsh.spec.in: Add appropriate build requires.
+
 	* Tagged mrsh-2-5-3
 	
 2007-09-10  Albert Chu  <chu11@llnl.gov>
