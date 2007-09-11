@@ -1,3 +1,9 @@
+2007-09-11  Albert Chu  <chu11@llnl.gov>
+
+	* META: Updated
+
+	* Tagged mrsh-2-5-3
+	
 2007-09-10  Albert Chu  <chu11@llnl.gov>
 
         * Adjust local build system.
