@@ -7,7 +7,7 @@ License: none
 Group: System Environment/Base
 Source: %{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}
-BuildRequires: libtermcap-devel
+BuildRequires: libtermcap-devel pam-devel
 Requires: munge >= 0.1-0
 
 %description
