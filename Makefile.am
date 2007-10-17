@@ -6,4 +6,4 @@
 
 SUBDIRS = common doc etc mcmd mauth mrcp mrlogin mrlogind mrsh mrshd rsh-compat
 
-EXTRA_DIST = META DISCLAIMER mrsh.spec
+EXTRA_DIST = META DISCLAIMER DISCLAIMER.UC mrsh.spec
