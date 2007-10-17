@@ -1,4 +1,4 @@
-Copyright (C) 2003 The Regents of the University of California.
+Copyright (C) 2003-2007 The Regents of the University of California.
 Produced at Lawrence Livermore National Laboratory.
 Written by Mike Haskell <haskell5@llnl.gov> and Albert Chu
 <chu11@llnl.gov>
