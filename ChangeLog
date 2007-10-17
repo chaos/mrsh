@@ -1,3 +1,9 @@
+2007-10-17  Albert Chu  <chu11@llnl.gov>
+
+	* DISCLAIMER: Renamed to DISCLAIMER.UC.
+
+	* DISCALIMER: Updated with new information.
+	
 2007-09-11  Albert Chu  <chu11@llnl.gov>
 
 	* bootstrap.sh: Renamed autogen.sh for consistency to other projects.
