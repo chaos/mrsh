@@ -1,7 +1,8 @@
 /*****************************************************************************\
  *  $Id$
  *****************************************************************************
- *  Copyright (C) 2003 The Regents of the University of California.
+ *  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
+ *  Copyright (C) 2003-2007 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
  *  Written by Mike Haskell <haskell5@llnl.gov> and Albert Chu 
  *  <chu11@llnl.gov>
@@ -22,8 +23,7 @@
  *  for more details.
  *  
  *  You should have received a copy of the GNU General Public License along
- *  with Mrsh; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
+ *  with Mrsh.  If not, see <http://www.gnu.org/licenses/>.
 \*****************************************************************************/
 
 /*
