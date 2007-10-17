@@ -11,6 +11,9 @@
  *  This file is part of Mrsh, a collection of remote shell programs
  *  that use munge based authentication rather than reserved ports for
  *  security. For details, see http://www.llnl.gov/linux/.
+ *
+ *  The code in this file began with the code in the rsh project.  See
+ *  below for original copyright information.
  *  
  *  Mrsh is free software; you can redistribute it and/or modify 
  *  it under the terms of the GNU General Public License as published by the 
