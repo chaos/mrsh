@@ -42,7 +42,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 
 %files
 %defattr(-,root,root)
-%doc NEWS README ChangeLog COPYING DISCLAIMER
+%doc NEWS README ChangeLog COPYING DISCLAIMER DISCLAIMER.UC
 %{_mandir}/man1/mrcp.1*
 %{_mandir}/man1/mrsh.1*
 %{_mandir}/man1/mrlogin.1*

@@ -5,6 +5,8 @@
 	* DISCALIMER: Updated with new information.
 
 	* Fixed copyright and FSF address globally.
+
+	* mrsh.spec.in: Add DISCALIMER.UC.
 	
 2007-09-11  Albert Chu  <chu11@llnl.gov>
 
