@@ -391,7 +391,13 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
     mptr += strlen(num_seq)+1;
     mptr = strcpy(mptr, cmd);
 
-    ctx = munge_ctx_create();
+    if ((ctx = munge_ctx_create()) == NULL) {
+        fprintf(stderr, "munge_ctx_create: %s\n", strerror(errno));
+        close(s2);
+        free(tmbuf);
+        goto bad;
+    }
+
     if ((rv = munge_encode(&m,ctx,mbuf,mcount)) != EMUNGE_SUCCESS) {
         fprintf(stderr,"munge_encode: %s\n", munge_ctx_strerror(ctx));
         munge_ctx_destroy(ctx);

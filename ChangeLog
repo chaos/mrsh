@@ -1,3 +1,7 @@
+2008-06-04  Albert Chu  <chu11@llnl.gov>
+
+	* mcmd/mcmd.c (mcmd): Check for error on munge_ctx_create.
+	
 2007-10-17  Albert Chu  <chu11@llnl.gov>
 
 	* DISCLAIMER: Renamed to DISCLAIMER.UC.
