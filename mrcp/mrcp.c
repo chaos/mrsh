@@ -302,7 +302,7 @@ toremote(const char *targ, int argc, char *argv[])
 				host = thost;
 					rem = mcmd(&host, port, 
 					    tuser ? tuser : pwd->pw_name,
-					    bp, 0);
+					    bp, 0, NULL);
 				if (rem < 0)
 					exit(1);
 #ifdef IP_TOS
@@ -363,7 +363,7 @@ tolocal(int argc, char *argv[])
 		if (!(bp = malloc(len)))
 			nospace();
 		(void)snprintf(bp, len, "%s -f %s", cmd, src);
-			rem = mcmd(&host, port, suser, bp, 0);
+			rem = mcmd(&host, port, suser, bp, 0, NULL);
 		(void)free(bp);
 		if (rem < 0) {
 			++errs;

@@ -33,6 +33,6 @@
  * - Modified version of rcmd(3) that uses munge authentication rather
  *   than reserved ports for security.
  */
-int mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p);
+int mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p, char *munge_socket);
 
 #endif /* _MCMD_H */

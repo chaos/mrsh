@@ -317,7 +317,7 @@ main(int argc, char **argv)
 	/* will use SIGUSR1 for window size hack, so hold it off */
 	omask = sigblock(sigmask(SIGURG) | sigmask(SIGUSR1));
 
-	rem = mcmd(&host, sp->s_port, user, term, 0);
+	rem = mcmd(&host, sp->s_port, user, term, 0, NULL);
 
 	if (rem < 0) exit(1);
 

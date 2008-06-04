@@ -131,7 +131,7 @@ extern int h_errno;
  *	int (RETURN)		socket for I/O on success
  */
 int 
-mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
+mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p, char *munge_socket)
 {
     struct sockaddr m_socket;
     struct sockaddr_in *getp;
@@ -396,6 +396,18 @@ mcmd(char **ahost, int port, char *remuser, char *cmd, int *fd2p)
         close(s2);
         free(tmbuf);
         goto bad;
+    }
+
+    if (munge_socket) {
+        if ((rv = munge_ctx_set (ctx, 
+				 MUNGE_OPT_SOCKET, 
+				 munge_socket)) != EMUNGE_SUCCESS) {
+	    fprintf(stderr,"munge_ctx_set: %s\n", munge_ctx_strerror(ctx));
+	    munge_ctx_destroy(ctx);
+	    close(s2);
+	    free(tmbuf);
+	    goto bad;
+	}
     }
 
     if ((rv = munge_encode(&m,ctx,mbuf,mcount)) != EMUNGE_SUCCESS) {

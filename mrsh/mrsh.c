@@ -198,7 +198,7 @@ main(int argc, char *argv[])
 		exit(1);
 	}
 
-	rem = mcmd(&host, sp->s_port, user, args, &rfd2);
+	rem = mcmd(&host, sp->s_port, user, args, &rfd2, NULL);
 
 	if (rem < 0)
 		exit(1);
