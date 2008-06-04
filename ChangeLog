@@ -2,8 +2,11 @@
 
 	* mcmd/mcmd.c (mcmd): Check for error on munge_ctx_create.
 
-	* mcmd/mcmc.h, mcmd/mcmd.c (mcmd): Add munge_socket parameter to
+	* mcmd/mcmd.h, mcmd/mcmd.c (mcmd): Add munge_socket parameter to
 	support alternate unix domain socket to communicate with munge daemon.
+
+	* mrsh/mrsh.c, mrcp/mrcp.c, mrlogin/mrlogin.c: Adjust mcmd() call
+	appropriately.
 	
 2007-10-17  Albert Chu  <chu11@llnl.gov>
 
