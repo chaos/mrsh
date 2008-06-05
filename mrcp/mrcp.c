@@ -100,7 +100,7 @@ char rcsid[] = "$Id$";
 #include "pathnames.h"
 #include "mcmd.h"
 
-#define	OPTIONS "dfprtV"
+#define	OPTIONS "dfprtM:V"
 
 struct passwd *pwd;
 u_short	port;
@@ -129,8 +129,8 @@ static void sink(int argc, char *argv[]);
 static BUF *allocbuf(BUF *bp, int fd, int blksize);
 static void nospace(void);
 static void usage(void);
-static void toremote(const char *targ, int argc, char *argv[]);
-static void tolocal(int argc, char *argv[]);
+static void toremote(const char *targ, int argc, char *argv[], char *munge_socket);
+static void tolocal(int argc, char *argv[], char *munge_socket);
 static void error(const char *fmt, ...);
 
 int
@@ -141,6 +141,7 @@ main(int argc, char *argv[])
 	char *targ;
 	const char *shell;
 	char *null = NULL;
+	char *munge_socket = NULL;
 
 	saved_environ = __environ;
 	__environ = &null;
@@ -166,6 +167,9 @@ main(int argc, char *argv[])
 		case 't':			/* "to" */
 			iamremote = 1;
 			tflag = 1;
+			break;
+		case 'M':
+			munge_socket = optarg;
 			break;
 		case 'V':
 			printf("%s %s-%s\n", PACKAGE, VERSION, RELEASE);
@@ -228,10 +232,10 @@ main(int argc, char *argv[])
 	if ((targ = colon(argv[argc - 1]))!=NULL) {
 		/* destination is remote host */
 		*targ++ = 0;
-		toremote(targ, argc, argv);
+		toremote(targ, argc, argv, munge_socket);
 	}
 	else {
-		tolocal(argc, argv);		/* destination is local host */
+		tolocal(argc, argv, munge_socket);		/* destination is local host */
 		if (targetshouldbedirectory)
 			verifydir(argv[argc - 1]);
 	}
@@ -239,7 +243,7 @@ main(int argc, char *argv[])
 }
 
 static void
-toremote(const char *targ, int argc, char *argv[])
+toremote(const char *targ, int argc, char *argv[], char *munge_socket)
 {
 	int i, len, tos;
 	char *bp, *host, *src, *suser, *thost, *tuser;
@@ -302,7 +306,7 @@ toremote(const char *targ, int argc, char *argv[])
 				host = thost;
 					rem = mcmd(&host, port, 
 					    tuser ? tuser : pwd->pw_name,
-					    bp, 0, NULL);
+					    bp, 0, munge_socket);
 				if (rem < 0)
 					exit(1);
 #ifdef IP_TOS
@@ -325,7 +329,7 @@ toremote(const char *targ, int argc, char *argv[])
 }
 
 static void
-tolocal(int argc, char *argv[])
+tolocal(int argc, char *argv[], char *munge_socket)
 {
  	static char dot[] = ".";
 	int i, len, tos;
@@ -363,7 +367,7 @@ tolocal(int argc, char *argv[])
 		if (!(bp = malloc(len)))
 			nospace();
 		(void)snprintf(bp, len, "%s -f %s", cmd, src);
-			rem = mcmd(&host, port, suser, bp, 0, NULL);
+			rem = mcmd(&host, port, suser, bp, 0, munge_socket);
 		(void)free(bp);
 		if (rem < 0) {
 			++errs;
@@ -941,6 +945,6 @@ static void
 usage(void)
 {
 	(void)fprintf(stderr,
-	    "usage: mrcp [-p] f1 f2; or: mrcp [-rp] f1 ... fn directory\n");
+	    "usage: mrcp [-p] f1 f2; or: mrcp [-rp] [-M munge_socket] f1 ... fn directory\n");
 	exit(1);
 }

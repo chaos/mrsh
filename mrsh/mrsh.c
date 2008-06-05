@@ -110,6 +110,7 @@ main(int argc, char *argv[])
 	char *args, *host, *user;
 	char *null = NULL;
 	char **saved_environ;
+	char *munge_socket = NULL;
 
 	saved_environ = __environ;
 	__environ = &null;
@@ -132,7 +133,7 @@ main(int argc, char *argv[])
 		argoff = 1;
 	}
 
-#define	OPTIONS	"+8KLdel:nwV"
+#define	OPTIONS	"+8KLdel:nwM:V"
 	while ((ch = getopt(argc - argoff, argv + argoff, OPTIONS)) != EOF)
 		switch(ch) {
 		case 'K':
@@ -150,6 +151,9 @@ main(int argc, char *argv[])
 			break;
 		case 'n':
 			nflag = 1;
+			break;
+		case 'M':
+			munge_socket = optarg;
 			break;
 		case 'V':
 			printf("%s %s-%s\n", PACKAGE, VERSION, RELEASE);
@@ -198,7 +202,7 @@ main(int argc, char *argv[])
 		exit(1);
 	}
 
-	rem = mcmd(&host, sp->s_port, user, args, &rfd2, NULL);
+	rem = mcmd(&host, sp->s_port, user, args, &rfd2, munge_socket);
 
 	if (rem < 0)
 		exit(1);
@@ -382,7 +386,7 @@ void
 usage(void)
 {
 	fprintf(stderr,
-	    "usage: mrsh [-nd%s]%s[-l login] host [command]\n",
+	    "usage: mrsh [-nd%s]%s[-l login] [-M munge_socket] host [command]\n",
 	    "", " ");
 	exit(1);
 }

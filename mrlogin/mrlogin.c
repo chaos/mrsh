@@ -217,6 +217,7 @@ main(int argc, char **argv)
 	char *host, *p, *user, term[1024];
 	const char *t;
 	char *null = NULL;
+	char *munge_socket = NULL;
 
 	argoff = dflag = 0;
 	one = 1;
@@ -236,7 +237,7 @@ main(int argc, char **argv)
 		argoff = 1;
 	}
 
-#define	OPTIONS	"8EKLde:l:V"
+#define	OPTIONS	"8EKLde:l:M:V"
 	while ((ch = getopt(argc - argoff, argv + argoff, OPTIONS)) != EOF)
 		switch(ch) {
 		case '8':
@@ -258,6 +259,9 @@ main(int argc, char **argv)
 			break;
 		case 'l':
 			user = optarg;
+			break;
+		case 'M':
+			munge_socket = optarg;
 			break;
 		case 'V':
 			printf("%s %s-%s\n", PACKAGE, VERSION, RELEASE);
@@ -317,7 +321,7 @@ main(int argc, char **argv)
 	/* will use SIGUSR1 for window size hack, so hold it off */
 	omask = sigblock(sigmask(SIGURG) | sigmask(SIGUSR1));
 
-	rem = mcmd(&host, sp->s_port, user, term, 0, NULL);
+	rem = mcmd(&host, sp->s_port, user, term, 0, munge_socket);
 
 	if (rem < 0) exit(1);
 
@@ -868,7 +872,7 @@ static void
 usage(void)
 {
 	fprintf(stderr,
-	    "usage: mrlogin [ -%s]%s[-e char] [ -l username ] host\n",
+	    "usage: mrlogin [ -%s]%s[-e char] [ -l username ] [-M munge_socket] host\n",
 	    "8EL", " ");
 	exit(1);
 }
