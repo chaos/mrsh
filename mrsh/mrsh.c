@@ -162,7 +162,7 @@ main(int argc, char *argv[])
 				fprintf(stderr, "invalid service port specified\n");
 				exit(1);
 			}
-			service_port = ntohs(service_port);
+			service_port = htons(service_port);
 			break;
 		case 'V':
 			printf("%s %s-%s\n", PACKAGE, VERSION, RELEASE);
