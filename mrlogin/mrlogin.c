@@ -218,6 +218,7 @@ main(int argc, char **argv)
 	const char *t;
 	char *null = NULL;
 	char *munge_socket = NULL;
+	int service_port = 0;
 
 	argoff = dflag = 0;
 	one = 1;
@@ -237,7 +238,7 @@ main(int argc, char **argv)
 		argoff = 1;
 	}
 
-#define	OPTIONS	"8EKLde:l:M:V"
+#define	OPTIONS	"8EKLde:l:M:P:V"
 	while ((ch = getopt(argc - argoff, argv + argoff, OPTIONS)) != EOF)
 		switch(ch) {
 		case '8':
@@ -262,6 +263,14 @@ main(int argc, char **argv)
 			break;
 		case 'M':
 			munge_socket = optarg;
+			break;
+		case 'P':
+			service_port = atoi(optarg);
+			if (!service_port) {
+				fprintf(stderr, "invalid service port specified\n");
+				exit(1);
+			}
+			service_port = ntohs(service_port);
 			break;
 		case 'V':
 			printf("%s %s-%s\n", PACKAGE, VERSION, RELEASE);
@@ -321,7 +330,12 @@ main(int argc, char **argv)
 	/* will use SIGUSR1 for window size hack, so hold it off */
 	omask = sigblock(sigmask(SIGURG) | sigmask(SIGUSR1));
 
-	rem = mcmd(&host, sp->s_port, user, term, 0, munge_socket);
+	rem = mcmd(&host, 
+		   (service_port) ? service_port : sp->s_port, 
+		   user, 
+		   term, 
+		   0, 
+		   munge_socket);
 
 	if (rem < 0) exit(1);
 
@@ -872,7 +886,7 @@ static void
 usage(void)
 {
 	fprintf(stderr,
-	    "usage: mrlogin [ -%s]%s[-e char] [ -l username ] [-M munge_socket] host\n",
+	    "usage: mrlogin [ -%s]%s[-e char] [ -l username ] [-M munge_socket] [-P service_port] host\n",
 	    "8EL", " ");
 	exit(1);
 }

@@ -111,6 +111,7 @@ main(int argc, char *argv[])
 	char *null = NULL;
 	char **saved_environ;
 	char *munge_socket = NULL;
+	int service_port = 0;
 
 	saved_environ = __environ;
 	__environ = &null;
@@ -133,7 +134,7 @@ main(int argc, char *argv[])
 		argoff = 1;
 	}
 
-#define	OPTIONS	"+8KLdel:nwM:V"
+#define	OPTIONS	"+8KLdel:nwM:P:V"
 	while ((ch = getopt(argc - argoff, argv + argoff, OPTIONS)) != EOF)
 		switch(ch) {
 		case 'K':
@@ -154,6 +155,14 @@ main(int argc, char *argv[])
 			break;
 		case 'M':
 			munge_socket = optarg;
+			break;
+		case 'P':
+			service_port = atoi(optarg);
+			if (!service_port) {
+				fprintf(stderr, "invalid service port specified\n");
+				exit(1);
+			}
+			service_port = ntohs(service_port);
 			break;
 		case 'V':
 			printf("%s %s-%s\n", PACKAGE, VERSION, RELEASE);
@@ -202,7 +211,12 @@ main(int argc, char *argv[])
 		exit(1);
 	}
 
-	rem = mcmd(&host, sp->s_port, user, args, &rfd2, munge_socket);
+	rem = mcmd(&host, 
+		   (service_port) ? service_port : sp->s_port, 
+		   user, 
+		   args, 
+		   &rfd2, 
+		   munge_socket);
 
 	if (rem < 0)
 		exit(1);
@@ -386,7 +400,7 @@ void
 usage(void)
 {
 	fprintf(stderr,
-	    "usage: mrsh [-nd%s]%s[-l login] [-M munge_socket] host [command]\n",
+	    "usage: mrsh [-nd%s]%s[-l login] [-M munge_socket] [-P service_port] host [command]\n",
 	    "", " ");
 	exit(1);
 }

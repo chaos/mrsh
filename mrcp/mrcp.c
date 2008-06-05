@@ -100,7 +100,7 @@ char rcsid[] = "$Id$";
 #include "pathnames.h"
 #include "mcmd.h"
 
-#define	OPTIONS "dfprtM:V"
+#define	OPTIONS "dfprtM:P:V"
 
 struct passwd *pwd;
 u_short	port;
@@ -142,6 +142,7 @@ main(int argc, char *argv[])
 	const char *shell;
 	char *null = NULL;
 	char *munge_socket = NULL;
+	int service_port = 0;
 
 	saved_environ = __environ;
 	__environ = &null;
@@ -171,6 +172,14 @@ main(int argc, char *argv[])
 		case 'M':
 			munge_socket = optarg;
 			break;
+		case 'P':
+			service_port = atoi(optarg);
+			if (!service_port) {
+				fprintf(stderr, "invalid service port specified\n");
+				exit(1);
+			}
+			service_port = ntohs(service_port);
+			break;
 		case 'V':
 			printf("%s %s-%s\n", PACKAGE, VERSION, RELEASE);
 			printf("Protocol Level = %s\n", MRSH_PROTOCOL_VERSION);
@@ -188,7 +197,7 @@ main(int argc, char *argv[])
 		(void)fprintf(stderr, "mrcp: %s/tcp: unknown service\n", shell);
 		exit(1);
 	}
-	port = sp->s_port;
+	port = (service_port) ? service_port : sp->s_port;
 
 	if (!(pwd = getpwuid(userid = getuid()))) {
 		(void)fprintf(stderr, "mrcp: unknown user %d.\n", (int)userid);
@@ -945,6 +954,6 @@ static void
 usage(void)
 {
 	(void)fprintf(stderr,
-	    "usage: mrcp [-p] f1 f2; or: mrcp [-rp] [-M munge_socket] f1 ... fn directory\n");
+	    "usage: mrcp [-p] f1 f2; or: mrcp [-rp] [-M munge_socket] [-P service_port] f1 ... fn directory\n");
 	exit(1);
 }
