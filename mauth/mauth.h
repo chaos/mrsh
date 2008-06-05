@@ -60,6 +60,6 @@ struct mauth {
  * - Returns 0 on success, -1 on error.  Error message stored in
  *   struct's errmsg buffer.
  */
-int mauth(struct mauth *ma, int fd, int cport);
+int mauth(struct mauth *ma, int fd, int cport, char *munge_socket);
 
 #endif /* _MAUTH_H */

@@ -118,6 +118,7 @@ int check_all = 0;
 int use_rhosts = 1;
 int allow_root_rhosts = 1;
 int deny_all_rhosts_hequiv = 0;
+char *munge_socket = NULL;
 
 static char oobdata[] = {(char)TIOCPKT_WINDOW};
 static char line[MAXPATHLEN];
@@ -423,7 +424,7 @@ static void doit(int netfd) {
 
     hname = network_init(netfd, &hostok);
 
-    if (mauth(&ma, 0, 0) < 0)
+    if (mauth(&ma, 0, 0, munge_socket) < 0)
         fatal(netfd, &(ma.errmsg[0]), 0);
 
     /* achu: Necessary b/c of internals of auth_checkauth. */
@@ -491,13 +492,14 @@ int main(int argc, char **argv) {
     openlog("mrlogind", LOG_PID | LOG_CONS, LOG_AUTH);
 
     opterr = 0;
-    while ((ch = getopt(argc, argv, "ahLlnV")) != EOF) {
+    while ((ch = getopt(argc, argv, "ahLlnM:V")) != EOF) {
 	switch (ch) {
 	    case 'a': check_all = 1; break;
 	    case 'h': allow_root_rhosts = 1; break;
 	    case 'L': deny_all_rhosts_hequiv = 1; break;
 	    case 'l': use_rhosts = 0; break;
 	    case 'n': keepalive = 0; break;
+	    case 'M': munge_socket = optarg; break;
 	    case 'V': printf("%s %s-%s\n", PACKAGE, VERSION, RELEASE);
 		      printf("Protocol Level = %s\n", MRSH_PROTOCOL_VERSION);
 		      exit(0);

@@ -233,12 +233,13 @@ static void _copy_passwd_struct(struct passwd *to, struct passwd *from) {
     return;
 }
 
-int mauth(struct mauth *ma, int fd, int cport) {
+int mauth(struct mauth *ma, int fd, int cport, char *munge_socket) {
     int rv, buf_length;
     char mbuf[MAX_MBUF_SIZE];
     char *mptr = NULL;
     char *m_head = NULL;
     char *m_end = NULL;
+    munge_ctx_t ctx = NULL;
 
     if (ma == NULL)
         return -1;
@@ -254,6 +255,22 @@ int mauth(struct mauth *ma, int fd, int cport) {
         syslog(LOG_ERR, "%s", "null munge credential.");
         snprintf(ma->errmsg, MAXERRMSGLEN, "Protocol Error");
         return -1;
+    }
+
+    if ((ctx = munge_ctx_create()) == NULL) {
+        syslog(LOG_ERR, "%s", "unable to create munge ctx.");
+        snprintf(ma->errmsg, MAXERRMSGLEN, "Internal System Error");
+        return -1;
+    }
+
+    if (munge_socket) {
+        if ((rv = munge_ctx_set (ctx,
+                                 MUNGE_OPT_SOCKET,
+                                 munge_socket)) != EMUNGE_SUCCESS) {
+            syslog(LOG_ERR, "%s: %s", "munge_ctx_set error", munge_strerror(rv));
+            snprintf(ma->errmsg, MAXERRMSGLEN, "Internal System Error");
+            goto bad2;
+        }
     }
 
     /*
@@ -284,18 +301,18 @@ int mauth(struct mauth *ma, int fd, int cport) {
      */
   
     mptr = &mbuf[0];
-    if ((rv = munge_decode(mbuf, 0, (void **)&mptr, &buf_length, 
+    if ((rv = munge_decode(mbuf, ctx, (void **)&mptr, &buf_length, 
                            &ma->uid, &ma->gid)) != EMUNGE_SUCCESS) {
         syslog(LOG_ERR, "%s: %s", "munge_decode error", munge_strerror(rv));
         snprintf(ma->errmsg, MAXERRMSGLEN, "Authentication Failure: %s",
                  munge_strerror(rv));
-        return -1;
+        goto bad2;
     }
   
     if ((mptr == NULL) || (buf_length <= 0)) {
         syslog(LOG_ERR, "Null munge buffer");
         snprintf(ma->errmsg, MAXERRMSGLEN, "Protocol Error");
-        return -1;
+        goto bad2;
     }
 
     m_head = mptr;
@@ -414,5 +431,7 @@ int mauth(struct mauth *ma, int fd, int cport) {
 
  bad:
     free(mptr);
+ bad2:
+    munge_ctx_destroy(ctx);
     return -1;
 }

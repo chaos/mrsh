@@ -131,13 +131,14 @@ extern int mrsh_conv(int num_msg, const struct pam_message **msg,
                      struct pam_response **resp, void *appdata_ptr);
 #endif /* USE_PAM */
 
-#define	OPTIONS	"ahlLnV"
+#define	OPTIONS	"ahlLnM:V"
 
 static int keepalive = 1;
 static int check_all = 0;
 static int paranoid = 0;
 static int sent_null;
 static int allow_root_rhosts=1;
+static char *munge_socket = NULL;
 
 char	username[20] = "USER=";
 char	homedir[64] = "HOME=";
@@ -436,7 +437,7 @@ doit(struct sockaddr_in *fromp)
 	dup2(f, 2);
 #endif
 
-	if (mauth(&ma, 0, port) < 0) {
+	if (mauth(&ma, 0, port, munge_socket) < 0) {
                 errmsg = ma.errmsg;
 		goto error_out;
 	}
@@ -714,6 +715,10 @@ main(int argc, char *argv[])
 
 		case 'L':
 			paranoid = 1;
+			break;
+
+		case 'M':
+			munge_socket = optarg;
 			break;
 
 		case 'V':
