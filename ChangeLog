@@ -12,6 +12,8 @@
 
 	* doc/: Update manpages for new options respectively.
 
+	* doc/, rsh-compat/: Fix comment typos in all manpages.
+
 2008-06-04  Albert Chu  <chu11@llnl.gov>
 
 	* mcmd/mcmd.c (mcmd): Check for error on munge_ctx_create.
