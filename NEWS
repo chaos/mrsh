@@ -2,6 +2,11 @@ This file describes changes in recent versions of mrsh. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in mrsh-2.6:
+====================
+* Add -M option to mrsh, mrcp, mrlogin, mrshd, mrlogind.
+* Add -P option to mrsh, mrcp, mrlogin.
+
 Changes in mrsh-2.4:
 ====================
 
