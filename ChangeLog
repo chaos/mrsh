@@ -1,3 +1,13 @@
+2009-02-09  Albert Chu  <chu11@llnl.gov>
+	
+	* META: Update for release.
+
+	* Tagged mrsh-2-6-2
+
+2009-02-05  Albert Chu  <chu11@llnl.gov>
+
+	* mrsh.spec.in: Replace libtermcap with libncurses buildrequires.
+
 2008-06-06  Albert Chu  <chu11@llnl.gov>
 
 	* NEWS, META: Update for release.
