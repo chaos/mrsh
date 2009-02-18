@@ -3,6 +3,10 @@
 	* etc/xinetd/mrshd, etc/xinetd/mrlogind: Disable services by
 	defualt.
 
+	* META: Update for release.
+
+	* Tagged mrsh-2-6-3
+
 2009-02-09  Albert Chu  <chu11@llnl.gov>
 	
 	* META: Update for release.
