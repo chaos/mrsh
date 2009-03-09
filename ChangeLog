@@ -3,6 +3,10 @@
 	* /etc/pam/mrsh, /etc/pam/mrlogin: Update for changes in newer
 	pams.
 	
+	* META: Update for release.
+
+	* Tagged mrsh-2-6-4
+
 2009-02-18  Albert Chu  <chu11@llnl.gov>
 
 	* etc/xinetd/mrshd, etc/xinetd/mrlogind: Disable services by
