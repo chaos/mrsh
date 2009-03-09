@@ -1,3 +1,8 @@
+2009-03-09  Albert Chu  <chu11@llnl.gov>
+
+	* /etc/pam/mrsh, /etc/pam/mrlogin: Update for changes in newer
+	pams.
+	
 2009-02-18  Albert Chu  <chu11@llnl.gov>
 
 	* etc/xinetd/mrshd, etc/xinetd/mrlogind: Disable services by

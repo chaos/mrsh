@@ -1,8 +1,10 @@
 #%PAM-1.0
 # For root login to succeed here with pam_securetty, "mrsh" must be
 # listed in /etc/securetty.
-auth       required	pam_nologin.so
-auth       required	pam_securetty.so
+auth       required     pam_nologin.so
+auth       required     pam_securetty.so
 auth       required     pam_env.so
-account    required	pam_stack.so service=system-auth
-session    required	pam_stack.so service=system-auth
+auth       required     pam_rhosts_auth.so
+account    include      system-auth
+session    optional     pam_keyinit.so    force revoke
+session    include      system-auth
