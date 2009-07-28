@@ -30,6 +30,10 @@
 #include <sys/types.h>
 #include <sys/param.h>      /* MAXHOSTNAMELEN */
 
+#ifndef ARG_MAX
+#define ARG_MAX 131072
+#endif
+
 #ifndef _MAUTH_H
 #define _MAUTH_H
 
