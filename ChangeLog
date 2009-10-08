@@ -1,3 +1,9 @@
+2009-10-08  Mark Grondona <mgrondona@llnl.gov>
+
+	* META : Update for release.
+
+	* Tagged mrsh-2-6-5
+
 2009-07-28  Jim Garlick <garlick@llnl.gov>
 
 	* mauth/mauth.h : Define ARG_MAX if undefined (Fedora 11 / RHEL 6).
