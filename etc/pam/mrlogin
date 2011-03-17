@@ -1,12 +1,9 @@
 #%PAM-1.0
 # For root login to succeed here with pam_securetty, "mrlogin" must be
 # listed in /etc/securetty.
-auth       required     pam_nologin.so
+auth       requisite    pam_nologin.so
+auth       required     pam_localuser.so
+auth       required     pam_shells.so
 auth       required     pam_securetty.so
-auth       required     pam_env.so
-auth       sufficient   pam_rhosts_auth.so
-auth       include      system-auth
 account    include      system-auth
-password   include      system-auth
-session    optional     pam_keyinit.so    force revoke
 session    include      system-auth

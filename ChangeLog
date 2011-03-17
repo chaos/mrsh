@@ -1,3 +1,11 @@
+2011-03-17  Albert Chu  <chu11@llnl.gov>
+
+	* /etc/pam/mrsh, /etc/pam/mrlogin: Update for RHEL6.
+	
+	* META: Update for release.
+
+	* Tagged mrsh-2-6-6.
+
 2009-10-08  Mark Grondona <mgrondona@llnl.gov>
 
 	* META : Update for release.
