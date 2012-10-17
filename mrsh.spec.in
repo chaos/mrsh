@@ -77,13 +77,15 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %{_bindir}/rsh
 %{_bindir}/rlogin
 
-%post server
+%post
 if ! grep "^mshell" /etc/services > /dev/null; then
         echo "mshell          21212/tcp                  # mrshd" >> /etc/services
 fi
 if ! grep "^mlogin" /etc/services > /dev/null; then
         echo "mlogin            541/tcp                  # mrlogind" >> /etc/services
 fi
+
+%post server
 # 'condrestart' is not portable
 if [ -x /etc/init.d/xinetd ]; then
     if /etc/init.d/xinetd status | grep -q running; then
