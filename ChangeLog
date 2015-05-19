@@ -1,5 +1,11 @@
 2014-04-16  Albert Chu  <chu11@llnl.gov>
 
+	* META, NEWS: Update for release.
+
+	* Tagged mrsh-2-7-1.
+
+2014-04-16  Albert Chu  <chu11@llnl.gov>
+
 	* mrlogind/mrlogind.c: Fix forkpty issue related to newer
 	/bin/login.  See Redhat Bugzilla 947213 for details.
 
