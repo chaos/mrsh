@@ -100,13 +100,14 @@ char rcsid[] =
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pty.h>
+#include <utmp.h>
 
 #include "pathnames.h"
 #include "logwtmp.h"
 #include "mrlogind.h"
 #include "mauth.h"
 
-pid_t forkpty(int *, char *, struct termios *, struct winsize *);
 int logout(const char *);
 
 #ifndef TIOCPKT_WINDOW
@@ -415,7 +416,7 @@ static void child(const char *hname, const char *termtype,
 
 
 static void doit(int netfd) {
-    int master, pid, on = 1;
+    int master, slave, r, pid, on = 1;
     int authenticated = 0;
     char *hname;
     int hostok;
@@ -465,12 +466,34 @@ static void doit(int netfd) {
     strncpy(termtype, &(ma.cmd[0]), sizeof(termtype));
     termtype[sizeof(termtype) - 1] = '\0';
 
-    pid = forkpty(&master, line, NULL, &win);
-    if (pid < 0) {
+    /*  We can no longer call forkpty here (a convenience routine that combines
+        openpty, fork, and login_tty) because, with forkpty, the slave end of
+        the pty is open only in the child process. The child process execs
+        /bin/login which now closes all open file descriptors before doing a
+        vhangup (see lkml.org/lkml/2012/6/5/145), and this resets packet mode
+        on the pty, undoing the effect of the ioctl(master, TIOCPKT, &on) call
+        made by the parent.
+
+        Instead, we call openpty, fork, and login_tty individually, so that we
+        can keep a file descriptor to the slave open in the parent process,
+        thereby retaining packet mode even when the child closes file descriptors
+        to call vhangup. */
+    r = openpty(&master, &slave, line, NULL, &win);
+    if (r < 0) {
 	if (errno == ENOENT) fatal(netfd, "Out of ptys", 0);
-	fatal(netfd, "Forkpty", 1);
+	fatal(netfd, "Openpty", 1);
     }
+
+    signal(SIGHUP, SIG_IGN);
+
+    pid = fork();
+    if (pid < 0) {
+        fatal(netfd, "Fork", 1);
+    }
+
     if (pid == 0) {
+	close(master);
+	login_tty(slave);
 	/* netfd should always be 0, but... */ 
 	if (netfd > 2) close(netfd);
 	child(hname, termtype, lusername, authenticated);

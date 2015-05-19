@@ -1,3 +1,10 @@
+2014-04-16  Albert Chu  <chu11@llnl.gov>
+
+	* mrlogind/mrlogind.c: Fix forkpty issue related to newer
+	/bin/login.  See Redhat Bugzilla 947213 for details.
+
+	https://bugzilla.redhat.com/show_bug.cgi?id=947213
+	
 2011-03-17  Albert Chu  <chu11@llnl.gov>
 
 	* /etc/pam/mrsh, /etc/pam/mrlogin: Update for RHEL6.
