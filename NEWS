@@ -2,6 +2,10 @@ This file describes changes in recent versions of mrsh. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in mrsh-2.8:
+====================
+* Update to support systemd.
+
 Changes in mrsh-2.7:
 ====================
 * Add forkpty fix for new /bin/login.  See Redhat bugzilla 947213 for
