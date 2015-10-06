@@ -54,7 +54,8 @@ am__aclocal_m4_deps = $(top_srcdir)/config/ac_crypt.m4 \
 	$(top_srcdir)/config/ac_snprintf.m4 \
 	$(top_srcdir)/config/ac_socklen.m4 \
 	$(top_srcdir)/config/ac_struct_sa_len.m4 \
-	$(top_srcdir)/config/acx_pthread.m4 $(top_srcdir)/configure.ac
+	$(top_srcdir)/config/acx_pthread.m4 \
+	$(top_srcdir)/config/systemd.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -146,6 +147,7 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PKG_CONFIG = @PKG_CONFIG@
 PTHREAD_CC = @PTHREAD_CC@
 PTHREAD_CFLAGS = @PTHREAD_CFLAGS@
 PTHREAD_LIBS = @PTHREAD_LIBS@
@@ -204,6 +206,7 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@
+systemdsystemunitdir = @systemdsystemunitdir@
 target = @target@
 target_alias = @target_alias@
 target_cpu = @target_cpu@
@@ -212,11 +215,11 @@ target_vendor = @target_vendor@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-XINETDDIR = $(sysconfdir)/xinetd.d
-XINETDFILES = mrlogind mrshd
-EXTRA_DIST = $(XINETDFILES)
-XINETDFILESdir = $(XINETDDIR)
-XINETDFILES_DATA = $(XINETDFILES)
+@HAVE_SYSTEMD_FALSE@XINETDDIR = $(sysconfdir)/xinetd.d
+@HAVE_SYSTEMD_FALSE@XINETDFILES = mrlogind mrshd
+@HAVE_SYSTEMD_FALSE@EXTRA_DIST = $(XINETDFILES)
+@HAVE_SYSTEMD_FALSE@XINETDFILESdir = $(XINETDDIR)
+@HAVE_SYSTEMD_FALSE@XINETDFILES_DATA = $(XINETDFILES)
 all: all-am
 
 .SUFFIXES:

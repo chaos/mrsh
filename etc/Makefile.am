@@ -4,4 +4,4 @@
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
-SUBDIRS = pam xinetd
+SUBDIRS = pam systemd xinetd

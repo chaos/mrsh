@@ -1,0 +1,9 @@
+[Unit]
+Description=Mrlogind Server Activation Socket
+
+[Socket]
+ListenStream=0.0.0.0:541
+Accept=true
+
+[Install]
+WantedBy=sockets.target

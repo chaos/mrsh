@@ -8,6 +8,7 @@ Group: System Environment/Base
 Source: %{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}
 BuildRequires: ncurses-devel pam-devel munge-devel
+BuildRequires: systemd
 Requires: munge >= 0.1-0
 
 %description
@@ -33,7 +34,9 @@ rsh compatability package for mrcp/mrlogin/mrsh
 %setup -q
 
 %build
-%configure --program-prefix=%{?_program_prefix:%{_program_prefix}} %{?_without_pam}
+%configure --program-prefix=%{?_program_prefix:%{_program_prefix}} \
+	   %{?_without_pam} \
+	   --with-systemdsystemunitdir=%{_unitdir}
 make
 
 %install
@@ -52,8 +55,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 
 %files server
 %defattr(-,root,root)
-%config(noreplace) /etc/xinetd.d/mrshd
-%config(noreplace) /etc/xinetd.d/mrlogind
+%{_unitdir}/powerman.service
 %if %{?_without_pam:0}%{!?_without_pam:1}
 %config(noreplace) /etc/pam.d/mrsh
 %config(noreplace) /etc/pam.d/mrlogin
@@ -84,9 +86,4 @@ fi
 if ! grep "^mlogin" /etc/services > /dev/null; then
         echo "mlogin            541/tcp                  # mrlogind" >> /etc/services
 fi
-# 'condrestart' is not portable
-if [ -x /etc/init.d/xinetd ]; then
-    if /etc/init.d/xinetd status | grep -q running; then
-       /etc/init.d/xinetd restart
-    fi
-fi
+/bin/systemctl try-restart powerman > /dev/null 2>&1 ||:
