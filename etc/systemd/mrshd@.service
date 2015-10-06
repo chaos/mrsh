@@ -1,0 +1,6 @@
+[Unit]
+Description=Mrshd Server
+
+[Service]
+ExecStart=-/usr/sbin/in.mrshd
+StandardInput=socket

@@ -1,0 +1,6 @@
+[Unit]
+Description=Mrlogind Server
+
+[Service]
+ExecStart=-/usr/sbin/in.mrlogind
+StandardInput=socket

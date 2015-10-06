@@ -51,6 +51,11 @@ AC_TYPE_UID_T
 AC_SYS_LARGEFILE
 
 ##
+# Check for systemd
+##
+RRA_WITH_SYSTEMD_UNITDIR
+
+##
 # Checks for library functions.
 ##
 AC_FUNC_MALLOC
@@ -93,6 +98,7 @@ AC_CONFIG_FILES( \
   doc/Makefile \
   etc/Makefile \
   etc/pam/Makefile \
+  etc/systemd/Makefile \
   etc/xinetd/Makefile \
   mauth/Makefile \
   mcmd/Makefile \

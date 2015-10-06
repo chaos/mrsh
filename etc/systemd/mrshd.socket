@@ -1,0 +1,9 @@
+[Unit]
+Description=Mrshd Server Activation Socket
+
+[Socket]
+ListenStream=0.0.0.0:21212
+Accept=true
+
+[Install]
+WantedBy=sockets.target
