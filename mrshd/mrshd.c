@@ -615,7 +615,7 @@ error_out:
 	 */
 	for (ifd = getdtablesize()-1; ifd > 2; ifd--) close(ifd);
 
-	execl(theshell, shellname, "-c", cmdbuf, 0);
+	execl(theshell, shellname, "-c", cmdbuf, (char *)NULL);
 	perror(theshell);
 	exit(1);
 }
