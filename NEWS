@@ -2,6 +2,10 @@ This file describes changes in recent versions of mrsh. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in mrsh-2.9:
+====================
+* Update systemd mrsh service file to handle corner case.
+
 Changes in mrsh-2.8:
 ====================
 * Update to support systemd.
