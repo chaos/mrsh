@@ -2,6 +2,10 @@ This file describes changes in recent versions of mrsh. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in mrsh-2.11:
+====================
+* Fix build error with 2.10.
+
 Changes in mrsh-2.10:
 ====================
 * Fix permissions on systemd unit files.
