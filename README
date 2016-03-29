@@ -14,7 +14,7 @@ Contents:
 	mrlogind	Daemon for mrlogin connections
 	
 Requires:
-	Working compiler, libc, kernel, and munge.
+	munge - https://github.com/dun/munge
 
 Security:
         See munge for more details.
