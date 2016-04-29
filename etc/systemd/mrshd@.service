@@ -2,6 +2,6 @@
 Description=Mrshd Server
 
 [Service]
-ExecStart=-/usr/sbin/in.mrshd
+ExecStart=-@/usr/sbin/tcpd /usr/sbin/in.mrshd
 StandardInput=socket
 KillMode=process
