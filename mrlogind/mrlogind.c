@@ -450,7 +450,7 @@ static void doit(int netfd) {
     network_confirm();
 
     /* achu: It is possible to disclose information by fatally
-     * exitting here.  We will accept this for now.
+     * exiting here.  We will accept this for now.
      */
     
     if (!hostok) {
