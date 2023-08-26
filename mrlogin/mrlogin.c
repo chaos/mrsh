@@ -476,7 +476,7 @@ writeroob(int ignore)
 void
 catch_child(int ignore)
 {
-	union wait status;
+	int status;
 	int pid;
 
 	(void)ignore;
@@ -487,7 +487,7 @@ catch_child(int ignore)
 			return;
 		/* if the child (reader) dies, just quit */
 		if (pid < 0 || (pid == childpid && !WIFSTOPPED(status)))
-			done((int)(status.w_termsig | status.w_retcode));
+			done((int)(WTERMSIG(status) | WEXITSTATUS(status)));
 	}
 	/* NOTREACHED */
 }
