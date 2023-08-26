@@ -23,12 +23,12 @@ Requires: xinetd
 Server daemons for remote access commands (mrsh, mrlogin, mrcp)
 
 %package rsh-compat
-Summary: rsh compatability package for mrcp/mrlogin/mrsh
+Summary: rsh compatibility package for mrcp/mrlogin/mrsh
 Group: System Environment/Base
 Requires: mrsh
 Provides: rsh
 %description rsh-compat
-rsh compatability package for mrcp/mrlogin/mrsh
+rsh compatibility package for mrcp/mrlogin/mrsh
 
 %prep
 %setup -q
