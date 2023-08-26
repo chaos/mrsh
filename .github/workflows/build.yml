@@ -1,0 +1,21 @@
+name: build CI
+
+on:
+  push:
+      branches: [ master ]
+  pull_request:
+      branches: [ master ]
+
+jobs:
+  build:
+      runs-on: ubuntu-22.04
+      steps:
+      - uses: actions/checkout@v2
+      - name: install pam
+        run: sudo apt install libpam0g-dev
+      - name: install munge
+        run: sudo apt install libmunge-dev
+      - name: configure
+        run: ./configure
+      - name: make
+        run: make
