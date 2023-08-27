@@ -17,7 +17,7 @@ AC_CANONICAL_SYSTEM
 # Automake support.
 ##
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
-AM_CONFIG_HEADER([config/config.h])
+AC_CONFIG_HEADERS([config/config.h])
 AM_MAINTAINER_MODE
 
 ##
