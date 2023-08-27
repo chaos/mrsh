@@ -7,8 +7,7 @@
 ##
 # Prologue.
 ##
-AC_INIT([mrsh])
-AC_META
+AC_INIT([mrsh], [2.12.1])
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_SRCDIR([README])
 AC_CANONICAL_TARGET
@@ -16,7 +15,7 @@ AC_CANONICAL_TARGET
 ##
 # Automake support.
 ##
-AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
+AM_INIT_AUTOMAKE([tar-ustar subdir-objects])
 AC_CONFIG_HEADERS([config/config.h])
 AM_MAINTAINER_MODE
 

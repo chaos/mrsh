@@ -523,7 +523,7 @@ int main(int argc, char **argv) {
 	    case 'l': use_rhosts = 0; break;
 	    case 'n': keepalive = 0; break;
 	    case 'M': munge_socket = optarg; break;
-	    case 'V': printf("%s %s-%s\n", PACKAGE, VERSION, RELEASE);
+	    case 'V': printf("%s %s\n", PACKAGE, VERSION);
 		      printf("Protocol Level = %s\n", MRSH_PROTOCOL_VERSION);
 		      exit(0);
 	    case '?': default:
