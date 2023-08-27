@@ -273,7 +273,7 @@ main(int argc, char **argv)
 			service_port = htons(service_port);
 			break;
 		case 'V':
-			printf("%s %s-%s\n", PACKAGE, VERSION, RELEASE);
+			printf("%s %s\n", PACKAGE, VERSION);
 			printf("Protocol Level = %s\n", MRSH_PROTOCOL_VERSION);
 			exit(0);
 		case '?':

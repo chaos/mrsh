@@ -1,6 +1,6 @@
 Name: @PACKAGE@
 Version: @VERSION@
-Release: @RELEASE@
+Release: 1
 Epoch: 3
 Summary: Remote shell program that uses munge authentication
 License: none

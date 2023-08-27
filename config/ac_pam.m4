@@ -19,7 +19,7 @@ AC_DEFUN([AC_PAM],
 
   AC_MSG_CHECKING([for whether to build with pam])
   AC_ARG_WITH([pam],
-    AC_HELP_STRING([--without-pam],
+    AS_HELP_STRING([--without-pam],
       [Do not build with pam support]),
     [ case "$withval" in
         no)  ac_with_pam=no ;;
