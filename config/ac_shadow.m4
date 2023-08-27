@@ -18,7 +18,7 @@ AC_DEFUN([AC_SHADOW],
 [
   AC_MSG_CHECKING([for whether to build with shadow file])
   AC_ARG_WITH([shadow],
-    AC_HELP_STRING([--without-shadow],
+    AS_HELP_STRING([--without-shadow],
       [Do not build with shadow file support]),
     [ case "$withval" in
         no)  ac_with_shadow=no ;;
