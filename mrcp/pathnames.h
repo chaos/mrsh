@@ -10,7 +10,7 @@
  *  
  *  This file is part of Mrsh, a collection of remote shell programs
  *  that use munge based authentication rather than reserved ports for
- *  security. For details, see http://www.llnl.gov/linux/.
+ *  security. For details, see https://github.com/chaos/mrsh.
  *
  *  The code in this file began with the code in the rsh project.  See
  *  below for original copyright information.
