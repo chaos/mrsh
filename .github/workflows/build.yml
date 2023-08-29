@@ -19,3 +19,5 @@ jobs:
         run: ./configure
       - name: make
         run: make
+      - name: make dist
+        run: make dist
