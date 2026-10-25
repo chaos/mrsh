@@ -150,7 +150,7 @@ int auth_checkauth(const char *remoteuser, const char *host,
 
     static struct pam_conv conv = { sock_conv, NULL };
     struct passwd *pwd;
-    char *ln;
+    const char *ln;
     int retval;
 
     retval = pam_start("mrlogin", localuser, &conv, &pamh);
@@ -171,7 +171,7 @@ int auth_checkauth(const char *remoteuser, const char *host,
 	return -1;
     }
 
-    pam_get_item(pamh, PAM_USER, &ln);
+    pam_get_item(pamh, PAM_USER, (const void **)&ln);
     if (!ln || !*ln) {
 	/*
 	 * Authentication wasn't adequate for requirements.
