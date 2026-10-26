@@ -2,7 +2,6 @@
 # For root login to succeed here with pam_securetty, "mrsh" must be
 # listed in /etc/securetty.
 auth       requisite    pam_nologin.so
-auth       required     pam_localuser.so
 auth       required     pam_shells.so
 auth       required     pam_securetty.so
 account    include      system-auth
